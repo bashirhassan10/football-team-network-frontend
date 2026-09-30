@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server";import {backendUrl} from "@/lib/backend";import {sessionToken} from "@/lib/session";
+export async function GET(){const token=await sessionToken();if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});const r=await fetch(backendUrl("/api/verification/status"),{headers:{Authorization:`Bearer ${token}`},cache:"no-store"});const text=await r.text();if(!r.ok)return NextResponse.json({error:text.trim()||"Unable to load verification status"},{status:r.status});return NextResponse.json(JSON.parse(text))}

@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server";import {backendUrl} from "@/lib/backend";
+export async function GET(request:Request){const url=new URL(request.url);const q=url.searchParams.toString();try{const r=await fetch(backendUrl("/api/teams"+(q?`?${q}`:"")),{cache:"no-store"});const text=await r.text();if(!r.ok)return NextResponse.json({error:text.trim()||"Unable to load teams"},{status:r.status});return NextResponse.json(JSON.parse(text))}catch{return NextResponse.json({error:"Team directory is temporarily unavailable"},{status:502})}}
