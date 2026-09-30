@@ -12,3 +12,6 @@
 .logoutButton{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 14px;font:inherit;font-size:10px;font-weight:800;color:var(--ink);cursor:pointer}.logoutButton:hover{border-color:var(--green);color:var(--green)}
 
 .dashCardLink{display:inline-block;margin-top:14px;font-size:8px;font-weight:900;letter-spacing:.04em;color:var(--green)}.dashGrid .progress i{transition:width .45s ease}.dashMain>.formError{margin:0 0 18px}
+
+
+.passwordToggle{margin-left:auto;border:0;background:transparent;display:grid;place-items:center;padding:4px;cursor:pointer;color:inherit}.passwordField{border:1px solid var(--border,#d9dedb);border-radius:10px;background:#fff}.passwordField input{border:0!important;outline:0;flex:1;min-width:0}.passwordToggle:focus-visible{outline:2px solid currentColor;outline-offset:2px;border-radius:6px}
