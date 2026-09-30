@@ -1,0 +1,1 @@
+import{NextResponse}from"next/server";import{sessionToken}from"@/lib/session";export async function GET(){const token=await sessionToken();return NextResponse.json({authenticated:Boolean(token)},{status:token?200:401})}
