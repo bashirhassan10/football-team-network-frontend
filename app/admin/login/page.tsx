@@ -1,6 +1,7 @@
 "use client";
 import {FormEvent,useState} from "react";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
 
 export default function AdminLoginPage(){
  const router=useRouter();
@@ -20,5 +21,5 @@ export default function AdminLoginPage(){
   finally{setBusy(false)}
  }
 
- return <main className="adminLoginPage"><section className="adminLoginCard"><span className="formKicker">ADMIN · SECURE ACCESS</span><h1>Admin sign in</h1><p>Authorized administrators only. Your credential is sent over the secure same-origin connection and is never stored in browser storage.</p>{error&&<p className="formError">{error}</p>}<form onSubmit={submit}><label>Admin credential<div className="adminCredentialField"><input type={showKey?"text":"password"} autoComplete="current-password" value={key} onChange={e=>setKey(e.target.value)} required/><button type="button" className="adminCredentialToggle" onClick={()=>setShowKey(v=>!v)} aria-label={showKey?"Hide admin credential":"Show admin credential"}>{showKey?"Hide":"Show"}</button></div></label><button className="button" disabled={busy}>{busy?"Signing in…":"Sign in"}</button></form></section></main>;
+ return <main className="adminLoginPage"><section className="adminLoginCard"><Link href="/" className="backLink">← Back to website</Link><span className="formKicker">ADMIN · SECURE ACCESS</span><h1>Admin sign in</h1><p>Authorized administrators only. Your credential is sent over the secure same-origin connection and is never stored in browser storage.</p>{error&&<p className="formError">{error}</p>}<form onSubmit={submit}><label>Admin credential<div className="adminCredentialField"><input type={showKey?"text":"password"} autoComplete="current-password" value={key} onChange={e=>setKey(e.target.value)} required/><button type="button" className="adminCredentialToggle" onClick={()=>setShowKey(v=>!v)} aria-label={showKey?"Hide admin credential":"Show admin credential"}>{showKey?"Hide":"Show"}</button></div></label><button className="button" disabled={busy}>{busy?"Signing in…":"Sign in"}</button></form></section></main>;
 }
