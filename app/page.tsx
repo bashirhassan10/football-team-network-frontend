@@ -11,7 +11,7 @@ export default function Home() {
   return <main>
     <nav className="nav shell">
       <Link href="/" className="brand"><span className="brandMark">FT</span><span>Football Team<br/><b>Network</b></span></Link>
-      <div className="navLinks"><a href="#features">Features</a><a href="#network">Network</a></div>
+      <div className="navLinks"><a href="#features">Features</a><a href="#network">Network</a><Link href="/admin/login">Admin portal</Link></div>
       <div className="navActions"><Link className="textButton" href="/login">Sign in</Link><Link className="button small" href="/register">Register team <ArrowRight size={16}/></Link></div>
     </nav>
 
