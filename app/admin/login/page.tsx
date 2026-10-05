@@ -6,7 +6,8 @@ export default function AdminLoginPage(){
  const router=useRouter();
  const [key,setKey]=useState("");
  const [error,setError]=useState("");
- const [busy,setBusy]=useState(false);\n const [showKey,setShowKey]=useState(false);
+ const [busy,setBusy]=useState(false);
+ const [showKey,setShowKey]=useState(false);
 
  async function submit(e:FormEvent){
   e.preventDefault();setBusy(true);setError("");
