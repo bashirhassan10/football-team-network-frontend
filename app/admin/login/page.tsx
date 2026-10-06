@@ -15,7 +15,10 @@ export default function AdminLoginPage(){
   try{
    const r=await fetch("/api/admin/session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_key:key})});
    const data=await r.json();
-   if(!r.ok){\n    const diagnostic=data.code?` (${data.code})`:"";\n    throw new Error(`${data.error||"Unable to sign in"}${diagnostic}`);\n   }
+   if(!r.ok){
+    const diagnostic=data.code?` (${data.code})`:"";
+    throw new Error(`${data.error||"Unable to sign in"}${diagnostic}`);
+   }
    setKey("");router.replace("/admin/verification");router.refresh();
   }catch(e){setError(e instanceof Error?e.message:"Unable to sign in")}
   finally{setBusy(false)}
