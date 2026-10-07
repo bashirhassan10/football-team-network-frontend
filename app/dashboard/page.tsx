@@ -30,6 +30,10 @@ export default function Dashboard(){
     <Link href="/teams"><Search/>Find teams</Link>
     <Link href="/matches"><CalendarDays/>Matches{received.length>0&&<i>{received.length}</i>}</Link>
     <Link href="/matches"><MessageCircle/>Messages</Link>
+    <span className="proNavLabel">CLUB MANAGEMENT</span>
+    <span className="proNavSoon"><Users/>Squad<small>Soon</small></span>
+    <span className="proNavSoon"><BarChart3/>Statistics<small>Soon</small></span>
+    <span className="proNavSoon"><Settings/>Settings<small>Soon</small></span>
    </nav>
    <div className="dashSecurity"><ShieldCheck/><span><b>Secure workspace</b><small>Protected team session</small></span></div>
   </aside>
