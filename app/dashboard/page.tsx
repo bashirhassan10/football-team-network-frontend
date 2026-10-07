@@ -22,14 +22,16 @@ export default function Dashboard(){
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
  const initials=(session?.team_name||"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
  return <main className="proDash">
-  <aside className="proSide">
-   <Link href="/" className="proBrand"><span className="proBrandMark">NF</span><span><b>Naija Football</b><small>NETWORK</small></span></Link>
-   <div className="proClub"><div className="proCrest">{initials}</div><div><b>{session?.team_name||"Your Team"}</b><span><BadgeCheck/> {status.replaceAll("_"," ")}</span></div></div>
+  <aside className="proSide dashSide restoredSide">
+   <Link href="/" className="brand brandLight"><span className="brandMark lime">NF</span><span>Naija Football<br/><b>Network</b></span></Link>
    <nav>
-    <Link className="active" href="/dashboard"><LayoutDashboard/>Dashboard</Link><Link href="/matches"><CalendarDays/>Matches{received.length>0&&<i>{received.length}</i>}</Link><Link href="/matches"><MessageCircle/>Messages</Link><Link href="/teams"><Search/>Find Teams</Link>
-    <span className="proNavLabel">CLUB</span><Link href="/verification"><FileCheck2/>Verification</Link><span className="proNavSoon"><Users/>Squad<small>Soon</small></span><span className="proNavSoon"><BarChart3/>Statistics<small>Soon</small></span><span className="proNavSoon"><Settings/>Settings<small>Soon</small></span>
+    <Link className="active" href="/dashboard"><LayoutDashboard/>Overview</Link>
+    <Link href="/verification"><FileCheck2/>Verification</Link>
+    <Link href="/teams"><Search/>Find teams</Link>
+    <Link href="/matches"><CalendarDays/>Matches{received.length>0&&<i>{received.length}</i>}</Link>
+    <Link href="/matches"><MessageCircle/>Messages</Link>
    </nav>
-   <div className="proSecure"><ShieldCheck/><span><b>Secure workspace</b><small>Protected team session</small></span></div>
+   <div className="dashSecurity"><ShieldCheck/><span><b>Secure workspace</b><small>Protected team session</small></span></div>
   </aside>
   <section className="proMain">
    <header className="proTop"><div><span className="proMobileBrand">NFN</span><p>TEAM WORKSPACE</p><h1>Welcome back, <em>{session?.team_name||"Team"}</em></h1></div><div className="proTopActions"><button className="proBell" aria-label="Notifications"><Bell/>{received.length>0&&<i/>}</button><div className="proAvatar">{initials}</div><form action="/api/auth/logout" method="post"><button className="proSignout">Sign out</button></form></div></header>
