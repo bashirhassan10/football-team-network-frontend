@@ -31,3 +31,6 @@
 @media(max-width:1000px){.proDash{grid-template-columns:220px 1fr}.proDashboardGrid{grid-template-columns:1fr}.proLower{grid-template-columns:1fr}.proStats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.proDash{display:block}.proSide{display:none}.proMain{padding:24px 16px 55px}.proMobileBrand{display:inline-grid;background:#102219;color:var(--lime);border-radius:7px;padding:6px;font-size:9px;font-weight:950;margin-bottom:12px}.proTop{align-items:flex-start}.proTopActions{gap:6px}.proSignout{display:none}.proStats{grid-template-columns:1fr 1fr}.proDashboardGrid{grid-template-columns:1fr}.proFixture{grid-template-columns:1fr 60px 1fr}.proTeamBadge{width:52px;height:52px}.proLower{grid-template-columns:1fr}.proVerifyCard{grid-template-columns:40px 1fr}.proVerifyCard>a{grid-column:2}.proTop h1{font-size:30px}}
 @media(max-width:430px){.proStats article{padding:16px}.proStats strong{font-size:25px}.proNext,.proActivity{padding:18px}.proFixtureTeam b{font-size:10px}.proTopActions .proAvatar{display:none}}
+
+/* Restored classic dashboard sidebar */
+.restoredSide{padding:30px 22px}.restoredSide>nav{margin-top:65px}.restoredSide>nav>a{color:#a8b6ad}.restoredSide>nav>a.active{background:#ffffff10;color:#fff}.restoredSide .dashSecurity{margin-top:auto}
