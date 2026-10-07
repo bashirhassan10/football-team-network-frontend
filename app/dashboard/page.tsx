@@ -40,7 +40,7 @@ export default function Dashboard(){
   <section className="proMain">
    <header className="proTop"><div><span className="proMobileBrand">NFN</span><p>TEAM WORKSPACE</p><h1>Welcome back, <em>{session?.team_name||"Team"}</em></h1></div><div className="proTopActions"><button className="proBell" aria-label="Notifications"><Bell/>{received.length>0&&<i/>}</button><div className="proAvatar">{initials}</div><form action="/api/auth/logout" method="post"><button className="proSignout">Sign out</button></form></div></header>
    {error&&<div className="formError">{error}</div>}
-   <div className="proStats">
+   <div className="proStudioGrid"><div className="proStudioMain"><div className="proStats">
     <article><span>ALL MATCHES</span><strong>{loading?"—":matches.length}</strong><small>Network fixtures</small></article>
     <article><span>ACCEPTED</span><strong>{loading?"—":accepted.length}</strong><small>Ready to play</small></article>
     <article><span>PENDING</span><strong>{loading?"—":received.length}</strong><small>{sent.length} request{sent.length===1?"":"s"} sent</small></article>
@@ -55,10 +55,11 @@ export default function Dashboard(){
      {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+m.status}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":m.status.toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
     </aside>
    </div>
+   </div><aside className="proStudioRail"><div className="proSecurityCard"><ShieldCheck/><div><span>SECURE WORKSPACE</span><b>Protected team session</b><small>{session?.team_name||"Team"} workspace</small></div></div>
    <section className="proLower">
     <div className="proVerifyCard"><div className="proVerifyIcon"><BadgeCheck/></div><div><span>TEAM VERIFICATION</span><h3>{status.replaceAll("_"," ")}</h3><p>{approved} of 3 identity documents approved</p><div className="proProgress"><i style={{width:`${approved/3*100}%`}}/></div></div><Link href="/verification">Manage <ChevronRight/></Link></div>
     <div className="proQuick"><span>QUICK ACTIONS</span><div><Link href="/matches"><CalendarDays/>New match</Link><Link href="/teams"><Search/>Find teams</Link><Link href="/verification"><FileCheck2/>Verification</Link></div></div>
-   </section>
+   </section></aside></div>
   </section>
  </main>
 }

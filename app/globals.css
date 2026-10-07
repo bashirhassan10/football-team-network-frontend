@@ -95,3 +95,52 @@
 .proNext .proFixture{max-width:58%;background:rgba(8,27,18,.42);border-color:rgba(255,255,255,.16)}
 @media(max-width:760px){.proNext::before{inset:0 0 0 35%;background-position:58% center}.proNext::after{background:linear-gradient(90deg,#153c2b 0%,rgba(21,60,43,.97) 44%,rgba(21,60,43,.62) 62%,rgba(21,60,43,.12) 86%)}.proNext .proSectionHead{max-width:72%}.proNext .proEmptyFixture{max-width:60%}.proNext .proFixture{max-width:72%}}
 @media(max-width:430px){.proNext{min-height:320px}.proNext::before{inset:0 0 0 42%;background-position:60% center}.proNext::after{background:linear-gradient(90deg,#153c2b 0%,rgba(21,60,43,.97) 52%,rgba(21,60,43,.58) 76%,rgba(21,60,43,.15) 100%)}.proNext .proSectionHead{max-width:88%}.proNext .proSectionHead h2{font-size:20px}.proNext .proEmptyFixture{max-width:67%;padding-top:42px}.proNext .proEmptyFixture p{font-size:11px}.proNext .proFixture{max-width:100%;background:rgba(8,27,18,.58)}}
+
+
+/* NFN reference-dashboard redesign */
+.proDash{grid-template-columns:245px minmax(0,1fr);background:#f3f6f2}
+.proSide{background:#0d1f17;border-right:1px solid rgba(255,255,255,.06)}
+.restoredSide{padding:26px 20px}
+.restoredSide>nav{margin-top:48px}
+.restoredSide>nav>a,.restoredSide>nav>.proNavSoon{border-radius:10px;min-height:44px;padding:0 12px}
+.restoredSide>nav>a.active{background:#1f5b3d;color:#fff;box-shadow:inset 3px 0 0 var(--lime)}
+.proMain{padding:26px 30px 38px;max-width:1540px;width:100%;margin:0 auto}
+.proTop{padding-bottom:22px}
+.proTop h1{font-size:32px}
+.proTop h1 em{color:#1f7a4c}
+.proStudioGrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.proStudioMain{min-width:0;display:flex;flex-direction:column}
+.proStudioMain .proDashboardGrid{order:1;grid-template-columns:minmax(0,1fr);margin-top:0}
+.proStudioMain .proStats{order:2;margin-top:16px}
+.proStudioMain .proDashboardGrid .proActivity{order:2}
+.proStudioMain .proDashboardGrid .proNext{order:1}
+.proDashboardGrid{gap:16px}
+.proNext{min-height:330px;border:0;border-radius:18px;box-shadow:0 14px 34px rgba(14,39,26,.12)}
+.proNext .proSectionHead{max-width:56%}
+.proNext .proSectionHead h2{font-size:26px}
+.proNext .proFixture{max-width:56%;padding:22px 10px 8px}
+.proNext .proEmptyFixture{padding-top:58px}
+.proStats{gap:12px}
+.proStats article{border-radius:14px;box-shadow:0 5px 18px rgba(25,53,36,.04);padding:19px}
+.proStats strong{font-size:28px}
+.proActivity{margin-top:16px;border-radius:16px;padding:21px 22px}
+.proActivityItem{padding:12px 4px}
+.proStudioRail{display:flex;flex-direction:column;gap:16px;position:sticky;top:22px}
+.proSecurityCard,.proStudioRail .proVerifyCard,.proStudioRail .proQuick{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 5px 18px rgba(25,53,36,.04)}
+.proSecurityCard{padding:20px;display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center}
+.proSecurityCard>svg{width:42px;height:42px;padding:10px;border-radius:12px;background:#edf5e8;color:var(--green)}
+.proSecurityCard div{display:grid;gap:4px}
+.proSecurityCard span,.proStudioRail .proQuick>span{font-size:10px;font-weight:900;letter-spacing:.08em;color:#829087}
+.proSecurityCard b{font-size:13px}
+.proSecurityCard small{font-size:10px;color:var(--muted)}
+.proLower{display:flex;flex-direction:column;gap:16px;margin-top:0}
+.proStudioRail .proVerifyCard{grid-template-columns:42px 1fr;padding:20px}
+.proStudioRail .proVerifyCard>a{grid-column:1/-1;justify-content:center;border:1px solid var(--line);padding:9px}
+.proStudioRail .proQuick{padding:20px}
+.proStudioRail .proQuick>div{display:grid;gap:8px}
+.proStudioRail .proQuick a{width:100%;justify-content:flex-start;padding:11px 12px;background:#f7f9f6}
+.proStudioRail .proQuick a:hover{background:#edf5e8}
+@media(max-width:1180px){.proStudioGrid{grid-template-columns:minmax(0,1fr) 260px}.proMain{padding-left:22px;padding-right:22px}}
+@media(max-width:1000px){.proStudioGrid{grid-template-columns:1fr}.proStudioRail{position:static;display:grid;grid-template-columns:1fr 1fr}.proStudioRail .proLower{display:contents}.proSecurityCard{grid-column:1/-1}.proStudioMain .proDashboardGrid{grid-template-columns:1fr}.proDash{grid-template-columns:220px 1fr}}
+@media(max-width:760px){.proMain{padding:22px 15px 50px}.proStudioRail{display:flex}.proTop h1{font-size:28px}.proNext .proSectionHead{max-width:75%}.proNext .proFixture{max-width:75%}}
+@media(max-width:430px){.proTop h1{font-size:25px}.proNext{min-height:330px}.proNext .proSectionHead{max-width:92%}.proNext .proFixture{max-width:100%}.proStats{gap:9px}}
