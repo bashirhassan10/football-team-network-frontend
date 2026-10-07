@@ -78,3 +78,20 @@
 .restoredSide>nav>a:focus-visible,.proQuick a:focus-visible,.proSectionHead>a:focus-visible,.proVerifyCard>a:focus-visible,.proEmptyFixture a:focus-visible,.proActivityItem:focus-visible,.proBell:focus-visible,.proSignout:focus-visible{outline:3px solid rgba(163,214,58,.42);outline-offset:2px}
 .proNavSoon{cursor:default}
 @media(max-width:430px){.proTop>div>p,.proStats article>span,.proSectionHead>div>span,.proVerifyCard>div:nth-child(2)>span,.proQuick>span{font-size:10px}.proStats small,.proFixtureMid span,.proFixtureMid time,.proVerifyCard p{font-size:10px}.proQuick a{font-size:10px}}
+
+
+/* Reference-inspired Next Match composition */
+.proNext{background:#153c2b;min-height:310px}
+.proNext::before{inset:0 0 0 43%;background-size:cover;background-position:center 35%;transform:none;opacity:1}
+.proNext::after{background:linear-gradient(90deg,#153c2b 0%,#153c2b 40%,rgba(21,60,43,.96) 46%,rgba(21,60,43,.58) 55%,rgba(21,60,43,.12) 67%,rgba(21,60,43,0) 78%)}
+.proNext .proSectionHead{max-width:58%}
+.proNext .proSectionHead h2{font-size:23px}
+.proNext .proSectionHead>a{background:rgba(255,255,255,.1);padding:7px 9px}
+.proNext .proEmptyFixture{max-width:48%;padding:44px 10px 28px 0}
+.proNext .proEmptyFixture>svg{width:28px}
+.proNext .proEmptyFixture h3{font-size:19px;margin-top:13px}
+.proNext .proEmptyFixture p{font-size:12px;max-width:270px}
+.proNext .proEmptyFixture a{margin-top:10px}
+.proNext .proFixture{max-width:58%;background:rgba(8,27,18,.42);border-color:rgba(255,255,255,.16)}
+@media(max-width:760px){.proNext::before{inset:0 0 0 35%;background-position:58% center}.proNext::after{background:linear-gradient(90deg,#153c2b 0%,rgba(21,60,43,.97) 44%,rgba(21,60,43,.62) 62%,rgba(21,60,43,.12) 86%)}.proNext .proSectionHead{max-width:72%}.proNext .proEmptyFixture{max-width:60%}.proNext .proFixture{max-width:72%}}
+@media(max-width:430px){.proNext{min-height:320px}.proNext::before{inset:0 0 0 42%;background-position:60% center}.proNext::after{background:linear-gradient(90deg,#153c2b 0%,rgba(21,60,43,.97) 52%,rgba(21,60,43,.58) 76%,rgba(21,60,43,.15) 100%)}.proNext .proSectionHead{max-width:88%}.proNext .proSectionHead h2{font-size:20px}.proNext .proEmptyFixture{max-width:67%;padding-top:42px}.proNext .proEmptyFixture p{font-size:11px}.proNext .proFixture{max-width:100%;background:rgba(8,27,18,.58)}}
