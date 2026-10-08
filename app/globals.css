@@ -144,3 +144,38 @@
 @media(max-width:1000px){.proStudioGrid{grid-template-columns:1fr}.proStudioRail{position:static;display:grid;grid-template-columns:1fr 1fr}.proStudioRail .proLower{display:contents}.proSecurityCard{grid-column:1/-1}.proStudioMain .proDashboardGrid{grid-template-columns:1fr}.proDash{grid-template-columns:220px 1fr}}
 @media(max-width:760px){.proMain{padding:22px 15px 50px}.proStudioRail{display:flex}.proTop h1{font-size:28px}.proNext .proSectionHead{max-width:75%}.proNext .proFixture{max-width:75%}}
 @media(max-width:430px){.proTop h1{font-size:25px}.proNext{min-height:330px}.proNext .proSectionHead{max-width:92%}.proNext .proFixture{max-width:100%}.proStats{gap:9px}}
+
+/* Accessible, consistent interactive states across the NFN interface. */
+a.button,button.button,.ghostButton{
+  color:#fff;
+  text-decoration:none;
+}
+a.button:visited{color:#fff}
+a.button:hover,button.button:hover:not(:disabled){
+  background:#174d32;
+  color:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(16,68,40,.26);
+}
+a.button:focus-visible,button.button:focus-visible,
+a.ghostButton:focus-visible,button:focus-visible,
+a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:3px solid #a8d97b;
+  outline-offset:3px;
+}
+button,a.button,.ghostButton,.textButton,.directoryCard a,.navActions a,.matchActions button{
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.directoryCard a:not(.button):hover,.textButton:hover,.navActions a:not(.button):hover{
+  color:#1b7046;
+  text-decoration:underline;
+  text-underline-offset:4px;
+}
+button:hover:not(:disabled):not(.button){
+  filter:brightness(.94);
+}
+button:disabled{cursor:not-allowed}
+@media(prefers-reduced-motion:reduce){
+  button,a.button,.ghostButton,.textButton,.directoryCard a,.navActions a,.matchActions button{transition:none}
+  a.button:hover,button.button:hover:not(:disabled){transform:none}
+}
