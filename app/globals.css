@@ -38,7 +38,7 @@
 
 /* Next Match full-background visual */
 .proNext{position:relative;overflow:hidden;isolation:isolate;background:#102219;color:#fff;min-height:310px}
-.proNext::before{content:"";position:absolute;z-index:-2;inset:0;background-image:url("/nfn-next-match-players-v2.webp");background-repeat:no-repeat;background-size:cover;background-position:center 38%;transform:scale(1.01)}
+.proNext::before{content:"";position:absolute;z-index:-2;inset:0;background-image:url("/nfn-next-match-players-hq.webp");background-repeat:no-repeat;background-size:cover;background-position:center 38%;transform:scale(1.01)}
 .proNext::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(7,23,16,.94) 0%,rgba(8,31,20,.82) 42%,rgba(8,29,19,.52) 68%,rgba(5,19,13,.28) 100%)}
 .proNext>.proSectionHead,.proNext>.proFixture,.proNext>.proEmptyFixture{position:relative;z-index:1}
 .proNext .proSectionHead span{color:var(--lime)}
