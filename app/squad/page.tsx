@@ -1,0 +1,4 @@
+"use client";
+import Link from "next/link";
+import {useEffect,useState} from "react";
+export default function Squad(){const[team,setTeam]=useState("");const[error,setError]=useState("");useEffect(()=>{fetch("/api/auth/session").then(async r=>{if(r.status===401){location.href="/login";return}if(!r.ok)throw Error();const data=await r.json();setTeam(data.team_name||"Your team")}).catch(()=>setError("Unable to load team session"))},[]);return <main className="shell" style={{padding:"48px 0 96px"}}><Link href="/dashboard">← Dashboard</Link><p style={{marginTop:32}}>CLUB MANAGEMENT</p><h1>Squad</h1><p>{team||"Loading team…"} roster</p>{error&&<p role="alert">{error}</p>}<section style={{background:"#fff",border:"1px solid #dfe5dc",padding:32,borderRadius:16,marginTop:32}}><h2>Player registration</h2><p>The roster database and secure player-management API must be deployed before adding players. No player information will be stored in the browser.</p></section></main>}
