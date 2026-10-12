@@ -12,7 +12,7 @@ export default function Dashboard(){
  const[v,setV]=useState<V|null>(null),[matches,setMatches]=useState<M[]>([]),[teams,setTeams]=useState<T[]>([]),[session,setSession]=useState<S|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
  useEffect(()=>{Promise.all([fetch("/api/verification/status"),fetch("/api/matches"),fetch("/api/teams"),fetch("/api/auth/session")]).then(async([vr,mr,tr,sr])=>{
   if(vr.status===401||mr.status===401||sr.status===401){location.href="/login";return}
-  if(vr.ok)setV(await vr.json());if(mr.ok)setMatches(await mr.json());if(tr.ok){const d=await tr.json();if(Array.isArray(d))setTeams(d)}if(sr.ok)setSession(await sr.json());
+  if(vr.ok){const d=await vr.json();if(d&&typeof d==="object")setV({...d,documents:Array.isArray(d.documents)?d.documents:[]})}if(mr.ok){const d=await mr.json();setMatches(Array.isArray(d)?d:[])}if(tr.ok){const d=await tr.json();setTeams(Array.isArray(d)?d:[])}if(sr.ok){const d=await sr.json();if(d&&typeof d==="object")setSession(d)}
   if(!vr.ok&&vr.status!==403)setError("Some dashboard data could not be loaded.");setLoading(false)
  }).catch(()=>{setError("Unable to refresh your workspace.");setLoading(false)})},[]);
  const required=["REGISTRATION","TEAM_ID","OWNER_ID"],approved=required.filter(t=>v?.documents?.some(d=>d.document_type===t&&d.status==="APPROVED")).length;
@@ -20,7 +20,7 @@ export default function Dashboard(){
  const status=v?.overall_status||"NOT SUBMITTED",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
  const nextMatch=useMemo(()=>accepted.filter(m=>new Date(m.match_date).getTime()>=Date.now()).sort((a,b)=>+new Date(a.match_date)-+new Date(b.match_date))[0],[accepted]);
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
- const initials=(session?.team_name||"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
+ const initials=(typeof session?.team_name==="string"?session.team_name:"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
  return <main className="proDash">
   <aside className="proSide dashSide restoredSide">
    <Link href="/" className="brand brandLight"><span className="brandMark lime">NF</span><span>Naija Football<br/><b>Network</b></span></Link>
@@ -52,7 +52,7 @@ export default function Dashboard(){
      {nextMatch?<div className="proFixture"><div className="proFixtureTeam"><div className="proTeamBadge">{teamName(nextMatch.sender_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.sender_team_id)}</b></div><div className="proFixtureMid"><span>{new Date(nextMatch.match_date).toLocaleDateString("en-NG",{day:"2-digit",month:"short"})}</span><strong>VS</strong><time>{new Date(nextMatch.match_date).toLocaleTimeString("en-NG",{hour:"2-digit",minute:"2-digit"})}</time></div><div className="proFixtureTeam"><div className="proTeamBadge alt">{teamName(nextMatch.receiver_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.receiver_team_id)}</b></div><p><MapPin/>{nextMatch.location}</p></div>:<div className="proEmptyFixture"><Trophy/><h3>No accepted fixture yet</h3><p>Find a verified team and arrange your next match.</p><Link href="/teams">Find an opponent</Link></div>}
     </section>
     <aside className="proActivity"><div className="proSectionHead"><div><span>LIVE WORKSPACE</span><h2>Recent activity</h2></div></div>
-     {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+m.status}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":m.status.toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
+     {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+m.status}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":String(m.status||"UNKNOWN").toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
     </aside>
    </div>
    </div><aside className="proStudioRail"><div className="proSecurityCard"><ShieldCheck/><div><span>SECURE WORKSPACE</span><b>Protected team session</b><small>{session?.team_name||"Team"} workspace</small></div></div>
