@@ -19,6 +19,7 @@ export default function PitchMapPicker({latitude,longitude,onPick}:Props){
    const center: [number,number]=latitude!=null&&longitude!=null?[latitude,longitude]:[9.082,8.6753];
    const instance=L.map(container.current).setView(center,latitude!=null?14:6);
    map.current=instance;
+   if(latitude!=null&&longitude!=null){marker.current=L.circleMarker([latitude,longitude],{radius:9,color:"#166534",fillColor:"#22c55e",fillOpacity:0.9}).addTo(instance) as unknown as L.Marker;}
    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:19}).addTo(instance);
    instance.on("click",(event:L.LeafletMouseEvent)=>callback.current(Number(event.latlng.lat.toFixed(7)),Number(event.latlng.lng.toFixed(7))));
    setTimeout(()=>instance.invalidateSize(),100);
@@ -34,7 +35,7 @@ export default function PitchMapPicker({latitude,longitude,onPick}:Props){
   if(latitude==null||longitude==null){marker.current?.remove();marker.current=null;return}
   const position:L.LatLngExpression=[latitude,longitude];
   if(marker.current)marker.current.setLatLng(position);
-  else marker.current=L.marker(position).addTo(instance);
+  else marker.current=L.circleMarker(position,{radius:9,color:"#166534",fillColor:"#22c55e",fillOpacity:0.9}).addTo(instance) as unknown as L.Marker;
   instance.panTo(position);
  },[latitude,longitude]);
  return <div><p>Click anywhere on the map to select your home pitch. Zoom in for accuracy.</p><div ref={container} style={{height:340,width:"100%",borderRadius:12,zIndex:0}} role="application" aria-label="Interactive map: click to choose pitch location"/><p style={{fontSize:12}}>Map data © OpenStreetMap contributors. You can also type coordinates above.</p></div>;
