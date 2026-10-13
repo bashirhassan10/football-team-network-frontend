@@ -29,7 +29,8 @@ export default function Dashboard(){
     <Link href="/verification"><FileCheck2/>Verification</Link>
     <Link href="/teams"><Search/>Find teams</Link>
     <Link href="/matches"><CalendarDays/>Matches{received.length>0&&<i>{received.length}</i>}</Link>
-    <Link href="/matches"><MessageCircle/>Messages</Link>
+    <Link href="/calendar"><CalendarDays/>Calendar</Link>
+     <Link href="/matches"><MessageCircle/>Messages</Link>
     <span className="proNavLabel">CLUB MANAGEMENT</span>
     <Link href="/squad"><Users/>Squad</Link>
     <Link href="/statistics"><BarChart3/>Statistics</Link>
