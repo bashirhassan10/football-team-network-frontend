@@ -35,7 +35,7 @@ export default function PitchMapPicker({latitude,longitude,onPick}:Props){
   if(latitude==null||longitude==null){marker.current?.remove();marker.current=null;return}
   const position:L.LatLngExpression=[latitude,longitude];
   if(marker.current)marker.current.setLatLng(position);
-  else marker.current=L.circleMarker(position,{radius:9,color:"#166534",fillColor:"#22c55e",fillOpacity:0.9}).addTo(instance) as unknown as L.Marker;
+  else marker.current=L.circleMarker(position,{radius:9,color:"#166534",fillColor:"#22c55e",fillOpacity:0.9}).addTo(instance);
   instance.panTo(position);
  },[latitude,longitude]);
  return <div><p>Click anywhere on the map to select your home pitch. Zoom in for accuracy.</p><div ref={container} style={{height:340,width:"100%",borderRadius:12,zIndex:0}} role="application" aria-label="Interactive map: click to choose pitch location"/><p style={{fontSize:12}}>Map data © OpenStreetMap contributors. You can also type coordinates above.</p></div>;
