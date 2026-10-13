@@ -39,7 +39,7 @@ export default function CalendarPage(){
  <h2 style={{textAlign:"center"}}>{month.toLocaleDateString("en-NG",{month:"long",year:"numeric"})}</h2>
  <button type="button" className="ghostButton" onClick={()=>setMonth(new Date(month.getFullYear(),month.getMonth()+1,1))} aria-label="Next month">Next →</button></div>
  {loading&&<p role="status">Loading fixtures…</p>}{error&&<p role="alert">{error} The calendar dates are still available.</p>}
- <>
+
  <div style={{display:"grid",gridTemplateColumns:"repeat(7,minmax(0,1fr))",gap:6}}>
  {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=><strong key={d} style={{textAlign:"center"}}>{d}</strong>)}
  {Array.from({length:firstDay},(_,i)=><div key={`blank-${i}`}/>)}
