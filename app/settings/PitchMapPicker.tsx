@@ -6,7 +6,7 @@ type LeafletModule=typeof import("leaflet");
 export default function PitchMapPicker({latitude,longitude,onPick}:Props){
  const container=useRef<HTMLDivElement>(null);
  const map=useRef<import("leaflet").Map|null>(null);
- const marker=useRef<import("leaflet").Marker|null>(null);
+ const marker=useRef<import("leaflet").CircleMarker|null>(null);
  const leaflet=useRef<LeafletModule|null>(null);
  const callback=useRef(onPick);
  useEffect(()=>{callback.current=onPick},[onPick]);
@@ -15,11 +15,11 @@ export default function PitchMapPicker({latitude,longitude,onPick}:Props){
   async function initialize(){
    const L=await import("leaflet");
    if(cancelled||!container.current||map.current)return;
-   leaflet.current=L;
    const center: [number,number]=latitude!=null&&longitude!=null?[latitude,longitude]:[9.082,8.6753];
    const instance=L.map(container.current).setView(center,latitude!=null?14:6);
    map.current=instance;
-   if(latitude!=null&&longitude!=null){marker.current=L.circleMarker([latitude,longitude],{radius:9,color:"#166534",fillColor:"#22c55e",fillOpacity:0.9}).addTo(instance) as unknown as L.Marker;}
+   leaflet.current=L;
+   if(latitude!=null&&longitude!=null){marker.current=L.circleMarker([latitude,longitude],{radius:9,color:"#166534",fillColor:"#22c55e",fillOpacity:0.9}).addTo(instance);}
    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:19}).addTo(instance);
    instance.on("click",(event:L.LeafletMouseEvent)=>callback.current(Number(event.latlng.lat.toFixed(7)),Number(event.latlng.lng.toFixed(7))));
    setTimeout(()=>instance.invalidateSize(),100);
