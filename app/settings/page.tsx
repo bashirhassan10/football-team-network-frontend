@@ -1,8 +1,7 @@
-import dynamic from "next/dynamic";
 "use client";
 import Link from "next/link";
 import {useEffect,useRef,useState,type FormEvent} from "react";
-const PitchMapPicker=dynamic(()=>import("./PitchMapPicker"),{ssr:false});
+import PitchMapPicker from "./PitchMapPicker";
 type Settings={team_name:string;contact_name:string;phone:string;email:string;pitch_address:string;pitch_name?:string;pitch_latitude?:number|null;pitch_longitude?:number|null};
 export default function Settings(){
  const[data,setData]=useState<Settings|null>(null),[error,setError]=useState(""),[message,setMessage]=useState(""),[busy,setBusy]=useState(false),[loading,setLoading]=useState(true),[retry,setRetry]=useState(0);
