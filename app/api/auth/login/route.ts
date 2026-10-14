@@ -24,7 +24,8 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
       cache: "no-store",
-      signal: AbortSignal.timeout(25000),
+      // Render Free instances can need 50+ seconds to wake after inactivity.
+      signal: AbortSignal.timeout(90000),
     });
   } catch {
     return NextResponse.json(
