@@ -10,17 +10,44 @@ const cookieOptions = {
 };
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const response = await fetch(backendUrl("/api/auth/login"), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    cache: "no-store",
-  });
-  const text = await response.text();
-  if (!response.ok) return NextResponse.json({ error: text.trim() || "Login failed" }, { status: response.status });
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid login request" }, { status: 400 });
+  }
 
-  const data = JSON.parse(text);
+  let response: Response;
+  try {
+    response = await fetch(backendUrl("/api/auth/login"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      cache: "no-store",
+      // Render Free instances can need 50+ seconds to wake after inactivity.
+      signal: AbortSignal.timeout(90000),
+    });
+  } catch {
+    return NextResponse.json(
+      { error: "Login service is temporarily unavailable. Please try again shortly." },
+      { status: 503 },
+    );
+  }
+
+  const text = await response.text();
+  if (!response.ok) return NextResponse.json(
+    { error: response.status >= 500 ? "Login service is temporarily unavailable. Please try again shortly." : text.trim() || "Login failed" },
+    { status: response.status },
+  );
+
+  let data: { message: string; team_id: number; team_name: string; token: string };
+  try {
+    data = JSON.parse(text);
+    if (!data.token || !data.team_id) throw new Error("Incomplete login response");
+  } catch {
+    return NextResponse.json({ error: "Login service returned an invalid response" }, { status: 502 });
+  }
+
   const result = NextResponse.json({ message: data.message, team_id: data.team_id, team_name: data.team_name });
   result.cookies.set("ftn_session", data.token, cookieOptions);
   result.cookies.set("ftn_team_id", String(data.team_id), cookieOptions);

@@ -144,3 +144,8 @@
 @media(max-width:1000px){.proStudioGrid{grid-template-columns:1fr}.proStudioRail{position:static;display:grid;grid-template-columns:1fr 1fr}.proStudioRail .proLower{display:contents}.proSecurityCard{grid-column:1/-1}.proStudioMain .proDashboardGrid{grid-template-columns:1fr}.proDash{grid-template-columns:220px 1fr}}
 @media(max-width:760px){.proMain{padding:22px 15px 50px}.proStudioRail{display:flex}.proTop h1{font-size:28px}.proNext .proSectionHead{max-width:75%}.proNext .proFixture{max-width:75%}}
 @media(max-width:430px){.proTop h1{font-size:25px}.proNext{min-height:330px}.proNext .proSectionHead{max-width:92%}.proNext .proFixture{max-width:100%}.proStats{gap:9px}}
+
+/* Profile actions must override the generic directory-card link color. */
+.directoryCard > a.profileChallengeButton { display: inline-flex; align-items: center; justify-content: center; background: var(--green); color: #fff; padding: 15px 20px; border-radius: 12px; font-size: 14px; font-weight: 800; min-height: 44px; text-align: center; }
+.directoryCard > a.profileChallengeButton:hover { background: #0b5430; color: #fff; }
+.directoryCard > a.profileChallengeButton:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }

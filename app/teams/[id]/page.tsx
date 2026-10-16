@@ -68,8 +68,8 @@ export default function TeamProfilePage() {
             <p><MapPin/> {team.lga_name}, {team.state_name}</p>
             <p><MapPin/> Home pitch: {team.pitch_address}</p>
             {session?.team_id === team.id ? <p>This is your team.</p> : session?.authenticated ?
-              <Link className="button" href={`/matches?opponent=${team.id}`}>Challenge Team →</Link> :
-              <Link className="button" href="/login">Sign in to challenge →</Link>}
+              <Link className="button profileChallengeButton" href={`/matches?opponent=${team.id}`}>Challenge Team →</Link> :
+              <Link className="button profileChallengeButton" href="/login">Sign in to challenge →</Link>}
           </article>
         </div>
       </> : null}
