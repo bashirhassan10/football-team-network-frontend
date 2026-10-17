@@ -14,7 +14,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      # The repository currently has no committed package-lock.json.\n      - run: npm install
+      # The repository currently has no committed package-lock.json.
+      - run: npm install
       - run: npm run test
       - run: npm run lint
       - run: npm run build
