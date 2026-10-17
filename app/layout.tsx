@@ -1,6 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import type { Metadata } from "next";
 import "./globals.css";
+import TeamSessionGuard from "./team-session-guard";
 
 export const metadata: Metadata = {
   title: { default: "Football Team Network", template: "%s | Football Team Network" },
@@ -8,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body><TeamSessionGuard />{children}</body></html>;
 }
