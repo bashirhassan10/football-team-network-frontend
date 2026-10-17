@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- Node.js CommonJS test runner uses require(). */
 // Regression tests for backend routing. No network calls or database writes.
 const test = require("node:test");
 const assert = require("node:assert/strict");
