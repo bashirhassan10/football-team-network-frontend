@@ -2,7 +2,7 @@ name: Frontend CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/staging-session-tab-isolation]
   pull_request:
     branches: [main]
 
@@ -14,8 +14,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install
+      - run: npm ci
+      - run: npm run test
       - run: npm run lint
       - run: npm run build
         env:
-          BACKEND_API_URL: https://football-team-network.onrender.com
+          # PRs and staging branches must never build against production backend.
+          BACKEND_API_URL: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'https://football-team-network.onrender.com' || 'https://football-team-network-staging.onrender.com' }}
