@@ -17,7 +17,7 @@ export default function Dashboard(){
  }).catch(()=>{setError("Unable to refresh your workspace.");setLoading(false)})},[]);
  const required=["REGISTRATION","TEAM_ID","OWNER_ID"],approved=required.filter(t=>v?.documents?.some(d=>d.document_type===t&&d.status==="APPROVED")).length;
  const received=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="RECEIVER"),sent=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="SENDER"),accepted=matches.filter(m=>m.status==="ACCEPTED"),completed=matches.filter(m=>m.status==="COMPLETED");
- const status=v?.overall_status||"NOT SUBMITTED",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
+ const status=v?.overall_status||"NOT SUBMITTED",verified=status==="APPROVED"||status==="VERIFIED",reviewPending=status==="PENDING_REVIEW",verificationAction=verified?"View verification details":reviewPending?"View review status":approved===3?"Complete verification":"Upload verification documents",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
  const nextMatch=useMemo(()=>accepted.filter(m=>new Date(m.match_date).getTime()>=Date.now()).sort((a,b)=>+new Date(a.match_date)-+new Date(b.match_date))[0],[accepted]);
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
  const initials=(typeof session?.team_name==="string"?session.team_name:"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
@@ -58,7 +58,7 @@ export default function Dashboard(){
    </div>
    </div><aside className="proStudioRail"><div className="proSecurityCard"><ShieldCheck/><div><span>SECURE WORKSPACE</span><b>Protected team session</b><small>{session?.team_name||"Team"} workspace</small></div></div>
    <section className="proLower">
-    <div className="proVerifyCard"><div className="proVerifyIcon"><BadgeCheck/></div><div><span>TEAM VERIFICATION</span><h3>{status.replaceAll("_"," ")}</h3><p>{approved} of 3 identity documents approved</p><div className="proProgress"><i style={{width:`${approved/3*100}%`}}/></div></div><Link href="/verification">Manage <ChevronRight/></Link></div>
+    <div className="proVerifyCard"><div className="proVerifyIcon"><BadgeCheck/></div><div><span>TEAM VERIFICATION</span><h3>{status.replaceAll("_"," ")}</h3><p>{approved} of 3 identity documents approved</p><p>{verified?"Verified team · no payment required":reviewPending?"Awaiting admin review":approved===3?"Next step: verification payment ₦5,000":"Next step: complete required documents"}</p><div className="proProgress"><i style={{width:`${approved/3*100}%`}}/></div></div><Link href="/verification">{verificationAction} <ChevronRight/></Link></div>
     <div className="proQuick"><span>QUICK ACTIONS</span><div><Link href="/matches"><CalendarDays/>New match</Link><Link href="/calendar"><CalendarDays/>Calendar</Link><Link href="/teams"><Search/>Find teams</Link><Link href="/verification"><FileCheck2/>Verification</Link></div></div>
    </section></aside></div>
   </section>
