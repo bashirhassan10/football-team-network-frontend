@@ -4,15 +4,16 @@ import {useEffect,useMemo,useState} from "react";
 import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,MapPin,MessageCircle,Search,ShieldCheck,Trophy,Users,Settings,BarChart3} from "lucide-react";
 
 type V={overall_status:string;documents:{document_type:string;status:string}[]};
+type P={status:string;review_consumed:boolean};
 type M={id:number;sender_team_id:number;receiver_team_id:number;match_date:string;location:string;status:string;viewer_role?:"SENDER"|"RECEIVER"};
 type T={id:number;team_name:string};
 type S={authenticated:boolean;team_id:number|null;team_name:string|null};
 
 export default function Dashboard(){
- const[v,setV]=useState<V|null>(null),[matches,setMatches]=useState<M[]>([]),[teams,setTeams]=useState<T[]>([]),[session,setSession]=useState<S|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
- useEffect(()=>{Promise.all([fetch("/api/verification/status"),fetch("/api/matches"),fetch("/api/teams"),fetch("/api/auth/session")]).then(async([vr,mr,tr,sr])=>{
+ const[payment,setPayment]=useState<P|null>(null),[v,setV]=useState<V|null>(null),[matches,setMatches]=useState<M[]>([]),[teams,setTeams]=useState<T[]>([]),[session,setSession]=useState<S|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
+ useEffect(()=>{Promise.all([fetch("/api/verification/status"),fetch("/api/matches"),fetch("/api/teams"),fetch("/api/auth/session"),fetch("/api/payments/status")]).then(async([vr,mr,tr,sr,pr])=>{
   if(vr.status===401||mr.status===401||sr.status===401){location.href="/login";return}
-  if(vr.ok){const d=await vr.json();if(d&&typeof d==="object")setV({...d,documents:Array.isArray(d.documents)?d.documents:[]})}if(mr.ok){const d=await mr.json();setMatches(Array.isArray(d)?d:[])}if(tr.ok){const d=await tr.json();setTeams(Array.isArray(d)?d:[])}if(sr.ok){const d=await sr.json();if(d&&typeof d==="object")setSession(d)}
+  if(pr.ok){const d=await pr.json();setPayment(d)}if(vr.ok){const d=await vr.json();if(d&&typeof d==="object")setV({...d,documents:Array.isArray(d.documents)?d.documents:[]})}if(mr.ok){const d=await mr.json();setMatches(Array.isArray(d)?d:[])}if(tr.ok){const d=await tr.json();setTeams(Array.isArray(d)?d:[])}if(sr.ok){const d=await sr.json();if(d&&typeof d==="object")setSession(d)}
   if(!vr.ok&&vr.status!==403)setError("Some dashboard data could not be loaded.");setLoading(false)
  }).catch(()=>{setError("Unable to refresh your workspace.");setLoading(false)})},[]);
  const required=["REGISTRATION","TEAM_ID","OWNER_ID"],approved=required.filter(t=>v?.documents?.some(d=>d.document_type===t&&d.status==="APPROVED")).length;
@@ -58,7 +59,7 @@ export default function Dashboard(){
    </div>
    </div><aside className="proStudioRail"><div className="proSecurityCard"><ShieldCheck/><div><span>SECURE WORKSPACE</span><b>Protected team session</b><small>{session?.team_name||"Team"} workspace</small></div></div>
    <section className="proLower">
-    <div className="proVerifyCard"><div className="proVerifyIcon"><BadgeCheck/></div><div><span>TEAM VERIFICATION</span><h3>{status.replaceAll("_"," ")}</h3><p>{approved} of 3 identity documents approved</p><p>{verified?"Verified team · no payment required":reviewPending?"Awaiting admin review":approved===3?"Next step: verification payment ₦5,000":"Next step: complete required documents"}</p><div className="proProgress"><i style={{width:`${approved/3*100}%`}}/></div></div><Link href="/verification">{verificationAction} <ChevronRight/></Link></div>
+    <div className="proVerifyCard"><div className="proVerifyIcon"><BadgeCheck/></div><div><span>TEAM VERIFICATION</span><h3>{status.replaceAll("_"," ")}</h3><p>{approved} of 3 identity documents approved</p><p>{verified?"Verified team · no payment required":reviewPending?"Awaiting admin review":payment?.status==="SUCCESS"?(payment.review_consumed?"Payment used for review":"Payment: PAID · submit for review"):payment?.status==="PENDING"?"Payment: PENDING":approved===3?"Next step: verification payment ₦5,000":"Next step: complete required documents"}</p><div className="proProgress"><i style={{width:`${approved/3*100}%`}}/></div></div><Link href="/verification">{verificationAction} <ChevronRight/></Link></div>
     <div className="proQuick"><span>QUICK ACTIONS</span><div><Link href="/matches"><CalendarDays/>New match</Link><Link href="/calendar"><CalendarDays/>Calendar</Link><Link href="/teams"><Search/>Find teams</Link><Link href="/verification"><FileCheck2/>Verification</Link></div></div>
    </section></aside></div>
   </section>
