@@ -4,7 +4,7 @@ import {useEffect,useMemo,useState} from "react";
 import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,MapPin,MessageCircle,Search,ShieldCheck,Trophy,Users,Settings,BarChart3} from "lucide-react";
 
 type V={overall_status:string;documents:{document_type:string;status:string}[]};
-type P={status:string;review_consumed:boolean};
+type P={status:string;review_consumed:boolean;team_verification_status:string};
 type M={id:number;sender_team_id:number;receiver_team_id:number;match_date:string;location:string;status:string;viewer_role?:"SENDER"|"RECEIVER"};
 type T={id:number;team_name:string};
 type S={authenticated:boolean;team_id:number|null;team_name:string|null};
@@ -18,7 +18,7 @@ export default function Dashboard(){
  }).catch(()=>{setError("Unable to refresh your workspace.");setLoading(false)})},[]);
  const required=["REGISTRATION","TEAM_ID","OWNER_ID"],approved=required.filter(t=>v?.documents?.some(d=>d.document_type===t&&d.status==="APPROVED")).length;
  const received=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="RECEIVER"),sent=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="SENDER"),accepted=matches.filter(m=>m.status==="ACCEPTED"),completed=matches.filter(m=>m.status==="COMPLETED");
- const status=v?.overall_status||"NOT SUBMITTED",verified=status==="APPROVED"||status==="VERIFIED",reviewPending=status==="PENDING_REVIEW",verificationAction=verified?"View verification details":reviewPending?"View review status":approved===3?"Complete verification":"Upload verification documents",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
+ const status=payment?.team_verification_status||"NOT_SUBMITTED",verified=status==="VERIFIED",reviewPending=status==="PENDING_REVIEW",verificationAction=verified?"View verification details":reviewPending?"View review status":approved===3?"Complete verification":"Upload verification documents",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
  const nextMatch=useMemo(()=>accepted.filter(m=>new Date(m.match_date).getTime()>=Date.now()).sort((a,b)=>+new Date(a.match_date)-+new Date(b.match_date))[0],[accepted]);
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
  const initials=(typeof session?.team_name==="string"?session.team_name:"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
