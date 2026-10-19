@@ -169,3 +169,11 @@
  .proDash .proMobileToolbar{position:sticky;top:0;z-index:80;background:#f3f5f1;padding:10px 0;margin-top:-10px;margin-bottom:12px;border-bottom:1px solid #dfe5dc}
  .proDash .proMobileMenuButton,.proDash .proMobileLogout{flex-shrink:0}
 }
+
+/* Mobile: fixed controls stay accessible inside nested browser/emulator scrolling. */
+@media(max-width:760px){
+ .proDash .proMobileToolbar{position:fixed;top:0;left:0;right:0;width:100%;z-index:90;margin:0;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:#f3f5f1;box-sizing:border-box;box-shadow:0 2px 10px rgba(0,0,0,.09)}
+ .proDash .proMain{padding-top:85px}
+ .proDash .proMobileBackdrop{z-index:95}
+ .proDash .proSide.proSideOpen{z-index:100}
+}
