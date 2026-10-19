@@ -11,6 +11,7 @@ type S={authenticated:boolean;team_id:number|null;team_name:string|null};
 
 export default function Dashboard(){
  const[mobileMenuOpen,setMobileMenuOpen]=useState(false);
+ useEffect(()=>{if(!mobileMenuOpen)return;const previous=document.body.style.overflow;document.body.style.overflow="hidden";return()=>{document.body.style.overflow=previous}},[mobileMenuOpen]);
  const[payment,setPayment]=useState<P|null>(null),[v,setV]=useState<V|null>(null),[matches,setMatches]=useState<M[]>([]),[teams,setTeams]=useState<T[]>([]),[session,setSession]=useState<S|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
  useEffect(()=>{Promise.all([fetch("/api/verification/status"),fetch("/api/matches"),fetch("/api/teams"),fetch("/api/auth/session"),fetch("/api/payments/status")]).then(async([vr,mr,tr,sr,pr])=>{
   if(vr.status===401||mr.status===401||sr.status===401){location.href="/login";return}
