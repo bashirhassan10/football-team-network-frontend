@@ -198,3 +198,10 @@
   .homeMobileMenu a:hover,.homeMobileMenu a:focus-visible{background:#edf4e6;color:var(--green)}
 }
 @media(min-width:801px){.homeMobileNav{display:none}}
+
+/* Staging match chat: WhatsApp-style outgoing/right, incoming/left */
+.chatMessages{display:flex;flex-direction:column;align-items:stretch}
+.chatMessages .bubble{max-width:82%;width:fit-content;min-width:110px;overflow-wrap:anywhere}
+.chatMessages .bubbleMine{align-self:flex-end;background:#e2f4df;border-color:#c2dfbd;border-bottom-right-radius:4px}
+.chatMessages .bubbleTheirs{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.chatMessages .bubble time{display:block;text-align:right;margin-top:4px}
