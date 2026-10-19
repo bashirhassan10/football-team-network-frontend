@@ -184,3 +184,17 @@
  .proDash .proSide.proSideOpen nav{flex:0 0 auto;overflow:visible}
  .proDash .proMobileBackdrop{z-index:105!important}
 }
+
+/* Homepage mobile navigation: staging QA */
+.homeMobileNav{display:none}
+@media(max-width:800px){
+  .nav{position:relative;z-index:20}
+  .navActions{display:none}
+  .homeMobileNav{display:flex;align-items:center;gap:10px;margin-left:auto}
+  .homeMobileSignIn{font-size:13px;font-weight:800;white-space:nowrap;color:var(--green)}
+  .homeMobileToggle{display:grid;place-items:center;width:42px;height:42px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);cursor:pointer}
+  .homeMobileMenu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:white;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 30px #10221922;padding:8px;display:grid;z-index:30}
+  .homeMobileMenu a{display:block;padding:13px 14px;font-size:14px;font-weight:700;border-radius:9px}
+  .homeMobileMenu a:hover,.homeMobileMenu a:focus-visible{background:#edf4e6;color:var(--green)}
+}
+@media(min-width:801px){.homeMobileNav{display:none}}
