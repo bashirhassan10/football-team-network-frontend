@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useMemo,useState} from "react";
-import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,MapPin,MessageCircle,Search,ShieldCheck,Trophy,Users,Settings,BarChart3} from "lucide-react";
+import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,MapPin,MessageCircle,Search,ShieldCheck,Trophy,Users,Settings,BarChart3,Menu,X} from "lucide-react";
 
 type V={overall_status:string;documents:{document_type:string;status:string}[]};
 type P={status:string;review_consumed:boolean;team_verification_status:string};
@@ -10,6 +10,7 @@ type T={id:number;team_name:string};
 type S={authenticated:boolean;team_id:number|null;team_name:string|null};
 
 export default function Dashboard(){
+ const[mobileMenuOpen,setMobileMenuOpen]=useState(false);
  const[payment,setPayment]=useState<P|null>(null),[v,setV]=useState<V|null>(null),[matches,setMatches]=useState<M[]>([]),[teams,setTeams]=useState<T[]>([]),[session,setSession]=useState<S|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
  useEffect(()=>{Promise.all([fetch("/api/verification/status"),fetch("/api/matches"),fetch("/api/teams"),fetch("/api/auth/session"),fetch("/api/payments/status")]).then(async([vr,mr,tr,sr,pr])=>{
   if(vr.status===401||mr.status===401||sr.status===401){location.href="/login";return}
@@ -23,9 +24,11 @@ export default function Dashboard(){
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
  const initials=(typeof session?.team_name==="string"?session.team_name:"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
  return <main className="proDash">
-  <aside className="proSide dashSide restoredSide">
+  {mobileMenuOpen&&<button type="button" className="proMobileBackdrop" aria-label="Close navigation" onClick={()=>setMobileMenuOpen(false)}/>}
+  <aside id="team-mobile-navigation" className={"proSide dashSide restoredSide"+(mobileMenuOpen?" proSideOpen":"")}>
+   <button type="button" className="proMobileClose" aria-label="Close navigation" onClick={()=>setMobileMenuOpen(false)}><X/></button>
    <Link href="/" className="brand brandLight"><span className="brandMark lime">NF</span><span>Naija Football<br/><b>Network</b></span></Link>
-   <nav>
+   <nav onClick={(event)=>{if((event.target as HTMLElement).closest("a"))setMobileMenuOpen(false)}}>
     <Link className="active" href="/dashboard"><LayoutDashboard/>Overview</Link>
     <Link href="/verification"><FileCheck2/>Verification</Link>
     <Link href="/teams"><Search/>Find teams</Link>
@@ -40,6 +43,7 @@ export default function Dashboard(){
    <div className="dashSecurity"><ShieldCheck/><span><b>Secure workspace</b><small>Protected team session</small></span></div>
   </aside>
   <section className="proMain">
+   <div className="proMobileToolbar"><button type="button" className="proMobileMenuButton" aria-controls="team-mobile-navigation" aria-expanded={mobileMenuOpen} onClick={()=>setMobileMenuOpen(open=>!open)}><Menu/> Menu</button><form action="/api/auth/logout" method="post"><button type="submit" className="proMobileLogout">Sign out</button></form></div>
    <header className="proTop"><div><span className="proMobileBrand">NFN</span><p>TEAM WORKSPACE</p><h1>Welcome back, <em>{session?.team_name||"Team"}</em></h1></div><div className="proTopActions"><button className="proBell" aria-label="Notifications"><Bell/>{received.length>0&&<i/>}</button><div className="proAvatar">{initials}</div><form action="/api/auth/logout" method="post"><button className="proSignout">Sign out</button></form></div></header>
    {error&&<div className="formError">{error}</div>}
    <div className="proStudioGrid"><div className="proStudioMain"><div className="proStats">
