@@ -162,3 +162,10 @@
  .proMobileClose{align-self:flex-end;background:transparent;color:#fff;border-color:#526057;margin-bottom:12px}
  .proMobileMenuButton:focus-visible,.proMobileLogout:focus-visible,.proMobileClose:focus-visible{outline:3px solid #a3d63a;outline-offset:2px}
 }
+
+/* Keep mobile dashboard navigation reachable while scrolling, including narrow emulator viewports. */
+@media(max-width:760px){
+ .proDash .proMain{overflow:visible}
+ .proDash .proMobileToolbar{position:sticky;top:0;z-index:80;background:#f3f5f1;padding:10px 0;margin-top:-10px;margin-bottom:12px;border-bottom:1px solid #dfe5dc}
+ .proDash .proMobileMenuButton,.proDash .proMobileLogout{flex-shrink:0}
+}
