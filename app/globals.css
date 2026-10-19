@@ -177,3 +177,10 @@
  .proDash .proMobileBackdrop{z-index:95}
  .proDash .proSide.proSideOpen{z-index:100}
 }
+
+/* Mobile drawer: scroll the navigation itself, not the page behind it. */
+@media(max-width:760px){
+ .proDash .proSide.proSideOpen{display:flex!important;flex-direction:column;position:fixed!important;top:0!important;bottom:0!important;left:0!important;right:auto!important;height:100dvh!important;max-height:100dvh!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;box-sizing:border-box;z-index:110!important;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+ .proDash .proSide.proSideOpen nav{flex:0 0 auto;overflow:visible}
+ .proDash .proMobileBackdrop{z-index:105!important}
+}
