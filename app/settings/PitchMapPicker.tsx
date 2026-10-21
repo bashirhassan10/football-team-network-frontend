@@ -1,9 +1,9 @@
 "use client";
 import {useEffect,useRef} from "react";
 
-type Props={latitude:number|null;longitude:number|null;onPick:(latitude:number,longitude:number)=>void};
+type Props={latitude:number|null;longitude:number|null;onPick:(latitude:number,longitude:number)=>void;description?:string};
 type LeafletModule=typeof import("leaflet");
-export default function PitchMapPicker({latitude,longitude,onPick}:Props){
+export default function PitchMapPicker({latitude,longitude,onPick,description}:Props){
  const container=useRef<HTMLDivElement>(null);
  const map=useRef<import("leaflet").Map|null>(null);
  const marker=useRef<import("leaflet").CircleMarker|null>(null);
@@ -38,5 +38,5 @@ export default function PitchMapPicker({latitude,longitude,onPick}:Props){
   else marker.current=L.circleMarker(position,{radius:9,color:"#166534",fillColor:"#22c55e",fillOpacity:0.9}).addTo(instance);
   instance.panTo(position);
  },[latitude,longitude]);
- return <div><p>Click anywhere on the map to select your home pitch. Zoom in for accuracy.</p><div ref={container} style={{height:340,width:"100%",borderRadius:12,zIndex:0}} role="application" aria-label="Interactive map: click to choose pitch location"/><p style={{fontSize:12}}>Map data © OpenStreetMap contributors. You can also type coordinates above.</p></div>;
+ return <div><p>{description||"Click anywhere on the map to select your home pitch. Zoom in for accuracy."}</p><div ref={container} style={{height:340,width:"100%",borderRadius:12,zIndex:0}} role="application" aria-label="Interactive map: click to choose pitch location"/><p style={{fontSize:12}}>Map data © OpenStreetMap contributors. You can also type coordinates above.</p></div>;
 }
