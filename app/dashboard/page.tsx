@@ -5,7 +5,7 @@ import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,Map
 
 type V={overall_status:string;documents:{document_type:string;status:string}[]};
 type P={status:string;review_consumed:boolean;team_verification_status:string};
-type M={id:number;sender_team_id:number;receiver_team_id:number;match_date:string;location:string;status:string;viewer_role?:"SENDER"|"RECEIVER"};
+type M={id:number;sender_team_id:number;receiver_team_id:number;match_date:string;location:string;status:string;completed_for_team?:boolean;viewer_role?:"SENDER"|"RECEIVER"};
 type T={id:number;team_name:string};
 type S={authenticated:boolean;team_id:number|null;team_name:string|null};
 
@@ -19,7 +19,7 @@ export default function Dashboard(){
   if(!vr.ok&&vr.status!==403)setError("Some dashboard data could not be loaded.");setLoading(false)
  }).catch(()=>{setError("Unable to refresh your workspace.");setLoading(false)})},[]);
  const required=["REGISTRATION","TEAM_ID","OWNER_ID"],approved=required.filter(t=>v?.documents?.some(d=>d.document_type===t&&d.status==="APPROVED")).length;
- const received=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="RECEIVER"),sent=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="SENDER"),accepted=matches.filter(m=>m.status==="ACCEPTED"),completed=matches.filter(m=>m.status==="COMPLETED");
+ const received=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="RECEIVER"),sent=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="SENDER"),accepted=matches.filter(m=>m.status==="ACCEPTED"&&!m.completed_for_team),completed=matches.filter(m=>m.status==="COMPLETED"||m.completed_for_team);
  const status=payment?.team_verification_status||"NOT_SUBMITTED",verified=status==="VERIFIED",reviewPending=status==="PENDING_REVIEW",verificationAction=verified?"View verification details":reviewPending?"View review status":approved===3?"Complete verification":"Upload verification documents",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
  const nextMatch=useMemo(()=>accepted.filter(m=>new Date(m.match_date).getTime()>=Date.now()).sort((a,b)=>+new Date(a.match_date)-+new Date(b.match_date))[0],[accepted]);
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
@@ -59,7 +59,7 @@ export default function Dashboard(){
      {nextMatch?<div className="proFixture"><div className="proFixtureTeam"><div className="proTeamBadge">{teamName(nextMatch.sender_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.sender_team_id)}</b></div><div className="proFixtureMid"><span>{new Date(nextMatch.match_date).toLocaleDateString("en-NG",{day:"2-digit",month:"short"})}</span><strong>VS</strong><time>{new Date(nextMatch.match_date).toLocaleTimeString("en-NG",{hour:"2-digit",minute:"2-digit"})}</time></div><div className="proFixtureTeam"><div className="proTeamBadge alt">{teamName(nextMatch.receiver_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.receiver_team_id)}</b></div><p><MapPin/>{nextMatch.location}</p></div>:<div className="proEmptyFixture"><Trophy/><h3>No accepted fixture yet</h3><p>Find a verified team and arrange your next match.</p><Link href="/teams">Find an opponent</Link></div>}
     </section>
     <aside className="proActivity"><div className="proSectionHead"><div><span>LIVE WORKSPACE</span><h2>Recent activity</h2></div></div>
-     {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+m.status}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":String(m.status||"UNKNOWN").toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
+     {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+(m.completed_for_team?"COMPLETED":m.status)}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):(m.completed_for_team||m.status==="COMPLETED")?"Match completed":m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":String(m.status||"UNKNOWN").toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
     </aside>
    </div>
    </div><aside className="proStudioRail"><div className="proSecurityCard"><ShieldCheck/><div><span>SECURE WORKSPACE</span><b>Protected team session</b><small>{session?.team_name||"Team"} workspace</small></div></div>
