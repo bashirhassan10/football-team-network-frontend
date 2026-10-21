@@ -1,30 +1,35 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useMemo,useState} from "react";
-import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,MapPin,MessageCircle,Search,ShieldCheck,Trophy,Users,Settings,BarChart3} from "lucide-react";
+import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,MapPin,MessageCircle,Search,ShieldCheck,Trophy,Users,Settings,BarChart3,Menu,X} from "lucide-react";
 
 type V={overall_status:string;documents:{document_type:string;status:string}[]};
-type M={id:number;sender_team_id:number;receiver_team_id:number;match_date:string;location:string;status:string;viewer_role?:"SENDER"|"RECEIVER"};
+type P={status:string;review_consumed:boolean;team_verification_status:string};
+type M={id:number;sender_team_id:number;receiver_team_id:number;match_date:string;location:string;venue_latitude?:number|null;venue_longitude?:number|null;status:string;completed_for_team?:boolean;viewer_role?:"SENDER"|"RECEIVER"};
 type T={id:number;team_name:string};
 type S={authenticated:boolean;team_id:number|null;team_name:string|null};
 
 export default function Dashboard(){
- const[v,setV]=useState<V|null>(null),[matches,setMatches]=useState<M[]>([]),[teams,setTeams]=useState<T[]>([]),[session,setSession]=useState<S|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
- useEffect(()=>{Promise.all([fetch("/api/verification/status"),fetch("/api/matches"),fetch("/api/teams"),fetch("/api/auth/session")]).then(async([vr,mr,tr,sr])=>{
+ const[mobileMenuOpen,setMobileMenuOpen]=useState(false);
+ useEffect(()=>{if(!mobileMenuOpen)return;const previous=document.body.style.overflow;document.body.style.overflow="hidden";return()=>{document.body.style.overflow=previous}},[mobileMenuOpen]);
+ const[payment,setPayment]=useState<P|null>(null),[v,setV]=useState<V|null>(null),[matches,setMatches]=useState<M[]>([]),[teams,setTeams]=useState<T[]>([]),[session,setSession]=useState<S|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
+ useEffect(()=>{Promise.all([fetch("/api/verification/status"),fetch("/api/matches"),fetch("/api/teams"),fetch("/api/auth/session"),fetch("/api/payments/status")]).then(async([vr,mr,tr,sr,pr])=>{
   if(vr.status===401||mr.status===401||sr.status===401){location.href="/login";return}
-  if(vr.ok){const d=await vr.json();if(d&&typeof d==="object")setV({...d,documents:Array.isArray(d.documents)?d.documents:[]})}if(mr.ok){const d=await mr.json();setMatches(Array.isArray(d)?d:[])}if(tr.ok){const d=await tr.json();setTeams(Array.isArray(d)?d:[])}if(sr.ok){const d=await sr.json();if(d&&typeof d==="object")setSession(d)}
+  if(pr.ok){const d=await pr.json();setPayment(d)}if(vr.ok){const d=await vr.json();if(d&&typeof d==="object")setV({...d,documents:Array.isArray(d.documents)?d.documents:[]})}if(mr.ok){const d=await mr.json();setMatches(Array.isArray(d)?d:[])}if(tr.ok){const d=await tr.json();setTeams(Array.isArray(d)?d:[])}if(sr.ok){const d=await sr.json();if(d&&typeof d==="object")setSession(d)}
   if(!vr.ok&&vr.status!==403)setError("Some dashboard data could not be loaded.");setLoading(false)
  }).catch(()=>{setError("Unable to refresh your workspace.");setLoading(false)})},[]);
  const required=["REGISTRATION","TEAM_ID","OWNER_ID"],approved=required.filter(t=>v?.documents?.some(d=>d.document_type===t&&d.status==="APPROVED")).length;
- const received=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="RECEIVER"),sent=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="SENDER"),accepted=matches.filter(m=>m.status==="ACCEPTED"),completed=matches.filter(m=>m.status==="COMPLETED");
- const status=v?.overall_status||"NOT SUBMITTED",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
+ const received=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="RECEIVER"),sent=matches.filter(m=>m.status==="PENDING"&&m.viewer_role==="SENDER"),accepted=matches.filter(m=>m.status==="ACCEPTED"&&!m.completed_for_team),completed=matches.filter(m=>m.status==="COMPLETED"||m.completed_for_team);
+ const status=payment?.team_verification_status||"NOT_SUBMITTED",verified=status==="VERIFIED",reviewPending=status==="PENDING_REVIEW",verificationAction=verified?"View verification details":reviewPending?"View review status":approved===3?"Complete verification":"Upload verification documents",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
  const nextMatch=useMemo(()=>accepted.filter(m=>new Date(m.match_date).getTime()>=Date.now()).sort((a,b)=>+new Date(a.match_date)-+new Date(b.match_date))[0],[accepted]);
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
  const initials=(typeof session?.team_name==="string"?session.team_name:"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
  return <main className="proDash">
-  <aside className="proSide dashSide restoredSide">
+  {mobileMenuOpen&&<button type="button" className="proMobileBackdrop" aria-label="Close navigation" onClick={()=>setMobileMenuOpen(false)}/>}
+  <aside id="team-mobile-navigation" className={"proSide dashSide restoredSide"+(mobileMenuOpen?" proSideOpen":"")}>
+   <button type="button" className="proMobileClose" aria-label="Close navigation" onClick={()=>setMobileMenuOpen(false)}><X/></button>
    <Link href="/" className="brand brandLight"><span className="brandMark lime">NF</span><span>Naija Football<br/><b>Network</b></span></Link>
-   <nav>
+   <nav onClick={(event)=>{if((event.target as HTMLElement).closest("a"))setMobileMenuOpen(false)}}>
     <Link className="active" href="/dashboard"><LayoutDashboard/>Overview</Link>
     <Link href="/verification"><FileCheck2/>Verification</Link>
     <Link href="/teams"><Search/>Find teams</Link>
@@ -39,6 +44,7 @@ export default function Dashboard(){
    <div className="dashSecurity"><ShieldCheck/><span><b>Secure workspace</b><small>Protected team session</small></span></div>
   </aside>
   <section className="proMain">
+   <div className="proMobileToolbar"><button type="button" className="proMobileMenuButton" aria-controls="team-mobile-navigation" aria-expanded={mobileMenuOpen} onClick={()=>setMobileMenuOpen(open=>!open)}><Menu/> Menu</button><form action="/api/auth/logout" method="post"><button type="submit" className="proMobileLogout">Sign out</button></form></div>
    <header className="proTop"><div><span className="proMobileBrand">NFN</span><p>TEAM WORKSPACE</p><h1>Welcome back, <em>{session?.team_name||"Team"}</em></h1></div><div className="proTopActions"><button className="proBell" aria-label="Notifications"><Bell/>{received.length>0&&<i/>}</button><div className="proAvatar">{initials}</div><form action="/api/auth/logout" method="post"><button className="proSignout">Sign out</button></form></div></header>
    {error&&<div className="formError">{error}</div>}
    <div className="proStudioGrid"><div className="proStudioMain"><div className="proStats">
@@ -50,15 +56,15 @@ export default function Dashboard(){
    <div className="proDashboardGrid">
     <section className="proNext">
      <div className="proSectionHead"><div><span>NEXT FIXTURE</span><h2>Next match</h2></div><Link href="/matches">Match centre <ChevronRight/></Link></div>
-     {nextMatch?<div className="proFixture"><div className="proFixtureTeam"><div className="proTeamBadge">{teamName(nextMatch.sender_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.sender_team_id)}</b></div><div className="proFixtureMid"><span>{new Date(nextMatch.match_date).toLocaleDateString("en-NG",{day:"2-digit",month:"short"})}</span><strong>VS</strong><time>{new Date(nextMatch.match_date).toLocaleTimeString("en-NG",{hour:"2-digit",minute:"2-digit"})}</time></div><div className="proFixtureTeam"><div className="proTeamBadge alt">{teamName(nextMatch.receiver_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.receiver_team_id)}</b></div><p><MapPin/>{nextMatch.location}</p></div>:<div className="proEmptyFixture"><Trophy/><h3>No accepted fixture yet</h3><p>Find a verified team and arrange your next match.</p><Link href="/teams">Find an opponent</Link></div>}
+     {nextMatch?<div className="proFixture"><div className="proFixtureTeam"><div className="proTeamBadge">{teamName(nextMatch.sender_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.sender_team_id)}</b></div><div className="proFixtureMid"><span>{new Date(nextMatch.match_date).toLocaleDateString("en-NG",{day:"2-digit",month:"short"})}</span><strong>VS</strong><time>{new Date(nextMatch.match_date).toLocaleTimeString("en-NG",{hour:"2-digit",minute:"2-digit"})}</time></div><div className="proFixtureTeam"><div className="proTeamBadge alt">{teamName(nextMatch.receiver_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.receiver_team_id)}</b></div><p><a href={nextMatch.venue_latitude!=null&&nextMatch.venue_longitude!=null?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${nextMatch.venue_latitude},${nextMatch.venue_longitude}`)}`:`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nextMatch.location)}`} target="_blank" rel="noopener noreferrer" aria-label={`View ${nextMatch.location} on Google Maps`}><MapPin/>{nextMatch.location} ↗</a></p></div>:<div className="proEmptyFixture"><Trophy/><h3>No accepted fixture yet</h3><p>Find a verified team and arrange your next match.</p><Link href="/teams">Find an opponent</Link></div>}
     </section>
     <aside className="proActivity"><div className="proSectionHead"><div><span>LIVE WORKSPACE</span><h2>Recent activity</h2></div></div>
-     {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+m.status}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":String(m.status||"UNKNOWN").toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
+     {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+(m.completed_for_team?"COMPLETED":m.status)}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):(m.completed_for_team||m.status==="COMPLETED")?"Match completed":m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":String(m.status||"UNKNOWN").toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
     </aside>
    </div>
    </div><aside className="proStudioRail"><div className="proSecurityCard"><ShieldCheck/><div><span>SECURE WORKSPACE</span><b>Protected team session</b><small>{session?.team_name||"Team"} workspace</small></div></div>
    <section className="proLower">
-    <div className="proVerifyCard"><div className="proVerifyIcon"><BadgeCheck/></div><div><span>TEAM VERIFICATION</span><h3>{status.replaceAll("_"," ")}</h3><p>{approved} of 3 identity documents approved</p><div className="proProgress"><i style={{width:`${approved/3*100}%`}}/></div></div><Link href="/verification">Manage <ChevronRight/></Link></div>
+    <div className="proVerifyCard"><div className="proVerifyIcon"><BadgeCheck/></div><div><span>TEAM VERIFICATION</span><h3>{status.replaceAll("_"," ")}</h3><p>{approved} of 3 identity documents approved</p><p>{verified?(payment?.status==="SUCCESS"?"Verified · Payment completed · no further payment required":"Verified team · no payment required"):reviewPending?"Awaiting admin review":payment?.status==="SUCCESS"?(payment.review_consumed?"Payment used for review":"Payment: PAID · submit for review"):payment?.status==="PENDING"?"Payment: PENDING":approved===3?"Next step: verification payment ₦5,000":"Next step: complete required documents"}</p><div className="proProgress"><i style={{width:`${approved/3*100}%`}}/></div></div><Link href="/verification">{verificationAction} <ChevronRight/></Link></div>
     <div className="proQuick"><span>QUICK ACTIONS</span><div><Link href="/matches"><CalendarDays/>New match</Link><Link href="/calendar"><CalendarDays/>Calendar</Link><Link href="/teams"><Search/>Find teams</Link><Link href="/verification"><FileCheck2/>Verification</Link></div></div>
    </section></aside></div>
   </section>
