@@ -15,10 +15,15 @@ export default function PitchMapPicker({latitude,longitude,onPick,description}:P
  const [searchError,setSearchError]=useState("");
  const [searched,setSearched]=useState(false);
  const searchAbort=useRef<AbortController|null>(null);
+ const lastSearchAt=useRef(0);
  async function searchPlace(event:React.FormEvent<HTMLFormElement>){
   event.preventDefault();
   const term=query.trim();
   if(term.length<3){setSearchError("Enter at least 3 characters.");return}
+  if(searching)return;
+  const now=Date.now();
+  if(now-lastSearchAt.current<1100){setSearchError("Please wait a moment before searching again.");return;}
+  lastSearchAt.current=now;
   searchAbort.current?.abort();
   const controller=new AbortController();searchAbort.current=controller;
   setSearching(true);setSearchError("");setResults([]);setSearched(false);
@@ -33,10 +38,10 @@ export default function PitchMapPicker({latitude,longitude,onPick,description}:P
  }
  function selectPlace(result:{lat:string;lon:string}){
   const lat=Number(result.lat),lon=Number(result.lon);
-  if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)||lat < -90||lat > 90||lon < -180||lon > 180)return;
   map.current?.setView([lat,lon],17);
   callback.current(Number(lat.toFixed(7)),Number(lon.toFixed(7)));
-  setResults([]);setSearched(false);
+  setResults([]);setSearched(false);setSearchError("");
  }
  useEffect(()=>()=>searchAbort.current?.abort(),[]);
  useEffect(()=>{callback.current=onPick},[onPick]);
