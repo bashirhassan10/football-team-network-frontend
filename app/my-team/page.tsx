@@ -15,6 +15,6 @@ export default function MyTeam(){
  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:20,marginTop:24}}>
  <section className="directoryCard"><h2>Club identity</h2><p>Manage your badge and home ground information.</p><Link className="button" href="/my-team/edit">Edit team profile →</Link></section>
  <section className="directoryCard"><h2>Team roster</h2><p>Keep your players and squad up to date.</p><Link href="/squad">View squad →</Link></section>
- <section className="directoryCard"><h2>Matches & performance</h2><p>See fixtures and your team's results.</p><Link href="/matches">View matches →</Link><br/><Link href="/statistics">View statistics →</Link></section>
+ <section className="directoryCard"><h2>Matches & performance</h2><p>See fixtures and your team&apos;s results.</p><Link href="/matches">View matches →</Link><br/><Link href="/statistics">View statistics →</Link></section>
  </div></>}</main>;
 }
