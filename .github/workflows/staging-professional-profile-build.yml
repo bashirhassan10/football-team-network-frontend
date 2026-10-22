@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - feat/staging-professional-team-profile
+  pull_request:
+    branches:
+      - feat/staging-team-logo-upload
   workflow_dispatch:
 jobs:
   build:
