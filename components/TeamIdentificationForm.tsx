@@ -37,6 +37,6 @@ export default function TeamIdentificationForm({busy,onGenerated,kind="team"}:Pr
   <label>Home pitch / location<input required maxLength={120} value={pitch} onChange={e=>setPitch(e.target.value)} style={{display:"block",width:"100%",padding:12,marginTop:6}}/></label>
   <label style={{display:"flex",gap:10,alignItems:"flex-start"}}><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)}/>I am authorized to submit this information, and it is accurate to the best of my knowledge.</label>
   {error&&<p role="alert" style={{color:"#a32920"}}>{error}</p>}
-  <button className="button" type="submit" disabled={busy||!confirmed} style={{border:0,cursor:"pointer"}}>{busy?"Submitting…":"{kind==="grassroots"?"Submit grassroots declaration":"Submit team identification for review"}"}</button>
+  <button className="button" type="submit" disabled={busy||!confirmed} style={{border:0,cursor:"pointer"}}>{busy?"Submitting…":(kind==="grassroots"?"Submit grassroots declaration":"Submit team identification for review")}</button>
  </form>;
 }
