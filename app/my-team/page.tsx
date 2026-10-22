@@ -13,7 +13,7 @@ export default function MyTeam(){
  <div style={{flex:"1 1 220px"}}><small style={{letterSpacing:2,color:"#b4f2ce"}}>YOUR CLUB</small><h2 style={{fontSize:"clamp(28px,4vw,44px)",color:"#fff",margin:"8px 0"}}>{session.team_name||details?.team_name||"My team"}</h2><p style={{color:"#d8f7e5"}}>{details?.pitch_name||details?.pitch_address||"Home ground details"}</p></div>
  {session.team_id&&<Link className="button" href={`/teams/${session.team_id}`}>View public profile ↗</Link>}</section>
  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:20,marginTop:24}}>
- <section className="directoryCard"><h2>Club identity</h2><p>Manage your badge and home ground information.</p><Link className="button" href="/my-team/edit">Edit team profile →</Link></section>
+ <section className="directoryCard"><h2>Club identity</h2><p>Manage your badge and home ground information.</p><Link className="button" style={{color:"#fff"}} href="/my-team/edit">Edit team profile →</Link></section>
  <section className="directoryCard"><h2>Team roster</h2><p>Keep your players and squad up to date.</p><Link href="/squad">View squad →</Link></section>
  <section className="directoryCard"><h2>Matches & performance</h2><p>See fixtures and your team&apos;s results.</p><Link href="/matches">View matches →</Link><br/><Link href="/statistics">View statistics →</Link></section>
  </div></>}</main>;
