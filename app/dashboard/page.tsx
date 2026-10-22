@@ -23,6 +23,8 @@ export default function Dashboard(){
  const status=payment?.team_verification_status||"NOT_SUBMITTED",verified=status==="VERIFIED",reviewPending=status==="PENDING_REVIEW",verificationAction=verified?"View verification details":reviewPending?"View review status":approved===3?"Complete verification":"Upload verification documents",teamName=(id:number)=>teams.find(t=>t.id===id)?.team_name||`Team #${id}`;
  const nextMatch=useMemo(()=>accepted.filter(m=>new Date(m.match_date).getTime()>=Date.now()).sort((a,b)=>+new Date(a.match_date)-+new Date(b.match_date))[0],[accepted]);
  const recent=useMemo(()=>[...matches].sort((a,b)=>b.id-a.id).slice(0,4),[matches]);
+ const [logoAvailable,setLogoAvailable]=useState(false);
+ useEffect(()=>{if(!session?.team_id)return;let active=true;fetch(`/api/teams/logo?team_id=${session.team_id}`,{cache:"no-store"}).then(r=>{if(active)setLogoAvailable(r.ok)}).catch(()=>{if(active)setLogoAvailable(false)});return()=>{active=false}},[session?.team_id]);
  const initials=(typeof session?.team_name==="string"?session.team_name:"NFN").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
  return <main className="proDash">
   {mobileMenuOpen&&<button type="button" className="proMobileBackdrop" aria-label="Close navigation" onClick={()=>setMobileMenuOpen(false)}/>}
@@ -45,7 +47,7 @@ export default function Dashboard(){
   </aside>
   <section className="proMain">
    <div className="proMobileToolbar"><button type="button" className="proMobileMenuButton" aria-controls="team-mobile-navigation" aria-expanded={mobileMenuOpen} onClick={()=>setMobileMenuOpen(open=>!open)}><Menu/> Menu</button><form action="/api/auth/logout" method="post"><button type="submit" className="proMobileLogout">Sign out</button></form></div>
-   <header className="proTop"><div><span className="proMobileBrand">NFN</span><p>TEAM WORKSPACE</p><h1>Welcome back, <em>{session?.team_name||"Team"}</em></h1></div><div className="proTopActions"><button className="proBell" aria-label="Notifications"><Bell/>{received.length>0&&<i/>}</button><div className="proAvatar">{initials}</div><form action="/api/auth/logout" method="post"><button className="proSignout">Sign out</button></form></div></header>
+   <header className="proTop"><div><span className="proMobileBrand">NFN</span><p>TEAM WORKSPACE</p><h1>Welcome back, <em>{session?.team_name||"Team"}</em></h1></div><div className="proTopActions"><button className="proBell" aria-label="Notifications"><Bell/>{received.length>0&&<i/>}</button><div className="proAvatar">{logoAvailable&&session?.team_id?<img src={`/api/teams/logo?team_id=${session.team_id}`} alt={`${session.team_name||"Team"} logo`} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:"50%"}}/>:initials}</div><form action="/api/auth/logout" method="post"><button className="proSignout">Sign out</button></form></div></header>
    {error&&<div className="formError">{error}</div>}
    <div className="proStudioGrid"><div className="proStudioMain"><div className="proStats">
     <article><span>ALL MATCHES</span><strong>{loading?"—":matches.length}</strong><small>Network fixtures</small></article>
