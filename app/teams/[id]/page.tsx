@@ -68,7 +68,7 @@ export default function TeamProfilePage() {
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:18,marginBottom:40}}>
           <article className="directoryCard"><h2>Club information</h2><p><b>Category</b></p><span className="categoryPill">{team.category||"Not provided"}</span><p><b>Verification</b></p><div className="verifiedLabel"><ShieldCheck size={18}/> {team.verification_status||"Not available"}</div></article>
           <article className="directoryCard"><h2>Home ground</h2><p><MapPin size={18}/> {team.pitch_address||"Not provided"}</p>{team.pitch_address&&<a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(team.pitch_address)}`} target="_blank" rel="noopener noreferrer">View stadium on map ↗</a>}</article>
-          <article className="directoryCard"><h2>Club activity</h2><p>Explore this club's squad, matches and performance across the network.</p><Link href="/teams">Explore teams →</Link></article>
+          <article className="directoryCard"><h2>Club activity</h2><p>Explore this club&apos;s squad, matches and performance across the network.</p><Link href="/teams">Explore teams →</Link></article>
         </div>
       </> : null}
     </section>
