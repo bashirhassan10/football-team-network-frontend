@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import TeamCrest from "../../components/TeamCrest";
 import {useEffect,useMemo,useState} from "react";
 import {BadgeCheck,Bell,CalendarDays,ChevronRight,FileCheck2,LayoutDashboard,MapPin,MessageCircle,Search,ShieldCheck,Trophy,Users,Settings,BarChart3,Menu,X} from "lucide-react";
 
@@ -33,6 +34,7 @@ export default function Dashboard(){
    <Link href="/" className="brand brandLight"><span className="brandMark lime">NF</span><span>Naija Football<br/><b>Network</b></span></Link>
    <nav onClick={(event)=>{if((event.target as HTMLElement).closest("a"))setMobileMenuOpen(false)}}>
     <Link className="active" href="/dashboard"><LayoutDashboard/>Overview</Link>
+    <Link href="/my-team"><ShieldCheck/>My Team Profile</Link>
     <Link href="/verification"><FileCheck2/>Verification</Link>
     <Link href="/teams"><Search/>Find teams</Link>
     <Link href="/matches"><CalendarDays/>Matches{received.length>0&&<i>{received.length}</i>}</Link>
@@ -58,7 +60,7 @@ export default function Dashboard(){
    <div className="proDashboardGrid">
     <section className="proNext">
      <div className="proSectionHead"><div><span>NEXT FIXTURE</span><h2>Next match</h2></div><Link href="/matches">Match centre <ChevronRight/></Link></div>
-     {nextMatch?<div className="proFixture"><div className="proFixtureTeam"><div className="proTeamBadge">{teamName(nextMatch.sender_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.sender_team_id)}</b></div><div className="proFixtureMid"><span>{new Date(nextMatch.match_date).toLocaleDateString("en-NG",{day:"2-digit",month:"short"})}</span><strong>VS</strong><time>{new Date(nextMatch.match_date).toLocaleTimeString("en-NG",{hour:"2-digit",minute:"2-digit"})}</time></div><div className="proFixtureTeam"><div className="proTeamBadge alt">{teamName(nextMatch.receiver_team_id).slice(0,2).toUpperCase()}</div><b>{teamName(nextMatch.receiver_team_id)}</b></div><p><a href={nextMatch.venue_latitude!=null&&nextMatch.venue_longitude!=null?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${nextMatch.venue_latitude},${nextMatch.venue_longitude}`)}`:`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nextMatch.location)}`} target="_blank" rel="noopener noreferrer" aria-label={`View ${nextMatch.location} on Google Maps`}><MapPin/>{nextMatch.location} ↗</a></p></div>:<div className="proEmptyFixture"><Trophy/><h3>No accepted fixture yet</h3><p>Find a verified team and arrange your next match.</p><Link href="/teams">Find an opponent</Link></div>}
+     {nextMatch?<div className="proFixture"><div className="proFixtureTeam"><TeamCrest className="proTeamBadge" teamId={nextMatch.sender_team_id} teamName={teamName(nextMatch.sender_team_id)}/><b>{teamName(nextMatch.sender_team_id)}</b></div><div className="proFixtureMid"><span>{new Date(nextMatch.match_date).toLocaleDateString("en-NG",{day:"2-digit",month:"short"})}</span><strong>VS</strong><time>{new Date(nextMatch.match_date).toLocaleTimeString("en-NG",{hour:"2-digit",minute:"2-digit"})}</time></div><div className="proFixtureTeam"><TeamCrest className="proTeamBadge alt" teamId={nextMatch.receiver_team_id} teamName={teamName(nextMatch.receiver_team_id)}/><b>{teamName(nextMatch.receiver_team_id)}</b></div><p><a href={nextMatch.venue_latitude!=null&&nextMatch.venue_longitude!=null?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${nextMatch.venue_latitude},${nextMatch.venue_longitude}`)}`:`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nextMatch.location)}`} target="_blank" rel="noopener noreferrer" aria-label={`View ${nextMatch.location} on Google Maps`}><MapPin/>{nextMatch.location} ↗</a></p></div>:<div className="proEmptyFixture"><Trophy/><h3>No accepted fixture yet</h3><p>Find a verified team and arrange your next match.</p><Link href="/teams">Find an opponent</Link></div>}
     </section>
     <aside className="proActivity"><div className="proSectionHead"><div><span>LIVE WORKSPACE</span><h2>Recent activity</h2></div></div>
      {recent.length?recent.map(m=><Link href="/matches" className="proActivityItem" key={m.id}><div className={"proActivityIcon "+(m.completed_for_team?"COMPLETED":m.status)}><CalendarDays/></div><div><b>{m.status==="PENDING"?(m.viewer_role==="RECEIVER"?"New match request":"Request sent"):(m.completed_for_team||m.status==="COMPLETED")?"Match completed":m.status==="ACCEPTED"?"Match accepted":m.status==="COMPLETED"?"Match completed":String(m.status||"UNKNOWN").toLowerCase().replaceAll("_"," ")}</b><p>{teamName(m.sender_team_id)} vs {teamName(m.receiver_team_id)}</p></div><ChevronRight/></Link>):<div className="proActivityEmpty">Your match activity will appear here.</div>}
