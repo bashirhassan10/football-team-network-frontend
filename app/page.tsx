@@ -1,3 +1,4 @@
+import NFNBrand from "../components/NFNBrand";
 import Link from "next/link";
 import MobileHomeNav from "./mobile-home-nav";
 import { ArrowRight, BadgeCheck, CalendarDays, CheckCircle2, MapPin, MessageCircle, ShieldCheck, Swords, Trophy, Users, BarChart3, Bell, UserRoundPlus, Search } from "lucide-react";
@@ -24,7 +25,7 @@ const steps = [
 export default function Home() {
   return <main>
     <nav className="nav shell">
-      <Link href="/" className="brand"><span className="brandMark">NFN</span><span>Naija Football<br/><b>Network</b></span></Link>
+      <Link href="/" className="brand"><NFNBrand/></Link>
       <div className="navLinks"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#network">Network</a><Link href="/admin/login">Admin portal</Link></div>
       <div className="navActions"><Link className="textButton" href="/login">Sign in</Link><Link className="button small" href="/register">Register team <ArrowRight size={16}/></Link></div>
       <MobileHomeNav />
@@ -73,6 +74,6 @@ export default function Home() {
       <div className="heroActions" style={{justifyContent:"center"}}><Link className="button" href="/register">Register your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/teams">Find teams</Link></div>
     </section>
 
-    <footer className="shell footer"><div className="brand"><span className="brandMark">NFN</span><span>Naija Football <b>Network</b></span></div><p>Connecting grassroots football clubs across Nigeria.</p><span>© 2026 Naija Football Network</span></footer>
+    <footer className="shell footer"><div className="brand"><NFNBrand/></div><p>Connecting grassroots football clubs across Nigeria.</p><span>© 2026 Naija Football Network</span></footer>
   </main>;
 }
