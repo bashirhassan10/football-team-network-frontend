@@ -1,5 +1,5 @@
-import NFNBrand from "../../components/NFNBrand";
 "use client";
+import NFNBrand from "../../components/NFNBrand";
 import Link from "next/link";
 import TeamCrest from "../../components/TeamCrest";
 import {useEffect,useMemo,useState} from "react";
