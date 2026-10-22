@@ -1,3 +1,4 @@
+import NFNBrand from "../../components/NFNBrand";
 "use client";
 import Link from "next/link";
 import TeamCrest from "../../components/TeamCrest";
@@ -31,7 +32,7 @@ export default function Dashboard(){
   {mobileMenuOpen&&<button type="button" className="proMobileBackdrop" aria-label="Close navigation" onClick={()=>setMobileMenuOpen(false)}/>}
   <aside id="team-mobile-navigation" className={"proSide dashSide restoredSide"+(mobileMenuOpen?" proSideOpen":"")}>
    <button type="button" className="proMobileClose" aria-label="Close navigation" onClick={()=>setMobileMenuOpen(false)}><X/></button>
-   <Link href="/" className="brand brandLight"><span className="brandMark lime">NF</span><span>Naija Football<br/><b>Network</b></span></Link>
+   <Link href="/" className="brand brandLight"><NFNBrand/></Link>
    <nav onClick={(event)=>{if((event.target as HTMLElement).closest("a"))setMobileMenuOpen(false)}}>
     <Link className="active" href="/dashboard"><LayoutDashboard/>Overview</Link>
     <Link href="/my-team"><ShieldCheck/>My Team Profile</Link>
