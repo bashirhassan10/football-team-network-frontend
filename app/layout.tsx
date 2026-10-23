@@ -4,7 +4,8 @@ import "./globals.css";
 import TeamSessionGuard from "./team-session-guard";
 
 export const metadata: Metadata = {
-  title: { default: "Football Team Network", template: "%s | Football Team Network" },
+  title: { default: "Naija Football Network", template: "%s | Naija Football Network" },
+  icons: { icon: "/nfn-mark.svg", shortcut: "/nfn-mark.svg", apple: "/nfn-mark.svg" },
   description: "Connect football teams, verify clubs, organize matches and build stronger football communities across Nigeria.",
 };
 

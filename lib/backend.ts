@@ -2,8 +2,8 @@
 // It avoids modifying the shared Production/Preview BACKEND_API_URL setting.
 const teamLogoPreviewOverride =
   process.env.VERCEL_ENV === "preview" &&
-  process.env.VERCEL_GIT_COMMIT_REF === "feat/staging-team-logo-upload"
-    ? process.env.TEAM_LOGO_STAGING_BACKEND_URL?.trim()
+  ["feat/staging-team-logo-upload", "feat/staging-professional-team-profile"].includes(process.env.VERCEL_GIT_COMMIT_REF || "")
+    ? (process.env.VERCEL_GIT_COMMIT_REF === "feat/staging-professional-team-profile" ? "https://football-team-network-staging.onrender.com" : process.env.TEAM_LOGO_STAGING_BACKEND_URL?.trim())
     : undefined;
 
 const configuredBackendUrl =

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, BadgeCheck, MapPin, ShieldCheck } from "lucide-react";
+import TeamCrest from "../../../components/TeamCrest";
 
 type Team = {
   id: number;
@@ -11,6 +12,7 @@ type Team = {
   category: string;
   pitch_address: string;
   verification_status: string;
+  officially_registered?: boolean;
   state_name: string;
   lga_name: string;
 };
@@ -57,20 +59,18 @@ export default function TeamProfilePage() {
       <Link href="/teams" className="textButton"><ArrowLeft size={18}/> Back to team directory</Link>
       <span className="formKicker">VERIFIED TEAM PROFILE</span>
       {loading ? <h1>Loading team…</h1> : error ? <div role="alert"><h1>Profile unavailable</h1><p>{error}</p></div> : team ? <>
-        <h1>{team.team_name}</h1>
-        <p><BadgeCheck size={20}/> Verified football team</p>
-        <div className="teamsGrid">
-          <article className="directoryCard">
-            <div className="directoryCrest">{team.team_name.split(" ").slice(0, 2).map(part => part[0]).join("").toUpperCase()}</div>
-            <div className="verifiedLabel"><ShieldCheck/> VERIFIED</div>
-            <h2>{team.team_name}</h2>
-            <span className="categoryPill">{team.category}</span>
-            <p><MapPin/> {team.lga_name}, {team.state_name}</p>
-            <p><MapPin/> Home pitch: {team.pitch_address}</p>
-            {session?.team_id === team.id ? <p>This is your team.</p> : session?.authenticated ?
-              <Link className="button profileChallengeButton" href={`/matches?opponent=${team.id}`}>Challenge Team →</Link> :
-              <Link className="button profileChallengeButton" href="/login">Sign in to challenge →</Link>}
-          </article>
+        <div style={{background:"linear-gradient(125deg,#08281e,#15523c)",color:"#fff",borderRadius:24,padding:"clamp(24px,5vw,52px)",margin:"24px 0",display:"flex",alignItems:"center",gap:28,flexWrap:"wrap"}}>
+          <TeamCrest teamId={team.id} teamName={team.team_name} style={{width:112,height:112,borderRadius:20,background:"#fff",color:"#103e2d",fontSize:28,fontWeight:800,flexShrink:0}}/>
+          <div style={{flex:"1 1 240px"}}><span style={{fontSize:12,letterSpacing:2,color:"#b5f5cb"}}>NAIJA FOOTBALL NETWORK · CLUB PROFILE</span><h1 style={{color:"#fff",margin:"10px 0"}}>{team.team_name}</h1>
+          <p style={{display:"flex",alignItems:"center",gap:8,color:"#d9f9e7"}}><BadgeCheck size={20}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Football team"}</p>
+          {team.officially_registered===true&&<p style={{display:"flex",alignItems:"center",gap:8,color:"#ffe3a3"}}><ShieldCheck size={18}/> Officially Registered Club</p>}
+          <p style={{display:"flex",alignItems:"center",gap:8,color:"#d9f9e7"}}><MapPin size={18}/>{[team.lga_name,team.state_name].filter(Boolean).join(", ")||"Nigeria"}</p></div>
+          {session?.team_id===team.id?<Link className="button" href="/my-team">Manage my profile →</Link>:session?.authenticated?<Link className="button" href={`/matches?opponent=${team.id}`}>Challenge team →</Link>:<Link className="button" href="/login">Sign in to challenge →</Link>}
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:18,marginBottom:40}}>
+          <article className="directoryCard"><h2>Club information</h2><p><b>Category</b></p><span className="categoryPill">{team.category||"Not provided"}</span><p><b>Verification</b></p><div className="verifiedLabel"><ShieldCheck size={18}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Not available"}</div>{team.officially_registered===true&&<div className="verifiedLabel"><ShieldCheck size={18}/> Officially Registered Club</div>}</article>
+          <article className="directoryCard"><h2>Home ground</h2><p><MapPin size={18}/> {team.pitch_address||"Not provided"}</p>{team.pitch_address&&<a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(team.pitch_address)}`} target="_blank" rel="noopener noreferrer">View stadium on map ↗</a>}</article>
+          <article className="directoryCard"><h2>Club activity</h2><p>Explore this club&apos;s squad, matches and performance across the network.</p><Link href="/teams">Explore teams →</Link></article>
         </div>
       </> : null}
     </section>
