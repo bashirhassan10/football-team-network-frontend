@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Naija Football Network logo">
+<defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#337957"/><stop offset="1" stop-color="#123f2d"/></linearGradient></defs>
+<path d="M13 83 Q35 48 59 58 M147 83 Q125 48 101 58" fill="none" stroke="#c5a34d" stroke-width="5" stroke-linecap="round"/>
+<path d="M8 99 Q34 67 58 73 M152 99 Q126 67 102 73" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round"/>
+<g fill="#c5a34d"><path d="m80 8 3 8 9 .3-7 5 2.5 9-7.5-5-7.5 5 2.5-9-7-5 9-.3z"/><path d="m47 21 2 5 6 .2-4.6 3.5 1.5 6-5-3.5-5 3.5 1.5-6-4.6-3.5 6-.2z"/><path d="m113 21 2 5 6 .2-4.6 3.5 1.5 6-5-3.5-5 3.5 1.5-6-4.6-3.5 6-.2z"/></g>
+<circle cx="80" cy="83" r="47" fill="#fff" stroke="#1a5338" stroke-width="6"/>
+<circle cx="80" cy="83" r="40" fill="#fff" stroke="#d4e1d7" stroke-width="2"/>
+<path d="m80 64 17 12-6 20H69l-6-20z" fill="#1b4e37"/>
+<path d="M80 43v21 M42 75l21 1 M118 75l-21 1 M55 114l14-18 M105 114 91 96" stroke="#1b4e37" stroke-width="4"/>
+<path d="M62 48 80 43 98 48 M44 95 55 114 M116 95 105 114" fill="none" stroke="#1b4e37" stroke-width="4"/>
+</svg>
