@@ -41,7 +41,20 @@ export default function TeamProfilePage() {
         if (!response.ok) throw new Error(data.error || "Unable to load team profile");
         return data as Team;
       })
-      .then((data) => { if (active) setTeam(data); })
+      .then(async (data) => {
+        // The directory includes football category fields that the legacy profile endpoint may omit.
+        if (data.verification_status === "VERIFIED" && (!data.football_division || !data.age_category)) {
+          try {
+            const response = await fetch("/api/teams", { cache: "no-store" });
+            if (response.ok) {
+              const directory: Team[] = await response.json();
+              const listed = Array.isArray(directory) ? directory.find((entry) => entry.id === data.id) : undefined;
+              if (listed) data = { ...data, football_division: listed.football_division, age_category: listed.age_category };
+            }
+          } catch { /* Keep profile usable if directory lookup fails. */ }
+        }
+        if (active) setTeam(data);
+      })
       .catch((reason) => { if (active) setError(reason instanceof Error ? reason.message : "Unable to load team profile"); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
