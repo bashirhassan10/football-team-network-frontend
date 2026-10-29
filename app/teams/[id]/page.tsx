@@ -13,6 +13,8 @@ type Team = {
   pitch_address: string;
   verification_status: string;
   officially_registered?: boolean;
+  football_division?: string;
+  age_category?: string;
   state_name: string;
   lga_name: string;
 };
@@ -23,6 +25,7 @@ export default function TeamProfilePage() {
   const id = params.id;
   const [team, setTeam] = useState<Team | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [ownCategory, setOwnCategory] = useState<{football_division:string;age_category:string;complete:boolean}|null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -44,6 +47,7 @@ export default function TeamProfilePage() {
   }, [id]);
 
   useEffect(() => {
+    fetch("/api/team/football-category").then(r=>r.ok?r.json():null).then(setOwnCategory).catch(()=>{});
     fetch("/api/auth/session")
       .then(async (response) => response.ok ? response.json() : null)
       .then(setSession)
@@ -65,10 +69,10 @@ export default function TeamProfilePage() {
           <p style={{display:"flex",alignItems:"center",gap:8,color:"#d9f9e7"}}><BadgeCheck size={20}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Football team"}</p>
           {team.officially_registered===true&&<p style={{display:"flex",alignItems:"center",gap:8,color:"#ffe3a3"}}><ShieldCheck size={18}/> Officially Registered Club</p>}
           <p style={{display:"flex",alignItems:"center",gap:8,color:"#d9f9e7"}}><MapPin size={18}/>{[team.lga_name,team.state_name].filter(Boolean).join(", ")||"Nigeria"}</p></div>
-          {session?.team_id===team.id?<Link className="button" href="/my-team">Manage my profile →</Link>:session?.authenticated?<Link className="button" href={`/matches?opponent=${team.id}`}>Challenge team →</Link>:<Link className="button" href="/login">Sign in to challenge →</Link>}
+          {session?.team_id===team.id?<Link className="button" href="/my-team">Manage my profile →</Link>:session?.authenticated?(ownCategory?.complete&&team.verification_status==="VERIFIED"&&team.football_division===ownCategory.football_division&&team.age_category===ownCategory.age_category?<Link className="button" href={`/matches?opponent=${team.id}`}>Challenge team →</Link>:<p role="status" style={{color:"#fff"}}>{!ownCategory?.complete?"Complete your division and age category before challenging.":team.verification_status!=="VERIFIED"?"Only verified teams can be challenged.":!team.football_division||!team.age_category?"This team has not completed its category.":"Different division or age category — challenge unavailable."}</p>):<Link className="button" href="/login">Sign in to challenge →</Link>}
         </div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:18,marginBottom:40}}>
-          <article className="directoryCard"><h2>Club information</h2><p><b>Category</b></p><span className="categoryPill">{team.category||"Not provided"}</span><p><b>Verification</b></p><div className="verifiedLabel"><ShieldCheck size={18}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Not available"}</div>{team.officially_registered===true&&<div className="verifiedLabel"><ShieldCheck size={18}/> Officially Registered Club</div>}</article>
+          <article className="directoryCard"><h2>Club information</h2><p><b>Category</b></p><span className="categoryPill">{team.category||"Not provided"}</span><p><b>Division / Age</b></p><span className="categoryPill">{team.football_division==="MENS"?"Boys / Men":team.football_division==="WOMENS"?"Girls / Women":"Division not set"} · {team.age_category||"Age not set"}</span><p><b>Verification</b></p><div className="verifiedLabel"><ShieldCheck size={18}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Not available"}</div>{team.officially_registered===true&&<div className="verifiedLabel"><ShieldCheck size={18}/> Officially Registered Club</div>}</article>
           <article className="directoryCard"><h2>Home ground</h2><p><MapPin size={18}/> {team.pitch_address||"Not provided"}</p>{team.pitch_address&&<a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(team.pitch_address)}`} target="_blank" rel="noopener noreferrer">View stadium on map ↗</a>}</article>
           <article className="directoryCard"><h2>Club activity</h2><p>Explore this club&apos;s squad, matches and performance across the network.</p><Link href="/teams">Explore teams →</Link></article>
         </div>
