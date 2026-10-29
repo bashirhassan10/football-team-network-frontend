@@ -15,6 +15,8 @@ type Team = {
   officially_registered?: boolean;
   state_name: string;
   lga_name: string;
+  football_division?: string;
+  age_category?: string;
 };
 type Session = { authenticated: boolean; team_id: number | null };
 
@@ -24,6 +26,7 @@ export default function TeamProfilePage() {
   const [team, setTeam] = useState<Team | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [ownCategory, setOwnCategory] = useState<{complete:boolean;football_division:string;age_category:string}|null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -44,12 +47,14 @@ export default function TeamProfilePage() {
   }, [id]);
 
   useEffect(() => {
+    fetch("/api/team/football-category").then(r=>r.ok?r.json():null).then(setOwnCategory).catch(()=>{});
     fetch("/api/auth/session")
       .then(async (response) => response.ok ? response.json() : null)
       .then(setSession)
       .catch(() => {});
   }, []);
 
+  const compatible = Boolean(ownCategory?.complete && team?.football_division && team?.age_category && ownCategory.football_division===team.football_division && ownCategory.age_category===team.age_category);
   return <main>
     <nav className="nav shell">
       <Link href="/" className="brand"><span className="brandMark">FT</span><span>Football Team<br/><b>Network</b></span></Link>
@@ -65,10 +70,11 @@ export default function TeamProfilePage() {
           <p style={{display:"flex",alignItems:"center",gap:8,color:"#d9f9e7"}}><BadgeCheck size={20}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Football team"}</p>
           {team.officially_registered===true&&<p style={{display:"flex",alignItems:"center",gap:8,color:"#ffe3a3"}}><ShieldCheck size={18}/> Officially Registered Club</p>}
           <p style={{display:"flex",alignItems:"center",gap:8,color:"#d9f9e7"}}><MapPin size={18}/>{[team.lga_name,team.state_name].filter(Boolean).join(", ")||"Nigeria"}</p></div>
-          {session?.team_id===team.id?<Link className="button" href="/my-team">Manage my profile →</Link>:session?.authenticated?<Link className="button" href={`/matches?opponent=${team.id}`}>Challenge team →</Link>:<Link className="button" href="/login">Sign in to challenge →</Link>}
+          {session?.authenticated && session.team_id!==team.id && <p style={{color:"#fff"}}>{compatible?"✓ Matching age and division":"Match unavailable: different age/division or incomplete category"}</p>}
+          {session?.team_id===team.id?<Link className="button" href="/my-team">Manage my profile →</Link>:session?.authenticated&&compatible?<Link className="button" href={`/matches?opponent=${team.id}`}>Challenge team →</Link>:session?.authenticated?<span role="status" style={{color:"#fff"}}>Challenge unavailable</span>:<Link className="button" href="/login">Sign in to challenge →</Link>}
         </div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:18,marginBottom:40}}>
-          <article className="directoryCard"><h2>Club information</h2><p><b>Category</b></p><span className="categoryPill">{team.category||"Not provided"}</span><p><b>Verification</b></p><div className="verifiedLabel"><ShieldCheck size={18}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Not available"}</div>{team.officially_registered===true&&<div className="verifiedLabel"><ShieldCheck size={18}/> Officially Registered Club</div>}</article>
+          <article className="directoryCard"><h2>Club information</h2><p><b>Category</b></p><span className="categoryPill">{team.category||"Not provided"}</span><p><b>Age category and division</b></p><span className="categoryPill">{team.football_division==="MENS"?"Boys / Men":team.football_division==="WOMENS"?"Girls / Women":"Not set"} · {team.age_category||"Not set"}</span><p><b>Verification</b></p><div className="verifiedLabel"><ShieldCheck size={18}/> {team.verification_status==="VERIFIED"?"Verified Team":team.verification_status||"Not available"}</div>{team.officially_registered===true&&<div className="verifiedLabel"><ShieldCheck size={18}/> Officially Registered Club</div>}</article>
           <article className="directoryCard"><h2>Home ground</h2><p><MapPin size={18}/> {team.pitch_address||"Not provided"}</p>{team.pitch_address&&<a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(team.pitch_address)}`} target="_blank" rel="noopener noreferrer">View stadium on map ↗</a>}</article>
           <article className="directoryCard"><h2>Club activity</h2><p>Explore this club&apos;s squad, matches and performance across the network.</p><Link href="/teams">Explore teams →</Link></article>
         </div>
