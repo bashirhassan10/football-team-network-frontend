@@ -48,7 +48,7 @@ export default function TeamProfilePage() {
   }, [id]);
 
   useEffect(() => {
-    fetch("/api/verification/status").then(r=>r.ok?r.json():null).then(d=>setVerifiedSender(d?.verification_status==="VERIFIED"||d?.team?.verification_status==="VERIFIED")).catch(()=>{});
+    fetch("/api/payments/status").then(r=>r.ok?r.json():null).then(d=>setVerifiedSender(d?.team_verification_status==="VERIFIED")).catch(()=>{});
     fetch("/api/team/football-category").then(r=>r.ok?r.json():null).then(setOwnCategory).catch(()=>{});
     fetch("/api/auth/session")
       .then(async (response) => response.ok ? response.json() : null)
