@@ -75,8 +75,10 @@ export default function TeamProfilePage() {
       <div className="navActions"><Link className="textButton" href="/teams">Find teams</Link><Link className="textButton" href="/dashboard">Dashboard</Link></div>
     </nav>
     <section className="directoryHero shell">
-      <Link href="/teams" className="textButton"><ArrowLeft size={18}/> Back to team directory</Link>
-      <span className="formKicker">VERIFIED TEAM PROFILE</span>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,flexWrap:"wrap",marginBottom:16}}>
+        <Link href="/teams" className="textButton" style={{display:"inline-flex",alignItems:"center",gap:8}}><ArrowLeft size={18}/> Back to team directory</Link>
+        <span className="formKicker" style={{margin:0}}>VERIFIED TEAM PROFILE</span>
+      </div>
       {loading ? <h1>Loading team…</h1> : error ? <div role="alert"><h1>Profile unavailable</h1><p>{error}</p></div> : team ? <>
         <div style={{background:"linear-gradient(125deg,#08281e,#15523c)",color:"#fff",borderRadius:24,padding:"clamp(24px,5vw,52px)",margin:"24px 0",display:"flex",alignItems:"center",gap:28,flexWrap:"wrap"}}>
           <TeamCrest teamId={team.id} teamName={team.team_name} style={{width:112,height:112,borderRadius:20,background:"#fff",color:"#103e2d",fontSize:28,fontWeight:800,flexShrink:0}}/>
