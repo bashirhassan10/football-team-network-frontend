@@ -217,3 +217,7 @@
 .nfnBrandText strong,.nfnBrandText b{font-weight:800}
 .brandLight .nfnBrandText{color:#fff}
 @media(max-width:520px){.registerHeader .nfnBrandText{display:none}}
+
+/* Keep directory map and profile actions on separate lines. */
+.directoryCard > a[href*="google.com/maps"] { display: block; width: fit-content; margin: 10px 0 14px; }
+.directoryCard > a[href^="/teams/"] { display: inline-block; margin-top: 8px; }
