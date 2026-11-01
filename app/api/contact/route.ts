@@ -9,7 +9,11 @@ export async function POST(request: Request) {
   if (length > 6000) return NextResponse.json({ error: "Message too long" }, { status: 413 });
   const origin = request.headers.get("origin");
   const host = request.headers.get("host");
-  if (origin && (!host || new URL(origin).host !== host)) return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+  if (origin) {
+    let originHost = "";
+    try { originHost = new URL(origin).host; } catch { /* Invalid origin */ }
+    if (!host || originHost !== host) return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+  }
   let input: Record<string, unknown>;
   try { input = await request.json(); } catch { return NextResponse.json({ error: "Invalid request" }, { status: 400 }); }
   if (!input || typeof input !== "object") return NextResponse.json({ error: "Invalid request" }, { status: 400 });
