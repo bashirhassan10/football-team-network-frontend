@@ -7,15 +7,18 @@ const recent = new Map<string, number[]>();
 export async function POST(request: Request) {
   const length = Number(request.headers.get("content-length") || 0);
   if (length > 6000) return NextResponse.json({ error: "Message too long" }, { status: 413 });
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (origin && (!host || new URL(origin).host !== host)) return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
   let input: Record<string, unknown>;
   try { input = await request.json(); } catch { return NextResponse.json({ error: "Invalid request" }, { status: 400 }); }
   if (!input || typeof input !== "object") return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-  if (input.website) return NextResponse.json({ message: "Thank you. Your message has been received." });
+  if (typeof input.website === "string" && input.website.length > 0) return NextResponse.json({ message: "Thank you. Your message has been received." });
   const name = typeof input.name === "string" ? input.name.trim() : "";
   const email = typeof input.email === "string" ? input.email.trim() : "";
   const topic = typeof input.topic === "string" ? input.topic : "";
   const message = typeof input.message === "string" ? input.message.trim() : "";
-  if (!name || name.length > 100 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !topics.has(topic) || message.length < 10 || message.length > 3000)
+  if (!name || /[\\r\\n]/.test(name) || name.length > 100 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !topics.has(topic) || message.length < 10 || message.length > 3000)
     return NextResponse.json({ error: "Please check the form fields" }, { status: 400 });
 
   // Best-effort per-instance throttle. Replace with shared rate limiting before public launch.
