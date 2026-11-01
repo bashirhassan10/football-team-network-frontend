@@ -28,7 +28,7 @@ export default function Home() {
   return <main>
     <nav className="nav shell">
       <Link href="/" className="brand"><NFNBrand/></Link>
-      <div className="navLinks"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#network">Network</a><Link href="/admin/login">Admin portal</Link></div>
+      <div className="navLinks"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#network">Network</a><Link href="/contact">Contact Us</Link><Link href="/admin/login">Admin portal</Link></div>
       <div className="navActions"><Link className="textButton" href="/login">Sign in</Link><Link className="button small" href="/register">Register team <ArrowRight size={16}/></Link></div>
       <MobileHomeNav />
     </nav>
@@ -76,6 +76,6 @@ export default function Home() {
       <div className="heroActions" style={{justifyContent:"center"}}><Link className="button" href="/register">Register your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/teams">Find teams</Link></div>
     </section>
 
-    <footer className="shell footer"><div className="brand"><NFNBrand/></div><p>Connecting football clubs and academies, men’s and women’s teams, across Nigeria.</p><span>© 2026 Naija Football Network</span></footer>
+    <footer className="shell footer"><div className="brand"><NFNBrand/></div><p>Connecting football clubs and academies, men’s and women’s teams, across Nigeria.</p><Link href="/contact">Help &amp; Support</Link><span>© 2026 Naija Football Network</span></footer>
   </main>;
 }
