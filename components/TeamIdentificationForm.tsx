@@ -25,8 +25,8 @@ export default function TeamIdentificationForm({busy,onGenerated,kind="team"}:Pr
   ctx.font="24px Arial";ctx.fillText("Self-declared information for NFN admin review only.",65,252);
   const rows=[["Team name",name],["Representative",representative],["Role / position",role],["Home pitch / location",pitch],["Established",founded],["Team purpose",teamPurpose],["Training / match schedule",trainingSchedule],["Date submitted",new Date().toISOString().slice(0,10)]];
   let y=300;for(const [label,value] of rows){ctx.fillStyle="#5b6b60";ctx.font="22px Arial";ctx.fillText(label,65,y);ctx.fillStyle="#12271b";ctx.font="bold 29px Arial";const v=value.length>60?value.slice(0,57)+"...":value;ctx.fillText(v,65,y+40);y+=78;}
-  ctx.fillStyle="#145b3b";ctx.fillRect(65,870,1070,3);
-  ctx.fillStyle="#263b2e";ctx.font="23px Arial";ctx.fillText("Self-declared by the representative. Subject to independent admin verification.",65,925);
+  ctx.fillStyle="#145b3b";ctx.fillRect(65,925,1070,3);
+  ctx.fillStyle="#263b2e";ctx.font="23px Arial";ctx.fillText("Self-declared; subject to independent admin verification.",65,966);
   const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,"image/png"));
   if(!blob){setError("Unable to prepare the form.");return;}
   await onGenerated(new File([blob],kind==="grassroots"?"nfn-grassroots-declaration.png":"nfn-team-identification.png",{type:"image/png"}));
