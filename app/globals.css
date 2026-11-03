@@ -232,3 +232,22 @@
 /* Staging verification: show complete guidance and filenames instead of truncating with ellipses. */
 .documentRow .docInfo small{max-width:none;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.45}
 .documentRow .docInfo{min-width:0}
+
+/* Verification document cards — professional, readable, responsive staging redesign. */
+.verifyPanel .documentList{gap:12px;margin-top:18px}
+.verifyPanel .documentRow{display:grid;grid-template-columns:24px 44px minmax(0,1fr) auto;align-items:start;gap:14px;padding:18px;border:1px solid #e1e9e2;border-radius:14px;background:#fff;box-shadow:0 3px 12px rgba(17,55,36,.035);transition:border-color .2s,box-shadow .2s}
+.verifyPanel .documentRow:hover{border-color:#b8d6c1;box-shadow:0 6px 18px rgba(17,55,36,.07)}
+.verifyPanel .docNumber{padding-top:13px;color:#7c9184;font-size:11px;letter-spacing:.05em}
+.verifyPanel .docIcon{width:44px;height:44px;border-radius:12px;background:#eaf5ee;color:#126b43}
+.verifyPanel .docInfo{min-width:0;padding-top:2px}
+.verifyPanel .docInfo b{font-size:15px;line-height:1.4;color:#163a29}
+.verifyPanel .docInfo small{font-size:12px;line-height:1.55;color:#61756a;max-width:none;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;margin-top:6px}
+.verifyPanel .docInfo small:last-of-type{font-weight:600;color:#3f6650}
+.verifyPanel .docStatus{position:static;margin:4px 0 0;justify-self:end;white-space:nowrap;padding:7px 9px;border-radius:999px;font-size:10px;letter-spacing:.025em}
+.verifyPanel .docStatus.APPROVED{background:#e8f6ed;color:#117343}
+.verifyPanel .docStatus.PENDING{background:#fff4df;color:#986000}
+.verifyPanel .docStatus.REJECTED{background:#fff0ed;color:#b53c32}
+.verifyPanel .docStatus.missing{background:#f1f4f1;color:#687b6e}
+.verifyPanel .uploadButton{grid-column:4;justify-self:end;margin:0;border-color:#cbded0;background:#f8fcf9;color:#126b43;border-radius:10px}
+.verifyPanel .uploadButton:hover{background:#eaf5ee}
+@media(max-width:700px){.verifyPanel .documentRow{grid-template-columns:36px minmax(0,1fr);gap:10px;padding:15px}.verifyPanel .docNumber{display:none}.verifyPanel .docIcon{width:36px;height:36px;grid-column:1}.verifyPanel .docInfo{grid-column:2}.verifyPanel .docStatus{grid-column:2;justify-self:start;margin:4px 0 0}.verifyPanel .uploadButton{grid-column:2;justify-self:start;margin:0}}
