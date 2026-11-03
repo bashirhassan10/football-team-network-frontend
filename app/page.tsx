@@ -1,6 +1,7 @@
 import NFNBrand from "../components/NFNBrand";
 import Link from "next/link";
 import MobileHomeNav from "./mobile-home-nav";
+import HomeFeatureDemo from "./home-feature-demo";
 import { ArrowRight, BadgeCheck, CalendarDays, CheckCircle2, MapPin, MessageCircle, ShieldCheck, Swords, Trophy, Users, BarChart3, Bell, UserRoundPlus, Search } from "lucide-react";
 
 const features = [
@@ -56,6 +57,8 @@ export default function Home() {
       <div className="sectionIntro"><span>LESS SEARCHING. MORE FOOTBALL.</span><h2>Finding your next opponent should be <em>simple.</em></h2></div>
       <p className="lead" style={{maxWidth: "780px"}}>Tired of struggling to find suitable opponents? Register your football club or academy, select your football division and age category, then discover verified teams that match. Arrange games and view confirmed fixtures in one place.</p>
     </section>
+
+    <HomeFeatureDemo />
 
     <section id="features" className="features shell" style={{paddingTop: "35px"}}>
       <div className="sectionIntro"><span>ONE NETWORK. MORE FOOTBALL.</span><h2>Everything your club needs to <em>connect and play.</em></h2></div>
