@@ -221,3 +221,10 @@
 /* Keep directory map and profile actions on separate lines. */
 .directoryCard > a[href*="google.com/maps"] { display: block; width: fit-content; margin: 10px 0 14px; }
 .directoryCard > a[href^="/teams/"] { display: inline-block; margin-top: 8px; }
+
+/* Staging: keep the Next Match card focused on fixtures, without a second promotional photo. */
+.proNext{background:linear-gradient(125deg,#0b3527 0%,#10553b 62%,#176b48 100%)}
+.proNext::before{display:none!important;background-image:none!important}
+.proNext::after{background:radial-gradient(circle at 85% 25%,rgba(187,247,99,.11),transparent 48%)}
+.proNext .proEmptyFixture{max-width:100%}
+@media(max-width:760px){.proNext .proEmptyFixture{max-width:100%}}
