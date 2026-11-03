@@ -228,3 +228,7 @@
 .proNext::after{background:radial-gradient(circle at 85% 25%,rgba(187,247,99,.11),transparent 48%)}
 .proNext .proEmptyFixture{max-width:100%}
 @media(max-width:760px){.proNext .proEmptyFixture{max-width:100%}}
+
+/* Staging verification: show complete guidance and filenames instead of truncating with ellipses. */
+.documentRow .docInfo small{max-width:none;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.45}
+.documentRow .docInfo{min-width:0}
