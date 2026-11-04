@@ -1,6 +1,7 @@
 import NFNBrand from "../components/NFNBrand";
 import Link from "next/link";
 import MobileHomeNav from "./mobile-home-nav";
+import HomeFeatureDemo from "./home-feature-demo";
 import { ArrowRight, BadgeCheck, CalendarDays, CheckCircle2, MapPin, MessageCircle, ShieldCheck, Swords, Trophy, Users, BarChart3, Bell, UserRoundPlus, Search } from "lucide-react";
 
 const features = [
@@ -28,7 +29,7 @@ export default function Home() {
   return <main>
     <nav className="nav shell">
       <Link href="/" className="brand"><NFNBrand/></Link>
-      <div className="navLinks"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#network">Network</a><Link href="/admin/login">Admin portal</Link></div>
+      <div className="navLinks"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#network">Network</a><Link href="/contact">Contact Us</Link><Link href="/admin/login">Admin portal</Link></div>
       <div className="navActions"><Link className="textButton" href="/login">Sign in</Link><Link className="button small" href="/register">Register team <ArrowRight size={16}/></Link></div>
       <MobileHomeNav />
     </nav>
@@ -57,6 +58,8 @@ export default function Home() {
       <p className="lead" style={{maxWidth: "780px"}}>Tired of struggling to find suitable opponents? Register your football club or academy, select your football division and age category, then discover verified teams that match. Arrange games and view confirmed fixtures in one place.</p>
     </section>
 
+    <HomeFeatureDemo />
+
     <section id="features" className="features shell" style={{paddingTop: "35px"}}>
       <div className="sectionIntro"><span>ONE NETWORK. MORE FOOTBALL.</span><h2>Everything your club needs to <em>connect and play.</em></h2></div>
       <div className="featureGrid">{features.map(({icon: Icon,title,text},i)=><article className="featureCard" key={title}><div className="featureNumber">{String(i+1).padStart(2,"0")}</div><div className="iconBox"><Icon size={23}/></div><h3>{title}</h3><p>{text}</p></article>)}</div>
@@ -76,6 +79,6 @@ export default function Home() {
       <div className="heroActions" style={{justifyContent:"center"}}><Link className="button" href="/register">Register your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/teams">Find teams</Link></div>
     </section>
 
-    <footer className="shell footer"><div className="brand"><NFNBrand/></div><p>Connecting football clubs and academies, men’s and women’s teams, across Nigeria.</p><span>© 2026 Naija Football Network</span></footer>
+    <footer className="shell footer"><div className="brand"><NFNBrand/></div><p>Connecting football clubs and academies, men’s and women’s teams, across Nigeria.</p><Link href="/contact">Help &amp; Support</Link><span>© 2026 Naija Football Network</span></footer>
   </main>;
 }
