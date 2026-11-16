@@ -19,7 +19,6 @@ export default function MobileHomeNav() {
         <div id="home-mobile-menu" className="homeMobileMenu">
           <Link href="/register" onClick={close}>Register Team</Link>
           <Link href="/login" onClick={close}>Sign In</Link>
-          <Link href="/admin/login" onClick={close}>Admin Login</Link>
           <a href="#features" onClick={close}>Features</a>
           <a href="#network" onClick={close}>Network</a>
           <Link href="/teams" onClick={close}>Explore Teams</Link>
