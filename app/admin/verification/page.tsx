@@ -4,7 +4,7 @@ import {useCallback,useEffect,useState} from "react";
 
 type Doc={id:number;team_id:number;document_type:string;original_filename:string;content_type:string;size_bytes:number;status:string;uploaded_at:string};
 type ReviewTeam={id:number;team_name:string;category:string;contact_name:string;email:string;phone:string;pitch_address:string;state_id:number;lga_id:number;review_submitted_at:string};
-const labels:Record<string,string>={REGISTRATION:"Registration document",TEAM_ID:"Team identification",OWNER_ID:"Owner identification",OTHER:"Other document"};
+const labels:Record<string,string>={REGISTRATION:"Team Certificate / Registration Form",COACH_LETTER:"Coach Appointment Letter",TEAM_ID:"Legacy team identification",OWNER_ID:"Legacy owner identification",OTHER:"Other document"};
 
 export default function AdminVerificationPage(){
  const[approvedRegistrations,setApprovedRegistrations]=useState<Doc[]>([]),[registrationChoice,setRegistrationChoice]=useState<Record<number,string>>({}),[docs,setDocs]=useState<Doc[]>([]),[teams,setTeams]=useState<ReviewTeam[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(""),[success,setSuccess]=useState(""),[busy,setBusy]=useState<string|null>(null),[docReason,setDocReason]=useState<Record<number,string>>({}),[teamReason,setTeamReason]=useState<Record<number,string>>({});
