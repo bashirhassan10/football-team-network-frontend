@@ -10,5 +10,5 @@ export default function PrivacyPolicy(){return <main className="shell" style={{m
 <h2>Your choices and requests</h2><p>You may contact NFN to request access to, correction of, or deletion of personal information, subject to applicable legal and operational obligations. Some records may need to be retained where required by law or to resolve payment, security or dispute issues.</p>
 <h2>Children and youth teams</h2><p>NFN supports youth football categories. Team administrators should provide only information they are authorized to share and should not upload unnecessary personal information about children. NFN should be contacted about any privacy concerns involving a minor.</p>
 <h2>Updates and contact</h2><p>We may update this policy when the service changes. For privacy questions or requests, email <a href="mailto:support@naijafootballnetwork.com">support@naijafootballnetwork.com</a>.</p>
-<p><strong>Before publication:</strong> The NFN owner should confirm the operator's legal identity, service providers, retention periods and procedures for privacy requests, and obtain legal review where appropriate.</p>
+<p><strong>Before publication:</strong> The NFN owner should confirm the operator&apos;s legal identity, service providers, retention periods and procedures for privacy requests, and obtain legal review where appropriate.</p>
 </main>}
