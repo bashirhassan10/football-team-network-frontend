@@ -29,7 +29,7 @@ export default function Home() {
   return <main>
     <nav className="nav shell">
       <Link href="/" className="brand"><NFNBrand/></Link>
-      <div className="navLinks"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#network">Network</a><Link href="/contact">Contact Us</Link><Link href="/admin/login">Admin portal</Link></div>
+      <div className="navLinks"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="#network">Network</a><Link href="/contact">Contact Us</Link></div>
       <div className="navActions"><Link className="textButton" href="/login">Sign in</Link><Link className="button small" href="/register">Register team <ArrowRight size={16}/></Link></div>
       <MobileHomeNav />
     </nav>
