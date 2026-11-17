@@ -15,7 +15,7 @@ export default function AccountDeletion() {
   const reason=String(values.get("reason")||"").trim();
   try{
    const res=await fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-    name:team,email,topic:"Login / Account",website:String(values.get("website")||""),
+    name:team,email,topic:"Account Deletion",website:String(values.get("website")||""),
     message:"ACCOUNT DELETION REQUEST\nRegistered team: "+team+"\nRegistered email: "+email+"\nReason (optional): "+(reason||"Not provided")
    })});
    const data=await res.json().catch(()=>({}));
