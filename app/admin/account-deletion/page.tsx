@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {redirect} from "next/navigation";
 import {hasAdminSession} from "@/lib/admin-session";
+import DeletionQueue from "./DeletionQueue";
 
 export const metadata={title:"Account Deletion Management | NFN Admin",robots:{index:false,follow:false}};
 
@@ -10,6 +11,7 @@ export default async function AdminDeletionPage(){
   <Link href="/admin/verification">← Back to admin verification</Link>
   <h1>Account deletion management</h1>
   <p>Authorized NFN administrators only. Account deletion requests currently arrive at the configured support inbox. This page is an operational checklist, <strong>not yet an automated deletion queue</strong>.</p>
+  <DeletionQueue />
   <section style={{padding:24,border:"1px solid #dce6dd",borderRadius:16,background:"#fff"}}>
    <h2>Current request channel</h2>
    <p>Customers submit requests at <Link href="/account-deletion">Request account deletion</Link>. Check the support inbox for messages with the subject <strong>[NFN Support] Account Deletion</strong>.</p>
