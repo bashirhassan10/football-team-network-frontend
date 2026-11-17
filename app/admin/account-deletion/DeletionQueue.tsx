@@ -1,5 +1,6 @@
 "use client";
 import {useCallback,useEffect,useState} from "react";
+import DeletionReview from "./DeletionReview";
 type RequestItem={id:number;team_name:string;email:string;reason:string;status:string;ownership_verified:boolean;admin_notes:string;created_at:string};
 const choices=["PENDING","UNDER_REVIEW","AWAITING_VERIFICATION","REJECTED"];
 export default function DeletionQueue(){
@@ -17,6 +18,7 @@ export default function DeletionQueue(){
  <label>Status<select style={{display:"block",padding:10,marginTop:8}} value={drafts[x.id]?.status||x.status} onChange={e=>setDrafts(v=>({...v,[x.id]:{...v[x.id],status:e.target.value}}))} disabled={x.status==="COMPLETED"}>{choices.map(s=><option key={s} value={s}>{s.replaceAll("_"," ")}</option>)}{x.status==="COMPLETED"&&<option value="COMPLETED">COMPLETED</option>}</select></label>
  <label>Admin notes<textarea style={{display:"block",width:"100%",padding:10,marginTop:8}} maxLength={2000} rows={3} value={drafts[x.id]?.admin_notes||""} onChange={e=>setDrafts(v=>({...v,[x.id]:{...v[x.id],admin_notes:e.target.value}}))}/></label>
  <button className="button" onClick={()=>void save(x.id)} disabled={busy===x.id||x.status==="COMPLETED"}>{busy===x.id?"Saving…":"Save review status"}</button>
+ <DeletionReview id={x.id} verified={x.ownership_verified} status={x.status} onApproved={load}/>
  </article>)}</div>}
  </section>;
 }
