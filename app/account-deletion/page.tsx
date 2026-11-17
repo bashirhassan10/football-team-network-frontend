@@ -14,13 +14,13 @@ export default function AccountDeletion() {
   const email=String(values.get("email")||"").trim();
   const reason=String(values.get("reason")||"").trim();
   try{
-   const res=await fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-    name:team,email,topic:"Account Deletion",website:String(values.get("website")||""),
-    message:"ACCOUNT DELETION REQUEST\nRegistered team: "+team+"\nRegistered email: "+email+"\nReason (optional): "+(reason||"Not provided")
-   })});
+   const res=await fetch("/api/account-deletion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({team_name:team,email,reason,website:String(values.get("website")||"")})});
    const data=await res.json().catch(()=>({}));
-   if(!res.ok)throw new Error(data.error||"Unable to submit request.");
-   setStatus("Your request has been sent to NFN support. We will verify account ownership before taking action. Please keep a copy of your request for your records.");
+   if(!res.ok)throw new Error(data.error||"Unable to save request.");
+   // Notification is best-effort: database record is authoritative.
+   const notification=await fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:team,email,topic:"Account Deletion",website:String(values.get("website")||""),message:"ACCOUNT DELETION REQUEST\\nRegistered team: "+team+"\\nRegistered email: "+email+"\\nReason (optional): "+(reason||"Not provided")})}).catch(()=>null);
+   if(!notification?.ok)setStatus("Your deletion request was saved successfully. Email notification could not be confirmed; NFN support can review it in the admin portal.");
+   else setStatus("Your deletion request was saved and NFN support has been notified. We will verify account ownership before taking action.");
    form.reset();
   }catch(err){setError(err instanceof Error?err.message:"Unable to submit request.");}
   finally{setBusy(false);}
