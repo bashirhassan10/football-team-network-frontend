@@ -21,5 +21,5 @@ export async function POST(req:Request){
   try{const mail=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json"},body:JSON.stringify({from,to:[to],subject:"[NFN Support] Account Deletion",text:message}),signal:AbortSignal.timeout(12000)});notified=mail.ok}catch{/* persisted request remains available to admins */}
  }
  return NextResponse.json({message:"Deletion request saved",notification_sent:notified},{status:201});
- }catch{return NextResponse.json({error:"Deletion request service unavailable"},{status:502})}
+ }catch(e){console.error("Account deletion backend request failed",e instanceof Error?e.message:"Unknown error");return NextResponse.json({error:"Deletion request service temporarily unavailable. Please try again later."},{status:503})}
 }
