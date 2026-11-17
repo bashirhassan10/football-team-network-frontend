@@ -15,9 +15,9 @@ export default function DeletionQueue(){
  {error&&<p role="alert" className="formError">{error}</p>}{message&&<p role="status" className="formSuccess">{message}</p>}
  {loading?<p>Loading requests…</p>:items.length===0?<p>No deletion requests recorded yet.</p>:<div style={{display:"grid",gap:16}}>{items.map(x=><article key={x.id} style={{background:"white",border:"1px solid #dce6dd",padding:20,borderRadius:14}}>
  <p><strong>Request #{x.id} — {x.team_name}</strong></p><p>Requester email: {x.email}</p><p>Submitted: {new Date(x.created_at).toLocaleString()}</p><p>Reason: {x.reason||"Not provided"}</p><p>Ownership verified: <strong>{x.ownership_verified?"Yes":"No"}</strong></p>
- <label>Status<select style={{display:"block",padding:10,marginTop:8}} value={drafts[x.id]?.status||x.status} onChange={e=>setDrafts(v=>({...v,[x.id]:{...v[x.id],status:e.target.value}}))} disabled={x.status==="COMPLETED"}>{choices.map(s=><option key={s} value={s}>{s.replaceAll("_"," ")}</option>)}{x.status==="COMPLETED"&&<option value="COMPLETED">COMPLETED</option>}</select></label>
+ <label>Status<select style={{display:"block",padding:10,marginTop:8}} value={drafts[x.id]?.status||x.status} onChange={e=>setDrafts(v=>({...v,[x.id]:{...v[x.id],status:e.target.value}}))} disabled={x.status==="COMPLETED"||x.status==="APPROVED_FOR_DELETION"}>{choices.map(s=><option key={s} value={s}>{s.replaceAll("_"," ")}</option>)}{x.status==="COMPLETED"&&<option value="COMPLETED">COMPLETED</option>}{x.status==="APPROVED_FOR_DELETION"&&<option value="APPROVED_FOR_DELETION">APPROVED FOR DELETION (review only)</option>}</select></label>
  <label>Admin notes<textarea style={{display:"block",width:"100%",padding:10,marginTop:8}} maxLength={2000} rows={3} value={drafts[x.id]?.admin_notes||""} onChange={e=>setDrafts(v=>({...v,[x.id]:{...v[x.id],admin_notes:e.target.value}}))}/></label>
- <button className="button" onClick={()=>void save(x.id)} disabled={busy===x.id||x.status==="COMPLETED"}>{busy===x.id?"Saving…":"Save review status"}</button>
+ <button className="button" onClick={()=>void save(x.id)} disabled={busy===x.id||x.status==="COMPLETED"||x.status==="APPROVED_FOR_DELETION"}>{busy===x.id?"Saving…":"Save review status"}</button>
  <DeletionReview id={x.id} verified={x.ownership_verified} status={x.status} onApproved={load}/>
  </article>)}</div>}
  </section>;
