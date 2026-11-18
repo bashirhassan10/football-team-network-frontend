@@ -23,10 +23,10 @@ export default async function AdminDeletionPage(){
     <li>Record the date, registered team name and request in a restricted support register. Never publish these details in the team directory.</li>
     <li>Verify ownership using the registered email and an independent secure account-verification process. Do not trust the submitted email address alone.</li>
     <li>Review related team data, payment records, verification documents, match participation and applicable retention requirements.</li>
-    <li>Only after verified authorization, arrange deletion through an approved, audited backend process. <strong>Do not delete records directly from this page.</strong></li>
+    <li>Only after verified authorization and approval, use the guarded Execute secure deletion action. This removes private team data while retaining necessary financial and shared match references.</li>
     <li>Confirm the outcome to the requester and document any legally justified retained records.</li>
    </ol>
-   <p style={{background:"#fff4df",padding:14,borderRadius:8}}><strong>Safety notice:</strong> A persisted request-status queue and review approval are implemented in staging. Automated account deletion has not been implemented. Never treat an incoming email as proof of ownership. Staging test requests marked DO NOT DELETE must not trigger account removal.</p>
+   <p style={{background:"#fff4df",padding:14,borderRadius:8}}><strong>Safety notice:</strong> Secure deletion is implemented in staging and was tested against an approved staging test account. Production readiness still requires separate release checks. Never treat an incoming email as proof of ownership. Staging test requests marked DO NOT DELETE must not trigger account removal.</p>
   </section>
  </main>
 }
