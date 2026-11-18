@@ -10,7 +10,7 @@ export default async function AdminDeletionPage(){
  return <main className="shell" style={{maxWidth:920,padding:"40px 20px 80px",lineHeight:1.7}}>
   <Link href="/admin/verification">← Back to admin verification</Link>
   <h1>Account deletion management</h1>
-  <p>Authorized NFN administrators only. Account deletion requests currently arrive at the configured support inbox. This page is an operational checklist, <strong>not yet an automated deletion queue</strong>.</p>
+  <p>Authorized NFN administrators only. Account deletion requests are recorded in the staging database and displayed in the review queue below. Support email notifications are also sent. <strong>Review approval does not delete account data.</strong></p>
   <DeletionQueue />
   <section style={{padding:24,border:"1px solid #dce6dd",borderRadius:16,background:"#fff"}}>
    <h2>Current request channel</h2>
@@ -26,7 +26,7 @@ export default async function AdminDeletionPage(){
     <li>Only after verified authorization, arrange deletion through an approved, audited backend process. <strong>Do not delete records directly from this page.</strong></li>
     <li>Confirm the outcome to the requester and document any legally justified retained records.</li>
    </ol>
-   <p style={{background:"#fff4df",padding:14,borderRadius:8}}><strong>Safety notice:</strong> Automated database deletion and a persisted request-status queue have not yet been implemented. Never treat an incoming email as proof of ownership. Staging test requests marked DO NOT DELETE must not trigger account removal.</p>
+   <p style={{background:"#fff4df",padding:14,borderRadius:8}}><strong>Safety notice:</strong> A persisted request-status queue and review approval are implemented in staging. Automated account deletion has not been implemented. Never treat an incoming email as proof of ownership. Staging test requests marked DO NOT DELETE must not trigger account removal.</p>
   </section>
  </main>
 }
