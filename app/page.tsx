@@ -37,9 +37,9 @@ export default function Home() {
     <section className="hero shell">
       <div className="heroCopy">
         <div className="eyebrow"><span></span> Built for Nigerian football</div>
-        <h1>Find teams. Challenge opponents. <em>Play football.</em></h1>
-        <p className="lead">Naija Football Network connects football clubs and football academies across Nigeria. Register men’s or women’s teams in U-13, U-15, U-17, U-20 or Senior football, discover matching opponents, arrange friendly matches and follow confirmed fixtures.</p>
-        <div className="heroActions"><Link className="button" href="/teams">Find football teams <ArrowRight size={18}/></Link><Link className="ghostButton" href="/register"><Users size={18}/> Register your team</Link></div>
+        <h1>Bring your football club <em>online.</em></h1>
+        <p className="lead">Naija Football Network connects football clubs and football academies across Nigeria. Register men’s or women’s teams in U-13, U-15, U-17, U-20 or Senior football. After registration, sign in to your dashboard to access team discovery, match requests and fixtures.</p>
+        <div className="heroActions"><Link className="button" href="/register">Register your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/login"><Users size={18}/> Sign in</Link></div>
         <div className="trust"><div className="avatars"><i>NF</i><i>NG</i><i>FC</i></div><span><b>Built for clubs across Nigeria</b><br/>Find verified opponents in your division and age group.</span></div>
       </div>
       <div className="heroVisual">
@@ -54,8 +54,8 @@ export default function Home() {
     </section>
 
     <section className="features shell" style={{paddingTop: "45px"}}>
-      <div className="sectionIntro"><span>LESS SEARCHING. MORE FOOTBALL.</span><h2>Finding your next opponent should be <em>simple.</em></h2></div>
-      <p className="lead" style={{maxWidth: "780px"}}>Tired of struggling to find suitable opponents? Register your football club or academy, select your football division and age category, then discover verified teams that match. Arrange games and view confirmed fixtures in one place.</p>
+      <div className="sectionIntro"><span>YOUR CLUB. ONE PLACE.</span><h2>Manage your football journey <em>online.</em></h2></div>
+      <p className="lead" style={{maxWidth: "780px"}}>Register your football club or academy, select your football division and age category, then sign in to your dashboard to access team discovery, matches and fixtures.</p>
     </section>
 
     <HomeFeatureDemo />
@@ -68,15 +68,15 @@ export default function Home() {
     <section id="how-it-works" className="features shell" style={{paddingTop: "25px"}}>
       <div className="sectionIntro"><span>GET STARTED IN FOUR STEPS</span><h2>How Naija Football Network <em>works.</em></h2></div>
       <div className="featureGrid">{steps.map(({icon: Icon,title,text},i)=><article className="featureCard" key={title}><div className="featureNumber">STEP {i+1}</div><div className="iconBox"><Icon size={23}/></div><h3>{title}</h3><p>{text}</p></article>)}</div>
-      <div className="heroActions" style={{marginTop:"32px"}}><Link className="button" href="/register">Create your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/teams">Explore teams</Link></div>
+      <div className="heroActions" style={{marginTop:"32px"}}><Link className="button" href="/register">Create your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/login">Sign in to dashboard</Link></div>
     </section>
 
     <section id="network" className="network"><div className="shell networkInner"><div><div className="eyebrow light"><span></span> Built for Nigerian football</div><h2>From local pitches<br/>to <em>nationwide connections.</em></h2><p style={{color:"#c6d2c9",lineHeight:1.7,maxWidth:540}}>Whether your football club or academy is in Kano, Jigawa, Lagos, Abuja or elsewhere in Nigeria, find verified opponents in the same football division and age category.</p></div><div className="networkStats"><div><MapPin size={29}/><span>Location-based discovery</span></div><div><ShieldCheck size={29}/><span>Team verification</span></div><div><MessageCircle size={29}/><span>Direct match chat</span></div></div></div></section>
 
     <section className="features shell" style={{textAlign:"center",paddingTop:"85px",paddingBottom:"95px"}}>
-      <div className="sectionIntro" style={{margin:"auto"}}><span>YOUR NEXT MATCH STARTS HERE</span><h2>Your next opponent is <em>just a click away.</em></h2></div>
+      <div className="sectionIntro" style={{margin:"auto"}}><span>GET YOUR CLUB STARTED</span><h2>Join the network <em>today.</em></h2></div>
       <p className="lead" style={{margin:"0 auto 26px"}}>Register your Football Club or Football Academy, choose Men’s or Women’s football and an age group, then connect with matching verified teams.</p>
-      <div className="heroActions" style={{justifyContent:"center"}}><Link className="button" href="/register">Register your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/teams">Find teams</Link></div>
+      <div className="heroActions" style={{justifyContent:"center"}}><Link className="button" href="/register">Register your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/login">Sign in to dashboard</Link></div>
     </section>
 
     <footer className="shell footer"><div className="brand"><NFNBrand/></div><p>Connecting football clubs and academies, men’s and women’s teams, across Nigeria.</p><Link href="/contact">Help &amp; Support</Link><span>© 2026 Naija Football Network</span></footer>
