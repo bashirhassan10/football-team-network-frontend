@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
-const topics = new Set(["Payment", "Verification", "Login / Account", "Matches", "Other"]);
+const topics = new Set(["Payment", "Verification", "Login / Account", "Account Deletion", "Matches", "Other"]);
 const recent = new Map<string, number[]>();
 
 export async function POST(request: Request) {
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   const from = process.env.CONTACT_FROM_EMAIL;
   const to = process.env.SUPPORT_EMAIL;
   if (!key || !from || !to) return NextResponse.json({ error: "Support service is temporarily unavailable." }, { status: 503 });
-  const body = ["New NFN support request", "Name: " + name, "Email: " + email, "Topic: " + topic, "", message].join("\n");
+  const body = [topic === "Account Deletion" ? "NFN ACCOUNT DELETION REQUEST — VERIFY OWNERSHIP BEFORE ACTION" : "New NFN support request", "Name: " + name, "Email: " + email, "Topic: " + topic, "", message].join("\n");
   try {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
