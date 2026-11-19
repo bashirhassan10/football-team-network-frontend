@@ -21,7 +21,6 @@ export default function MobileHomeNav() {
           <Link href="/login" onClick={close}>Sign In</Link>
           <a href="#features" onClick={close}>Features</a>
           <a href="#network" onClick={close}>Network</a>
-          <Link href="/teams" onClick={close}>Explore Teams</Link>
           <Link href="/contact" onClick={close}>Contact Us</Link>
         </div>
       )}
