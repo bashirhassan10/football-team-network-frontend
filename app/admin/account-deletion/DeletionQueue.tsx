@@ -11,7 +11,7 @@ export default function DeletionQueue(){
  async function save(id:number){setBusy(id);setError("");setMessage("");try{const r=await fetch("/api/admin/account-deletion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,...drafts[id]})});const d=await r.json();if(!r.ok)throw Error(d.error||"Unable to save");setMessage("Request status saved.");await load()}catch(e){setError(e instanceof Error?e.message:"Unable to save")}finally{setBusy(null)}}
  return <section style={{marginTop:24}}>
  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:16}}><h2>Deletion request queue</h2><button className="ghostButton" onClick={()=>void load()}>Refresh</button></div>
- <p>Requests are stored in the staging database. Updating a status does not delete an account or prove ownership.</p>
+ <p>Requests are stored in the configured backend database. Updating a status does not delete an account or prove ownership.</p>
  {error&&<p role="alert" className="formError">{error}</p>}{message&&<p role="status" className="formSuccess">{message}</p>}
  {loading?<p>Loading requests…</p>:items.length===0?<p>No deletion requests recorded yet.</p>:<div style={{display:"grid",gap:16}}>{items.map(x=><article key={x.id} style={{background:"white",border:"1px solid #dce6dd",padding:20,borderRadius:14}}>
  <p><strong>Request #{x.id} — {x.team_name}</strong></p><p>Requester email: {x.email}</p><p>Submitted: {new Date(x.created_at).toLocaleString()}</p><p>Reason: {x.reason||"Not provided"}</p><p>Ownership verified: <strong>{x.ownership_verified?"Yes":"No"}</strong></p>
