@@ -5,7 +5,7 @@ import HomeFeatureDemo from "./home-feature-demo";
 import { ArrowRight, BadgeCheck, CalendarDays, CheckCircle2, MapPin, MessageCircle, ShieldCheck, Swords, Trophy, Users, BarChart3, Bell, UserRoundPlus, Search } from "lucide-react";
 
 const features = [
-  { icon: Search, title: "Find matching opponents", text: "Discover verified teams in your football division and age category across Nigeria." },
+  { icon: Search, title: "Discover opponents after sign-in", text: "Register and sign in to your team dashboard to discover verified teams in your division and age category." },
   { icon: Users, title: "Men’s and women’s football", text: "Register boys’ and men’s teams or girls’ and women’s teams with their own dedicated accounts." },
   { icon: ShieldCheck, title: "Age-based football", text: "Choose U-13, U-15, U-17, U-20 or Senior so challenges stay within the same age group." },
   { icon: Swords, title: "Challenge opponents", text: "Send match requests and let the other team accept or decline." },
@@ -20,7 +20,7 @@ const features = [
 
 const steps = [
   { icon: UserRoundPlus, title: "Register your team", text: "Register a Football Club or Football Academy, choose Men’s or Women’s football and select your age category." },
-  { icon: Search, title: "Discover opponents", text: "Find verified opponents in the same division and age category as your team." },
+  { icon: Search, title: "Explore from your dashboard", text: "After registration and sign-in, browse verified opponents in your team dashboard." },
   { icon: Swords, title: "Send a challenge", text: "Propose a friendly match with a date, time and venue." },
   { icon: CheckCircle2, title: "Play and track", text: "Chat, complete your match and optionally confirm the result." },
 ];
@@ -40,7 +40,7 @@ export default function Home() {
         <h1>Bring your football club <em>online.</em></h1>
         <p className="lead">Naija Football Network connects football clubs and football academies across Nigeria. Register men’s or women’s teams in U-13, U-15, U-17, U-20 or Senior football. After registration, sign in to your dashboard to access team discovery, match requests and fixtures.</p>
         <div className="heroActions"><Link className="button" href="/register">Register your team <ArrowRight size={18}/></Link><Link className="ghostButton" href="/login"><Users size={18}/> Sign in</Link></div>
-        <div className="trust"><div className="avatars"><i>NF</i><i>NG</i><i>FC</i></div><span><b>Built for clubs across Nigeria</b><br/>Find verified opponents in your division and age group.</span></div>
+        <div className="trust"><div className="avatars"><i>NF</i><i>NG</i><i>FC</i></div><span><b>Built for clubs across Nigeria</b><br/>Team discovery is available after registration and sign-in.</span></div>
       </div>
       <div className="heroVisual">
         <div className="glow"></div>
@@ -48,7 +48,7 @@ export default function Home() {
           <div className="pitchLine"></div><div className="circle"></div>
           <div className="teamCard cardOne"><div className="crest">FC</div><div><b>Your football club</b><span><MapPin size={12}/> Nigeria</span></div><BadgeCheck className="verified" size={19}/></div>
           <div className="teamCard cardTwo"><div className="crest alt">FC</div><div><b>Your next opponent</b><span><MapPin size={12}/> Discover nearby teams</span></div><Swords className="verified" size={19}/></div>
-          <div className="matchChip"><Trophy size={16}/><div><small>FRIENDLY MATCHES</small><b>Find your next opponent</b></div></div>
+          <div className="matchChip"><Trophy size={16}/><div><small>FRIENDLY MATCHES</small><b>Discover teams after sign-in</b></div></div>
         </div>
       </div>
     </section>
