@@ -7,3 +7,14 @@ out/
 *.log
 .DS_Store
 .vercel
+
+# Android / Gradle local build output and signing material
+.gradle/
+**/build/
+local.properties
+*.jks
+*.keystore
+*.aab
+*.apk
+*.ap_
+*.idsig
