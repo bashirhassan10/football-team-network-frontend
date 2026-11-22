@@ -2,7 +2,7 @@ name: Frontend CI
 
 on:
   push:
-    branches: [main, fix/staging-session-tab-isolation]
+    branches: [main, fix/staging-session-tab-isolation, chore/android-play-release-prep]
   pull_request:
     branches: [main]
 
