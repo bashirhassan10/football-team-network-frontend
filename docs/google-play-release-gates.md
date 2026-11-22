@@ -1,23 +1,23 @@
-# NFN Android / Google Play release gate (staging planning)
-Updated: 2026-11-18. This is a checklist, not a Play approval claim.
+# NFN Android / Google Play release gate
+Updated: 2026-11-22. Preparation checklist only; this is not a Play approval claim.
 
-## Current verified capabilities
-- Public privacy policy and public account deletion request page.
-- Deletion requests persisted in staging and support notification delivered in test.
-- Team-session ownership check, admin impact preview, non-destructive review approval.
+## Confirmed preparation details
+- App name: **Naija Football Network**
+- Client-approved Android application ID: `com.naijafootballnetwork.app`
+- Public privacy policy: https://naijafootballnetwork.com/privacy-policy
+- Public account deletion page: https://naijafootballnetwork.com/account-deletion
+- Developer reports the account deletion flow has passed an end-to-end test, including request, review/approval and deletion. Preserve test evidence and verify behavior on the final release build before submission.
 
-## Release blockers
-1. **Android artifact:** No verified signed Android App Bundle (.aab), Android package ID, signing key, or Play Console listing has been supplied. Decide native vs Trusted Web Activity implementation, and test device behavior.
-2. **Actual deletion:** No deletion execution endpoint. Do not mark deletion completed or claim immediate removal. Implement verified deletion with audit trail, explicit retention and anonymization policy, and storage-object cleanup. Require independent authentication and operator sign-off before irreversible actions.
-3. **Financial retention:** Payments table references teams with NO ACTION FK. Determine lawful retention period and minimization/anonymization with operator and appropriate legal/accounting advice. Do not remove payment records blindly.
-4. **Shared match history:** Match requests have NO ACTION FKs and messages have CASCADE behavior. Decide what shared records should be retained, anonymized, or removed without corrupting opponents' fixtures or chats.
-5. **Verification uploads:** DB rows may be cascaded, but files in external object storage require a separate authenticated cleanup plan. Verify storage paths and permissions.
-6. **Google Play disclosures:** Reconcile Data safety form, privacy policy, actual data flows (location, documents, messaging, payments), account deletion instructions, target audience and permissions with the shipped Android app.
-7. **Operator approval:** Confirm real support mailbox, operator name, retention policy, account deletion handling timelines, and production readiness.
-8. **QA:** Test staging deletion with a fresh disposable team and no live payments; regression-test match flows, login, emails and admin access; only then plan production migration.
+## Remaining release gates
+1. **Android artifact and signing:** Generate the Android Trusted Web Activity project, establish a secure release-signing process, build a signed Android App Bundle (.aab), and test it on real Android devices.
+2. **Digital Asset Links:** Publish `/.well-known/assetlinks.json` on the final domain with the exact package ID and actual SHA-256 fingerprint for the release signing certificate. Verify domain association from the installed build.
+3. **Deletion and retention evidence:** Document what is deleted, anonymized or retained after a completed request, including payment/accounting records, shared match history, chat records, logs, backups, emails and uploaded files. Do not promise immediate erasure of records that must be retained or that remain in backups.
+4. **Google Play disclosures:** Reconcile the Data Safety form, privacy policy, actual data flows (location, documents, messaging, payments), account deletion instructions, target audience and permissions with the shipped Android app and any added SDKs.
+5. **Play Console readiness:** Confirm account access, store listing, support contact, screenshots, app access instructions, target API and testing-track requirements.
+6. **Final QA:** Test the signed candidate build, including signup/login, sessions, payment redirects, location permissions, document uploads, match discovery, chat, support and account deletion. Do not use Production test teams or fake payments.
 
-## Security rules
-- Never execute DELETE FROM teams as a shortcut.
-- Never use an email alone as proof of ownership.
-- Review approval is not deletion execution.
-- Production data and live payments are out of scope for staging tests.
+## Security and environment rules
+- Never execute destructive database commands as a shortcut.
+- Never use an email address alone as proof of account ownership.
+- Keep Production data and live payments out of staging tests.
+- Do not merge this preparation branch into `main`, deploy it, or change Production configuration until the release candidate has been reviewed and the user explicitly approves.
