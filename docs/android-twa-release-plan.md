@@ -16,7 +16,7 @@ Updated: 2026-11-22. Staging planning; not a signed Android release.
 1. Generate a Trusted Web Activity Android project with Bubblewrap on a trusted development machine, pointing to the final production origin/manifest.
 2. Generate and securely back up a release signing keystore; never commit the keystore, passwords or Play upload credentials.
 3. Configure Digital Asset Links at `https://naijafootballnetwork.com/.well-known/assetlinks.json` using the actual SHA-256 fingerprint of the signing certificate and this exact package ID. Do not fabricate a fingerprint.
-4. Build a signed Android App Bundle (.aab) and install/test an Android build on a real device. Verify domain verification works and the browser address bar is not shown unexpectedly.
+4. Verify the generated Android project targets Android 16 (API level 36) or higher, as required for new Google Play submissions from August 31, 2026. Build a signed Android App Bundle (.aab) and install/test an Android build on a real device. Verify domain verification works and the browser address bar is not shown unexpectedly.
 5. Test signup/login, persistent sessions, Paystack payment redirects, map/geolocation permissions, file uploads, match chat, support email, account deletion and back navigation.
 6. Complete Play Console listing, Data Safety, account deletion URL, privacy policy, screenshots, target API and testing requirements. Submit only after the final release behavior and disclosures have been checked.
 
