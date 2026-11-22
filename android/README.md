@@ -24,7 +24,7 @@ npm install --global @bubblewrap/cli
 bubblewrap init --manifest=https://naijafootballnetwork.com/manifest.webmanifest --directory=android
 ```
 
-During initialization, verify the package ID is exactly `com.naijafootballnetwork.app`, the start URL is `/`, and the scope is `/`. Do not accept a different application ID.
+During initialization, verify the package ID is exactly `com.naijafootballnetwork.app`, the start URL is `/`, and the scope is `/`. Do not accept a different application ID. Also verify the generated Android project targets Android 16 (API level 36) or higher; Google Play requires API 36+ for new app submissions from August 31, 2026.
 
 Bubblewrap may ask to create a signing key. Keep the keystore and its passwords private. The repository ignores `*.jks` and `*.keystore`; do not force-add them, upload them to GitHub, or paste passwords into chat. Store a secure offline backup of the release/upload key.
 
