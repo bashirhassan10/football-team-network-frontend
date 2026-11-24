@@ -50,7 +50,6 @@ jobs:
       - name: Install Android 36 SDK components
         run: |
           sdkmanager --install "platform-tools" "platforms;android-36" "build-tools;36.1.0"
-          # Bubblewrap expects sdkmanager at $ANDROID_HOME/bin/sdkmanager.
           CMDLINE_TOOLS_DIR="$(find "$ANDROID_HOME/cmdline-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
           test -x "$CMDLINE_TOOLS_DIR/bin/sdkmanager"
           if [ ! -e "$ANDROID_HOME/bin" ]; then
@@ -58,8 +57,8 @@ jobs:
           fi
           test -x "$ANDROID_HOME/bin/sdkmanager"
 
-      - name: Install Bubblewrap CLI
-        run: npm install --global @bubblewrap/cli
+      - name: Install pinned Bubblewrap CLI
+        run: npm install --global @bubblewrap/cli@1.27.0
 
       - name: Configure Bubblewrap toolchain
         run: |
@@ -74,42 +73,46 @@ jobs:
           sudo apt-get install --yes expect
           expect <<'EXPECT_SCRIPT'
           set timeout 900
+          log_user 1
           spawn bubblewrap init --manifest=https://naijafootballnetwork.com/manifest.webmanifest --directory=android
-          expect "Domain:"
+
+          # Match the actual Inquirer question prompt (the leading '?'), not
+          # the explanatory text printed above each prompt.
+          expect -re {\?.*Domain:}
           send "naijafootballnetwork.com\r"
-          expect "URL path:"
+          expect -re {\?.*URL path:}
           send "/\r"
-          expect "Application name:"
+          expect -re {\?.*Application name:}
           send "\r"
-          expect "Short name:"
+          expect -re {\?.*Short name:}
           send "\r"
-          expect "Application ID:"
+          expect -re {\?.*Application ID:}
           send "com.naijafootballnetwork.app\r"
-          expect "Starting version code"
+          expect -re {\?.*Starting version code}
           send "1\r"
-          expect "Display mode:"
+          expect -re {\?.*Display mode:}
           send "\r"
-          expect "Orientation:"
+          expect -re {\?.*Orientation:}
           send "\r"
-          expect "Status bar color:"
+          expect -re {\?.*Status bar color:}
           send "\r"
-          expect "Splash screen color:"
+          expect -re {\?.*Splash screen color:}
           send "\r"
-          expect "Icon URL:"
+          expect -re {\?.*Icon URL:}
           send "\r"
-          expect "Maskable icon URL:"
+          expect -re {\?.*Maskable icon URL:}
           send "\r"
-          expect "Monochrome icon URL:"
+          expect -re {\?.*Monochrome icon URL:}
           send "\r"
-          expect "Include support for Play Billing?"
+          expect -re {\?.*Include support for Play Billing}
           send "n\r"
-          expect "Request geolocation permission?"
+          expect -re {\?.*Request geolocation permission}
           send "n\r"
-          expect "Key store location:"
+          expect -re {\?.*Key store location:}
           send "\r"
-          expect "Key name:"
+          expect -re {\?.*Key name:}
           send "\r"
-          expect "Do you want to create one now?"
+          expect -re {\?.*Do you want to create one now}
           send "n\r"
           expect eof
           EXPECT_SCRIPT
@@ -123,6 +126,8 @@ jobs:
           from pathlib import Path
           import re
           path = Path("app/build.gradle")
+          if not path.is_file():
+              raise SystemExit("Bubblewrap did not generate app/build.gradle")
           text = path.read_text()
           text, compile_count = re.subn(r"(compileSdkVersion|compileSdk)\s+\d+", r"\g<1> 36", text, count=1)
           text, target_count = re.subn(r"(targetSdkVersion|targetSdk)\s+\d+", r"\g<1> 36", text, count=1)
@@ -131,12 +136,26 @@ jobs:
           path.write_text(text)
           PY
 
-      - name: Verify application identity and Android API level
+      - name: Verify generated app identity and Android API level
         working-directory: android
         shell: bash
         run: |
           set -euo pipefail
-          test -f app/build.gradle
+          test -f twa-manifest.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path("twa-manifest.json").read_text())
+          expected = {
+              "host": "naijafootballnetwork.com",
+              "packageId": "com.naijafootballnetwork.app",
+              "name": "Naija Football Network",
+              "launcherName": "NFN",
+          }
+          for key, value in expected.items():
+              if manifest.get(key) != value:
+                  raise SystemExit(f"Unexpected {key}: {manifest.get(key)!r}; expected {value!r}")
+          PY
           grep -F 'applicationId "com.naijafootballnetwork.app"' app/build.gradle
           grep -Eq 'compileSdkVersion 36|compileSdk 36' app/build.gradle
           grep -Eq 'targetSdkVersion 36|targetSdk 36' app/build.gradle
@@ -146,7 +165,7 @@ jobs:
         run: bubblewrap build --skipSigning
 
       - name: Verify unsigned App Bundle exists
-        run: test -s android/app-release-bundle.aab
+        run: test -s android/app/build/outputs/bundle/release/app-release.aab
 
       - name: Upload generated Android project and unsigned AAB
         uses: actions/upload-artifact@v4
@@ -162,6 +181,6 @@ jobs:
             android/gradle/**
             android/app/build.gradle
             android/app/src/**
-            android/app-release-bundle.aab
+            android/app/build/outputs/bundle/release/app-release.aab
           if-no-files-found: error
           retention-days: 14
