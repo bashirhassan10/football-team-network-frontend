@@ -28,7 +28,7 @@ Updated: 24 November 2026. This README describes code on `main`; implemented doe
 - [x] PWA manifest, 192/512 PNG icons and service-worker registration.
 - [x] Automated backend-routing tests, ESLint and Next.js build in CI.
 
-The landing page's feature previews are explicitly sample data. Authenticated pages request backend data. The service worker caches static icon assets only; it does not provide an offline application or intentionally cache private API responses.
+The landing page's feature previews are explicitly sample data. Authenticated pages request backend data. The service worker caches static icon assets only; it provides a public offline recovery page, not offline access to private application data. Private API responses and authenticated HTML are not cached.
 
 ## Architecture and technology
 
@@ -149,3 +149,13 @@ These implementation checkboxes describe staging source and CI verification, not
 Apply backend migration 026 to the isolated staging database before enabling COMMUNITY_SAFETY_ENABLED=true on staging. It defaults off. This chat has no Vercel/Render deployment access; the team must verify staging hosting, environment isolation and migrations. Backend staging history is preserved rather than replaced with master. Frontend staging was created from the current frontend source.
 
 Staging frontend branches explicitly use the staging backend URL even if an old production BACKEND_API_URL remains configured. Individual admin identities remain a separate improvement; moderation audit currently identifies the shared admin credential.
+
+## Next five — staging release preparation
+
+- [ ] Default-off checkout initialization that requires explicit staging opt-in and a test key.
+- [ ] Read-only admin release-readiness dashboard with secret-free configuration/schema diagnostics.
+- [ ] Source-based Data Safety inventory and JSON draft export, with operator questions.
+- [ ] Public offline navigation fallback and reconnection guidance without private caching or action replay.
+- [ ] Current registration/coach-letter verification guidance and removal of obsolete three-document instructions.
+
+See docs/staging-release-readiness.md. These are implementation milestones only. Billing approval, final disclosures, fresh-deletion backport to backend staging, migrations/hosting checks, signing and physical-device QA remain open. No main/master or hosting settings are changed by this batch.

@@ -1,6 +1,6 @@
 // This dedicated override is used only by the team-logo feature preview.
 // It avoids modifying the shared Production/Preview BACKEND_API_URL setting.
-const stagingBranch = process.env.VERCEL_GIT_COMMIT_REF === "staging" || process.env.VERCEL_GIT_COMMIT_REF?.startsWith("feat/staging-community-safety");
+const stagingBranch = process.env.VERCEL_GIT_COMMIT_REF === "staging" || /^(feat|fix|chore|docs|test)\/staging(?:-|\/)/.test(process.env.VERCEL_GIT_COMMIT_REF || "");
 const teamLogoPreviewOverride =
   process.env.VERCEL_ENV === "preview" &&
   ["feat/staging-team-logo-upload", "feat/staging-professional-team-profile", "feat/staging-team-divisions-fixtures"].includes(process.env.VERCEL_GIT_COMMIT_REF || "")
