@@ -1,58 +1,112 @@
-# NFN Android (Trusted Web Activity)
+# NFN Android — Trusted Web Activity
 
-The Android app is being generated as a Trusted Web Activity (TWA) with Bubblewrap. The app identity and Bubblewrap configuration are stored in `twa-manifest.json`; the generated Gradle project is created by the isolated GitHub Actions job.
+This directory contains the Android / Google Play preparation for **Naija Football Network (NFN)**. The intended packaging approach is a Trusted Web Activity (TWA) generated with Bubblewrap.
 
-## Fixed app identity
+> **Current status:** preparation only. The latest recorded Android CI attempt was cancelled during interactive project initialization. The frontend quality job passed, but a successful Android project generation or AAB build has not yet been verified. Do not describe this as a working or Play-ready Android release.
 
-- App name: Naija Football Network
-- Launcher name: NFN
-- Package ID: `com.naijafootballnetwork.app`
-- Production web origin: `https://naijafootballnetwork.com`
-- Web manifest: `https://naijafootballnetwork.com/manifest.webmanifest`
-- Android compile/target API requirement: 36 or higher
+## Confirmed app identity
 
-## Automated unsigned build
+| Setting | Value |
+| --- | --- |
+| App name | Naija Football Network |
+| Launcher name | NFN |
+| Package ID | `com.naijafootballnetwork.app` |
+| Production web origin | `https://naijafootballnetwork.com` |
+| Web manifest | `https://naijafootballnetwork.com/manifest.webmanifest` |
+| Android API target | API 36 or higher |
 
-The `android-twa` job in `.github/workflows/ci.yml` runs only on pushes to `chore/android-play-release-prep`. It:
+The package ID is the intended permanent Play Store identity. Do not change it casually, especially after an app is created in Play Console.
 
-1. Sets up JDK 17, Node.js and Android SDK tools.
-2. Installs Android platform API 36 and Build Tools 36.0.0.
-3. Generates the Gradle project from this directory's `twa-manifest.json`.
-4. Verifies the package ID, compile SDK and target SDK.
-5. Builds an unsigned Android App Bundle using Bubblewrap's `--skipSigning` option.
-6. Uploads the generated project and unsigned AAB as a short-lived GitHub Actions artifact.
+## How the automated build works
 
-This is a build-validation artifact only. It is not suitable for Play Console upload or public distribution.
+The `android-twa` job in `.github/workflows/ci.yml` runs only for a **push** to `chore/android-play-release-prep`. It does not run for `main` or ordinary pull requests.
 
-## Local reproduction (optional)
+The job:
 
-From the repository root on the isolated preparation branch:
+1. Checks out the Android preparation branch.
+2. Installs JDK 17, Node.js 22, Android platform API 36, and Build Tools 36.1.0.
+3. Installs the pinned Bubblewrap CLI version 1.27.0.
+4. Runs `bubblewrap init` against the production web manifest URL.
+5. Answers Bubblewrap's interactive questions, preserving the manifest defaults where appropriate and explicitly setting the package ID.
+6. Sets and verifies `compileSdk` and `targetSdk` as 36.
+7. Runs `bubblewrap build --skipSigning`.
+8. Verifies the unsigned bundle at `app/build/outputs/bundle/release/app-release.aab`.
+9. Uploads the generated project and unsigned AAB as a GitHub Actions artifact retained for 14 days.
+
+The CI job generates its actual `twa-manifest.json` from the live web manifest. The checked-in `android/twa-manifest.json` is a configuration reference, not the file consumed as the input to `bubblewrap init`. Review the generated manifest in the artifact after each successful build.
+
+## Local build reproduction
+
+Use a clean checkout of `chore/android-play-release-prep`. Install:
+
+- Node.js 18 or newer (CI uses Node.js 22)
+- JDK 17
+- Android command-line tools
+- Android platform API 36
+- Android Build Tools 36.1.0
+- Bubblewrap CLI 1.27.0
+
+Then run:
 
 ```bash
-npm install --global @bubblewrap/cli
+npm install --global @bubblewrap/cli@1.27.0
+bubblewrap doctor
 cd android
-bubblewrap update --skipVersionUpgrade
+bubblewrap init --manifest=https://naijafootballnetwork.com/manifest.webmanifest
+```
+
+During `bubblewrap init`, confirm these values:
+
+- Domain: `naijafootballnetwork.com`
+- URL path: `/`
+- Application name: `Naija Football Network`
+- Short name: `NFN`
+- Application ID: `com.naijafootballnetwork.app`
+- Starting version code: `1` for the initial test build
+- Keep the PWA manifest's display, orientation, colors, and icon defaults unless a reviewed design decision requires a change.
+- Play Billing: No (NFN uses Paystack; do not add Play Billing without a separate policy/product review).
+- Geolocation delegation: No unless the Android permission and location flow have been deliberately designed and tested.
+- Do not create a signing key during this unsigned validation step.
+
+After initialization, inspect `twa-manifest.json` and the generated Gradle project. Set `compileSdk` and `targetSdk` to at least 36, then build:
+
+```bash
 bubblewrap build --skipSigning
 ```
 
-Prerequisites: Node.js 18+, JDK 17, Android command-line tools, Android platform API 36 and Build Tools 36.0.0.
+Expected unsigned AAB path:
+
+```text
+android/app/build/outputs/bundle/release/app-release.aab
+```
+
+Bubblewrap may also produce an unsigned APK for local testing. Neither unsigned artifact is suitable for Play Console upload.
 
 ## Signing and Digital Asset Links
 
-- The manifest's signing-key path and alias are placeholders; no release keystore is included.
-- Do not create, commit, upload or share a production signing keystore or its passwords in GitHub or chat.
-- A signed release build requires a separately generated and securely backed-up upload/release key.
-- Do not publish `/.well-known/assetlinks.json` until the correct SHA-256 fingerprint is confirmed. If Play App Signing is enabled, the Play app-signing certificate fingerprint must be used for the installed Play-distributed app.
+- No release keystore is included in this repository.
+- Do not generate or commit a production signing key in CI.
+- Generate the upload/release key through an agreed secure process, back it up securely, and store credentials in an approved secret manager.
+- Verify the certificate fingerprint from the actual signing certificate.
+- Configure `https://naijafootballnetwork.com/.well-known/assetlinks.json` with the exact package ID and correct SHA-256 certificate fingerprint.
+- If Play App Signing is enabled, use the Play app-signing certificate fingerprint for the installed Play-distributed app's Digital Asset Links association. Do not guess or reuse a debug fingerprint.
 
-## Remaining release checks
+## Required pre-submission testing
 
-- Review the generated Gradle project and unsigned build output.
-- Configure and securely back up the release/upload signing key.
-- Generate a signed AAB and verify its certificate.
-- Configure and verify Digital Asset Links on the final domain.
-- Test the app on physical Android devices, including login, sessions, payment redirects, location, document uploads, chat, support and account deletion.
-- Finalize Play Console listing, screenshots, Data Safety disclosures and testing requirements.
+Test the signed candidate on physical Android devices, including:
 
-## Production protection
+- Installation, first launch, splash screen, app navigation and back behavior.
+- Domain verification and absence of unexpected browser UI.
+- Signup, login, logout, session persistence and password recovery.
+- Team registration and verification-document uploads.
+- Match discovery, match requests, fixtures and chat.
+- Location permission and pitch/map behavior.
+- Paystack handoff and return flow without using live payments as test transactions.
+- Support contact and account deletion request/review/deletion.
+- Network loss, app resume, external links and error states.
 
-This is Android release preparation only. Do not merge this branch into `main`, deploy it, modify Production configuration, or create Production test data as part of these steps. Do not submit to Google Play until the signed candidate and disclosures have been reviewed and explicitly approved.
+## Production safety
+
+Android preparation must not change or deploy the production website, backend, database, environment variables, Paystack configuration, or production data. Do not merge this branch into `main`, publish a signed release, or submit to Google Play without explicit approval after the release gates have been reviewed.
+
+For the complete status and handoff, see [the Android engineer handoff](../docs/android-engineer-handoff.md).
