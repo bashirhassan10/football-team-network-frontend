@@ -22,5 +22,5 @@ test('unblocking preserves DELETE body and team authorization',async()=>{
 });
 test('moderator credential stays server-side and backend denial is preserved',async()=>{
  const a=load({admin:true,status:403});const response=await a.proxy('/api/admin/community/action','POST',new Request('https://test.invalid',{method:'POST',body:'{}'}),true);
- assert.equal(response.status,403);assert.equal(a.calls[0].init.headers['X-Admin-Key'],'server-test-key');assert.equal(a.calls[0].init.headers.Authorization,undefined);assert.ok(!(await response.text()).includes('server-test-key'));
+ assert.equal(response.status,403);assert.equal(response.headers.get("Cache-Control"),"no-store");assert.equal(a.calls[0].init.headers['X-Admin-Key'],'server-test-key');assert.equal(a.calls[0].init.headers.Authorization,undefined);assert.ok(!(await response.text()).includes('server-test-key'));
 });
