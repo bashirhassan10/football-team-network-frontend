@@ -68,8 +68,68 @@ jobs:
           bubblewrap doctor
 
       - name: Generate the Android TWA project
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes expect
+          expect <<'EXPECT_SCRIPT'
+          set timeout 900
+          spawn bubblewrap init --manifest=https://naijafootballnetwork.com/manifest.webmanifest --directory=android
+          expect "Domain:"
+          send "naijafootballnetwork.com\\r"
+          expect "URL path:"
+          send "/\\r"
+          expect "Application name:"
+          send "\\r"
+          expect "Short name:"
+          send "\\r"
+          expect "Application ID:"
+          send "com.naijafootballnetwork.app\\r"
+          expect "Starting version code"
+          send "1\\r"
+          expect "Display mode:"
+          send "\\r"
+          expect "Orientation:"
+          send "\\r"
+          expect "Status bar color:"
+          send "\\r"
+          expect "Splash screen color:"
+          send "\\r"
+          expect "Icon URL:"
+          send "\\r"
+          expect "Maskable icon URL:"
+          send "\\r"
+          expect "Monochrome icon URL:"
+          send "\\r"
+          expect "Include support for Play Billing?"
+          send "n\\r"
+          expect "Request geolocation permission?"
+          send "n\\r"
+          expect "Key store location:"
+          send "\\r"
+          expect "Key name:"
+          send "\\r"
+          expect "Do you want to create one now?"
+          send "n\\r"
+          expect eof
+          EXPECT_SCRIPT
+
+      - name: Enforce Android API 36 in generated project
         working-directory: android
-        run: bubblewrap update --skipVersionUpgrade
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          path = Path("app/build.gradle")
+          text = path.read_text()
+          text, compile_count = re.subn(r"(compileSdkVersion|compileSdk)\\s+\\d+", r"\\g<1> 36", text, count=1)
+          text, target_count = re.subn(r"(targetSdkVersion|targetSdk)\\s+\\d+", r"\\g<1> 36", text, count=1)
+          if compile_count != 1 or target_count != 1:
+              raise SystemExit("Could not safely set compileSdk and targetSdk to 36")
+          path.write_text(text)
+          PY
 
       - name: Verify application identity and Android API level
         working-directory: android
