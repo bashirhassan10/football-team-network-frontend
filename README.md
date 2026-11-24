@@ -138,11 +138,11 @@ To configure Digital Asset Links after Play App Signing enrollment, set ANDROID_
 
 ## Next five features — staging community safety
 
-- [ ] Versioned Community Terms acceptance at registration and before existing accounts create content.
-- [ ] Report individual opponent messages from match chat.
-- [ ] Report a team from its profile or match chat.
-- [ ] Block/unblock teams, with Settings management and backend enforcement.
-- [ ] Admin moderation queue with message removal, suspension/restoration and action audit.
+- [x] Versioned Community Terms acceptance at registration and before existing accounts create content.
+- [x] Report individual opponent messages from match chat.
+- [x] Report a team from its profile or match chat.
+- [x] Block/unblock teams, with Settings management and backend enforcement.
+- [x] Admin moderation queue with message removal, suspension/restoration and action audit.
 
 These implementation checkboxes describe staging source and CI verification, not production release. The broader community-safety Play gate remains open until hosted staging QA, operator review of Terms/retention and moderation operations are confirmed.
 
