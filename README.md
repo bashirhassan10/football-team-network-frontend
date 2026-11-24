@@ -112,7 +112,7 @@ The older documents on `main` remain useful background but contain stale claims,
 - [x] Diagnose and fix the unsigned Android bundle build (PR CI 45414505882 produced an unsigned AAB).
 - [x] Reconcile non-www Android configuration with the observed www production redirect.
 - [ ] Complete secure signing, correct app-signing certificate association and Digital Asset Links.
-- [ ] Finish deletion integration: backend execution requires prior deactivation, but the current frontend has no deactivation proxy/UI step.
+- [x] Finish deletion integration: admin impact inspection, explicit preparation proxy/UI, then execution; authenticated proxy and backend lifecycle tests pass.
 - [ ] Add fresh independent ownership authentication, review retention rules and test deletion/storage cleanup/retry behavior with disposable staging data.
 - [ ] Add appropriate user/content reporting, blocking, Terms acceptance and admin moderation for team chat.
 - [ ] Assess verification payments against Google Play Billing requirements before shipping Paystack in the Android app.
@@ -129,7 +129,7 @@ Do not mark any gate complete based only on source inspection or an older handof
 - [x] Unsigned AAB build fix: minimum SDK 24 and direct Gradle bundleRelease passed Android CI 45414505882; artifact nfn-android-twa-unsigned-224 uploaded.
 - [x] Android configuration uses the observed canonical www host, including manifest/icon URLs and generated identity checks. Installed-app domain verification remains part of signing/device QA.
 - [ ] Signing and Play certificate association: Play Console app is not created yet. The assetlinks route validates public certificate fingerprints from ANDROID_APP_SIGNING_SHA256 and returns 404 while unconfigured. No private signing material is generated or committed.
-- [ ] Deletion integration: admin inspection exposes preparation state; explicit deactivation precedes erasure. Await cross-repository CI validation before ticking.
+- [x] Deletion integration: admin inspection exposes preparation state; explicit deactivation precedes erasure. Frontend proxy tests and backend disposable-database lifecycle CI pass.
 - [ ] Ownership/retention/cleanup: current password is required; approval and deactivation require verification within 24 hours. Operator retention decision and production-like storage/concurrency QA remain outstanding.
 
 Deployment order: apply backend migration 025 before the new backend handlers, then deploy the matching frontend. DELETION_RETENTION_POLICY_APPROVED defaults off and must remain off until the operator approves retention. Do not test against real accounts. No production migration or environment change is performed by this source change.
