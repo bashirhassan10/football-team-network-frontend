@@ -2,7 +2,7 @@ name: Frontend CI
 
 on:
   push:
-    branches: [main, fix/staging-session-tab-isolation]
+    branches: [main, fix/staging-session-tab-isolation, chore/android-play-release-prep, feat/play-first-five-20261124]
   pull_request:
     branches: [main]
 
@@ -22,3 +22,172 @@ jobs:
         env:
           # PRs and staging branches must never build against production backend.
           BACKEND_API_URL: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'https://football-team-network.onrender.com' || 'https://football-team-network-staging.onrender.com' }}
+
+  android-twa:
+    # Keep Android packaging limited to the isolated preparation branch.
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref != 'refs/heads/main')
+    name: Generate and validate Android TWA
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out isolated Android preparation branch
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Install Android 36 SDK components
+        run: |
+          sdkmanager --install "platform-tools" "platforms;android-36" "build-tools;36.1.0"
+          CMDLINE_TOOLS_DIR="$(find "$ANDROID_HOME/cmdline-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -x "$CMDLINE_TOOLS_DIR/bin/sdkmanager"
+          if [ ! -e "$ANDROID_HOME/bin" ]; then
+            ln -s "$CMDLINE_TOOLS_DIR/bin" "$ANDROID_HOME/bin"
+          fi
+          test -x "$ANDROID_HOME/bin/sdkmanager"
+
+      - name: Install pinned Bubblewrap CLI
+        run: npm install --global @bubblewrap/cli@1.27.0
+
+      - name: Configure Bubblewrap toolchain
+        run: |
+          mkdir -p "$HOME/.bubblewrap"
+          printf '{"jdkPath":"%s","androidSdkPath":"%s"}\n' "$JAVA_HOME" "$ANDROID_HOME" > "$HOME/.bubblewrap/config.json"
+          bubblewrap doctor
+
+      - name: Generate the Android TWA project
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes expect
+          expect <<'EXPECT_SCRIPT'
+          set timeout 900
+          log_user 1
+          spawn bubblewrap init --manifest=https://www.naijafootballnetwork.com/manifest.webmanifest --directory=android
+
+          # Match the actual Inquirer question prompt (the leading '?'), not
+          # the explanatory text printed above each prompt.
+          expect -re {\?.*Domain:}
+          send "www.naijafootballnetwork.com\r"
+          expect -re {\?.*URL path:}
+          send "/\r"
+          expect -re {\?.*Application name:}
+          send "\r"
+          expect -re {\?.*Short name:}
+          send "\r"
+          expect -re {\?.*Application ID:}
+          send "com.naijafootballnetwork.app\r"
+          expect -re {\?.*Starting version code}
+          send "1\r"
+          expect -re {\?.*Display mode:}
+          send "\r"
+          expect -re {\?.*Orientation:}
+          send "\r"
+          expect -re {\?.*Status bar color:}
+          send "\r"
+          expect -re {\?.*Splash screen color:}
+          send "\r"
+          expect -re {\?.*Icon URL:}
+          send "\r"
+          expect -re {\?.*Maskable icon URL:}
+          send "\r"
+          expect -re {\?.*Monochrome icon URL:}
+          send "\r"
+          expect -re {\?.*Include support for Play Billing}
+          send "n\r"
+          expect -re {\?.*Request geolocation permission}
+          send "n\r"
+          expect -re {\?.*Key store location:}
+          send "\r"
+          expect -re {\?.*Key name:}
+          send "\r"
+          expect -re {\?.*Do you want to create one now}
+          send "n\r"
+          expect eof
+          EXPECT_SCRIPT
+
+      - name: Enforce Android API 36 in generated project
+        working-directory: android
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          path = Path("app/build.gradle")
+          if not path.is_file():
+              raise SystemExit("Bubblewrap did not generate app/build.gradle")
+          text = path.read_text()
+          text, compile_count = re.subn(r"(compileSdkVersion|compileSdk)\s+\d+", r"\g<1> 36", text, count=1)
+          text, min_count = re.subn(r"(minSdkVersion|minSdk)\s+\d+", r"\g<1> 24", text, count=1)
+          text, target_count = re.subn(r"(targetSdkVersion|targetSdk)\s+\d+", r"\g<1> 36", text, count=1)
+          if compile_count != 1 or target_count != 1 or min_count != 1:
+              raise SystemExit("Could not safely set compileSdk and targetSdk to 36")
+          path.write_text(text)
+          import json
+          manifest_path = Path("twa-manifest.json")
+          manifest = json.loads(manifest_path.read_text())
+          manifest["minSdkVersion"] = 24
+          manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+          PY
+
+      - name: Verify generated app identity and Android API level
+        working-directory: android
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f twa-manifest.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path("twa-manifest.json").read_text())
+          expected = {
+              "host": "www.naijafootballnetwork.com",
+              "packageId": "com.naijafootballnetwork.app",
+              "name": "Naija Football Network",
+              "launcherName": "NFN",
+          }
+          for key, value in expected.items():
+              if manifest.get(key) != value:
+                  raise SystemExit(f"Unexpected {key}: {manifest.get(key)!r}; expected {value!r}")
+          PY
+          grep -F 'applicationId "com.naijafootballnetwork.app"' app/build.gradle
+          grep -Eq 'compileSdkVersion 36|compileSdk 36' app/build.gradle
+          grep -Eq 'targetSdkVersion 36|targetSdk 36' app/build.gradle
+          grep -Eq 'minSdkVersion 24|minSdk 24' app/build.gradle
+
+      - name: Build unsigned Android App Bundle
+        working-directory: android
+        run: ./gradlew bundleRelease --stacktrace
+
+      - name: Verify unsigned App Bundle exists
+        run: test -s android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Upload generated Android project and unsigned AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: nfn-android-twa-unsigned-${{ github.run_number }}
+          path: |
+            android/twa-manifest.json
+            android/manifest-checksum.txt
+            android/*.gradle
+            android/gradle.properties
+            android/gradlew
+            android/gradlew.bat
+            android/gradle/**
+            android/app/build.gradle
+            android/app/src/**
+            android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 14

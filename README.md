@@ -99,7 +99,7 @@ The existing approach is a Trusted Web Activity (TWA), using Bubblewrap to packa
 | Signed AAB, signing certificate, Digital Asset Links | Not verified as completed |
 | Physical-device QA and Play submission | Outstanding |
 
-The Android workflow runs on the preparation branch; it is not part of this README-only change. Its build failure remains open.
+The Android workflow also validates pull requests. Minimum SDK is 24 to match Android Browser Helper; compile/target SDK remain 36. The generated project is built directly with Gradle to preserve verified SDK settings.
 
 Current Android instructions live on that branch:
 - [Engineer handoff](https://github.com/bashirhassan10/football-team-network-frontend/blob/chore/android-play-release-prep/docs/android-engineer-handoff.md)
@@ -110,7 +110,7 @@ The older documents on `main` remain useful background but contain stale claims,
 ## Remaining work before release
 
 - [ ] Diagnose and fix the unsigned Android bundle build on the preparation branch.
-- [ ] Reconcile non-www Android configuration with the observed www production redirect.
+- [x] Reconcile non-www Android configuration with the observed www production redirect.
 - [ ] Complete secure signing, correct app-signing certificate association and Digital Asset Links.
 - [ ] Finish deletion integration: backend execution requires prior deactivation, but the current frontend has no deactivation proxy/UI step.
 - [ ] Add fresh independent ownership authentication, review retention rules and test deletion/storage cleanup/retry behavior with disposable staging data.
@@ -123,3 +123,15 @@ The older documents on `main` remain useful background but contain stale claims,
 - [ ] Confirm deployed frontend/backend versions, schema migrations, support delivery and end-to-end production readiness.
 
 Do not mark any gate complete based only on source inspection or an older handoff. README updates do not execute deletions, apply migrations, change secrets or authorize a Play release.
+
+## First five release items — implementation batch
+
+- [ ] Unsigned AAB build fix: CI now uses minimum SDK 24 and direct Gradle bundleRelease; await a successful Android run before ticking the release gate.
+- [x] Android configuration uses the observed canonical www host, including manifest/icon URLs and generated identity checks. Installed-app domain verification remains part of signing/device QA.
+- [ ] Signing and Play certificate association: Play Console app is not created yet. The assetlinks route validates public certificate fingerprints from ANDROID_APP_SIGNING_SHA256 and returns 404 while unconfigured. No private signing material is generated or committed.
+- [ ] Deletion integration: admin inspection exposes preparation state; explicit deactivation precedes erasure. Await cross-repository CI validation before ticking.
+- [ ] Ownership/retention/cleanup: current password is required; approval and deactivation require verification within 24 hours. Operator retention decision and production-like storage/concurrency QA remain outstanding.
+
+Deployment order: apply backend migration 025 before the new backend handlers, then deploy the matching frontend. DELETION_RETENTION_POLICY_APPROVED defaults off and must remain off until the operator approves retention. Do not test against real accounts. No production migration or environment change is performed by this source change.
+
+To configure Digital Asset Links after Play App Signing enrollment, set ANDROID_APP_SIGNING_SHA256 to the Play app-signing certificate SHA-256 (colon-separated bytes; comma-separated certificates for a verified rotation). Do not use the upload-key fingerprint for Play-installed builds. Verify the canonical /.well-known/assetlinks.json response and installed app before marking signing complete.
