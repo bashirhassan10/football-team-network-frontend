@@ -76,41 +76,41 @@ jobs:
           set timeout 900
           spawn bubblewrap init --manifest=https://naijafootballnetwork.com/manifest.webmanifest --directory=android
           expect "Domain:"
-          send "naijafootballnetwork.com\\r"
+          send "naijafootballnetwork.com\r"
           expect "URL path:"
-          send "/\\r"
+          send "/\r"
           expect "Application name:"
-          send "\\r"
+          send "\r"
           expect "Short name:"
-          send "\\r"
+          send "\r"
           expect "Application ID:"
-          send "com.naijafootballnetwork.app\\r"
+          send "com.naijafootballnetwork.app\r"
           expect "Starting version code"
-          send "1\\r"
+          send "1\r"
           expect "Display mode:"
-          send "\\r"
+          send "\r"
           expect "Orientation:"
-          send "\\r"
+          send "\r"
           expect "Status bar color:"
-          send "\\r"
+          send "\r"
           expect "Splash screen color:"
-          send "\\r"
+          send "\r"
           expect "Icon URL:"
-          send "\\r"
+          send "\r"
           expect "Maskable icon URL:"
-          send "\\r"
+          send "\r"
           expect "Monochrome icon URL:"
-          send "\\r"
+          send "\r"
           expect "Include support for Play Billing?"
-          send "n\\r"
+          send "n\r"
           expect "Request geolocation permission?"
-          send "n\\r"
+          send "n\r"
           expect "Key store location:"
-          send "\\r"
+          send "\r"
           expect "Key name:"
-          send "\\r"
+          send "\r"
           expect "Do you want to create one now?"
-          send "n\\r"
+          send "n\r"
           expect eof
           EXPECT_SCRIPT
 
@@ -124,8 +124,8 @@ jobs:
           import re
           path = Path("app/build.gradle")
           text = path.read_text()
-          text, compile_count = re.subn(r"(compileSdkVersion|compileSdk)\\s+\\d+", r"\\g<1> 36", text, count=1)
-          text, target_count = re.subn(r"(targetSdkVersion|targetSdk)\\s+\\d+", r"\\g<1> 36", text, count=1)
+          text, compile_count = re.subn(r"(compileSdkVersion|compileSdk)\s+\d+", r"\g<1> 36", text, count=1)
+          text, target_count = re.subn(r"(targetSdkVersion|targetSdk)\s+\d+", r"\g<1> 36", text, count=1)
           if compile_count != 1 or target_count != 1:
               raise SystemExit("Could not safely set compileSdk and targetSdk to 36")
           path.write_text(text)
