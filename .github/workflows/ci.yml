@@ -48,7 +48,8 @@ jobs:
         uses: android-actions/setup-android@v4
 
       - name: Install Android 36 SDK components
-        run: sdkmanager --install "platform-tools" "platforms;android-36" "build-tools;36.1.0"
+        run: |
+          sdkmanager --install "platform-tools" "platforms;android-36" "build-tools;36.1.0"
           # Bubblewrap expects sdkmanager at $ANDROID_HOME/bin/sdkmanager.
           CMDLINE_TOOLS_DIR="$(find "$ANDROID_HOME/cmdline-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
           test -x "$CMDLINE_TOOLS_DIR/bin/sdkmanager"
