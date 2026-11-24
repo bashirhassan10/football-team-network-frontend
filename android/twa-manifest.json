@@ -1,0 +1,41 @@
+{
+  "packageId": "com.naijafootballnetwork.app",
+  "host": "naijafootballnetwork.com",
+  "name": "Naija Football Network",
+  "launcherName": "NFN",
+  "display": "standalone",
+  "displayOverride": [],
+  "themeColor": "#087443",
+  "themeColorDark": "#087443",
+  "navigationColor": "#087443",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#00000000",
+  "navigationDividerColorDark": "#00000000",
+  "backgroundColor": "#ffffff",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://naijafootballnetwork.com/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionCode": 1,
+  "appVersion": "1.0.0",
+  "shortcuts": [],
+  "generatorApp": "Bubblewrap",
+  "webManifestUrl": "https://naijafootballnetwork.com/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "minSdkVersion": 23,
+  "orientation": "default",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}
