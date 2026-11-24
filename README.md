@@ -92,14 +92,14 @@ The existing approach is a Trusted Web Activity (TWA), using Bubblewrap to packa
 | Package ID | `com.naijafootballnetwork.app`, recorded as client-confirmed in the Android handoff |
 | Preparation | Separate `chore/android-play-release-prep` branch |
 | Toolchain | Branch workflow pins Bubblewrap 1.27.0, Java 17, Node 22 and Android API 36 |
-| Latest inspected run | [45404641520](https://github.com/bashirhassan10/football-team-network-frontend/actions/runs/45404641520) |
+| Latest inspected run | [45414505882](https://github.com/bashirhassan10/football-team-network-frontend/actions/runs/45414505882) |
 | Web quality checks | Passed in that run |
 | TWA generation and identity/API checks | Passed in that run |
-| Unsigned AAB build | Failed; no successful bundle verified |
+| Unsigned AAB build | Passed; unsigned validation artifact uploaded |
 | Signed AAB, signing certificate, Digital Asset Links | Not verified as completed |
 | Physical-device QA and Play submission | Outstanding |
 
-The Android workflow runs on the preparation branch; it is not part of this README-only change. Its build failure remains open.
+The Android workflow also validates pull requests. Minimum SDK is 24 to match Android Browser Helper; compile/target SDK remain 36. The generated project is built directly with Gradle to preserve verified SDK settings.
 
 Current Android instructions live on that branch:
 - [Engineer handoff](https://github.com/bashirhassan10/football-team-network-frontend/blob/chore/android-play-release-prep/docs/android-engineer-handoff.md)
@@ -109,10 +109,10 @@ The older documents on `main` remain useful background but contain stale claims,
 
 ## Remaining work before release
 
-- [ ] Diagnose and fix the unsigned Android bundle build on the preparation branch.
-- [ ] Reconcile non-www Android configuration with the observed www production redirect.
+- [x] Diagnose and fix the unsigned Android bundle build (PR CI 45414505882 produced an unsigned AAB).
+- [x] Reconcile non-www Android configuration with the observed www production redirect.
 - [ ] Complete secure signing, correct app-signing certificate association and Digital Asset Links.
-- [ ] Finish deletion integration: backend execution requires prior deactivation, but the current frontend has no deactivation proxy/UI step.
+- [x] Finish deletion integration: admin impact inspection, explicit preparation proxy/UI, then execution; authenticated proxy and backend lifecycle tests pass.
 - [ ] Add fresh independent ownership authentication, review retention rules and test deletion/storage cleanup/retry behavior with disposable staging data.
 - [ ] Add appropriate user/content reporting, blocking, Terms acceptance and admin moderation for team chat.
 - [ ] Assess verification payments against Google Play Billing requirements before shipping Paystack in the Android app.
@@ -123,3 +123,15 @@ The older documents on `main` remain useful background but contain stale claims,
 - [ ] Confirm deployed frontend/backend versions, schema migrations, support delivery and end-to-end production readiness.
 
 Do not mark any gate complete based only on source inspection or an older handoff. README updates do not execute deletions, apply migrations, change secrets or authorize a Play release.
+
+## First five release items — implementation batch
+
+- [x] Unsigned AAB build fix: minimum SDK 24 and direct Gradle bundleRelease passed Android CI 45414505882; artifact nfn-android-twa-unsigned-224 uploaded.
+- [x] Android configuration uses the observed canonical www host, including manifest/icon URLs and generated identity checks. Installed-app domain verification remains part of signing/device QA.
+- [ ] Signing and Play certificate association: Play Console app is not created yet. The assetlinks route validates public certificate fingerprints from ANDROID_APP_SIGNING_SHA256 and returns 404 while unconfigured. No private signing material is generated or committed.
+- [x] Deletion integration: admin inspection exposes preparation state; explicit deactivation precedes erasure. Frontend proxy tests and backend disposable-database lifecycle CI pass.
+- [ ] Ownership/retention/cleanup: current password is required; approval and deactivation require verification within 24 hours. Operator retention decision and production-like storage/concurrency QA remain outstanding.
+
+Deployment order: apply backend migration 025 before the new backend handlers, then deploy the matching frontend. DELETION_RETENTION_POLICY_APPROVED defaults off and must remain off until the operator approves retention. Do not test against real accounts. No production migration or environment change is performed by this source change.
+
+To configure Digital Asset Links after Play App Signing enrollment, set ANDROID_APP_SIGNING_SHA256 to the Play app-signing certificate SHA-256 (colon-separated bytes; comma-separated certificates for a verified rotation). Do not use the upload-key fingerprint for Play-installed builds. Verify the canonical /.well-known/assetlinks.json response and installed app before marking signing complete.
