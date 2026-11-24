@@ -1,3 +1,4 @@
+import {CommunityConsent} from "@/components/CommunitySafety";
 import "leaflet/dist/leaflet.css";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -13,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><TeamSessionGuard /><PwaRegistration />{children}</body></html>;
+  return <html lang="en"><body><TeamSessionGuard /><PwaRegistration /><CommunityConsent/>{children}</body></html>;
 }

@@ -2,9 +2,9 @@ name: Frontend CI
 
 on:
   push:
-    branches: [main, fix/staging-session-tab-isolation, chore/android-play-release-prep, feat/play-first-five-20261124]
+    branches: [staging, main, fix/staging-session-tab-isolation, chore/android-play-release-prep, feat/play-first-five-20261124]
   pull_request:
-    branches: [main]
+    branches: [main, staging]
 
 jobs:
   quality:

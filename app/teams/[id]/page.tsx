@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, BadgeCheck, MapPin, ShieldCheck } from "lucide-react";
+import {TeamSafety} from "@/components/CommunitySafety";
 import TeamCrest from "../../../components/TeamCrest";
 
 type Team = {
@@ -95,5 +96,5 @@ export default function TeamProfilePage() {
         </div>
       </> : null}
     </section>
-  </main>;
+  {team&&session?.team_id&&session.team_id!==team.id&&<TeamSafety teamID={team.id}/>}</main>;
 }

@@ -62,3 +62,10 @@ test("Existing production default is unchanged when explicitly in production", (
   const url = loadBackend({ VERCEL_ENV: "production" });
   assert.equal(url("/api/auth/login"), "https://football-team-network.onrender.com/api/auth/login");
 });
+
+for (const branch of ["staging", "feat/staging-community-safety-20261124"]) {
+ test(`${branch} ignores a stale production backend setting`, () => {
+  const url=loadBackend({VERCEL_ENV:"production",VERCEL_GIT_COMMIT_REF:branch,BACKEND_API_URL:"https://football-team-network.onrender.com"});
+  assert.equal(url("/api/community/terms"),"https://football-team-network-staging.onrender.com/api/community/terms");
+ });
+}

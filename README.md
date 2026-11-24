@@ -80,7 +80,7 @@ npm run build
 
 Set a staging `BACKEND_API_URL` for local validation. The repository currently has no committed package lock; CI uses `npm install`. Tests cover backend URL routing, not the complete user journey.
 
-Create a branch from current `main`, commit and push scoped changes, open a PR, wait for its CI checks to pass, then merge when authorized. Update this checklist when functionality changes. Do not add co-authored trailers.
+Create a branch from current `staging`, commit and push scoped changes, open a PR, wait for its CI checks to pass, then merge into `staging` when CI passes. Production releases into `main` require separate approval. Update this checklist when functionality changes. Do not add co-authored trailers.
 
 ## Android / Google Play status
 
@@ -135,3 +135,17 @@ Do not mark any gate complete based only on source inspection or an older handof
 Deployment order: apply backend migration 025 before the new backend handlers, then deploy the matching frontend. DELETION_RETENTION_POLICY_APPROVED defaults off and must remain off until the operator approves retention. Do not test against real accounts. No production migration or environment change is performed by this source change.
 
 To configure Digital Asset Links after Play App Signing enrollment, set ANDROID_APP_SIGNING_SHA256 to the Play app-signing certificate SHA-256 (colon-separated bytes; comma-separated certificates for a verified rotation). Do not use the upload-key fingerprint for Play-installed builds. Verify the canonical /.well-known/assetlinks.json response and installed app before marking signing complete.
+
+## Next five features — staging community safety
+
+- [ ] Versioned Community Terms acceptance at registration and before existing accounts create content.
+- [ ] Report individual opponent messages from match chat.
+- [ ] Report a team from its profile or match chat.
+- [ ] Block/unblock teams, with Settings management and backend enforcement.
+- [ ] Admin moderation queue with message removal, suspension/restoration and action audit.
+
+These implementation checkboxes describe staging source and CI verification, not production release. The broader community-safety Play gate remains open until hosted staging QA, operator review of Terms/retention and moderation operations are confirmed.
+
+Apply backend migration 026 to the isolated staging database before enabling COMMUNITY_SAFETY_ENABLED=true on staging. It defaults off. This chat has no Vercel/Render deployment access; the team must verify staging hosting, environment isolation and migrations. Backend staging history is preserved rather than replaced with master. Frontend staging was created from the current frontend source.
+
+Staging frontend branches explicitly use the staging backend URL even if an old production BACKEND_API_URL remains configured. Individual admin identities remain a separate improvement; moderation audit currently identifies the shared admin credential.
