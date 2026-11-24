@@ -1,3 +1,4 @@
+import ConnectionStatus from "@/components/ConnectionStatus";
 import {CommunityConsent} from "@/components/CommunitySafety";
 import "leaflet/dist/leaflet.css";
 import type { Metadata } from "next";
@@ -14,5 +15,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><TeamSessionGuard /><PwaRegistration /><CommunityConsent/>{children}</body></html>;
+  return <html lang="en"><body><TeamSessionGuard /><PwaRegistration /><ConnectionStatus/><CommunityConsent/>{children}</body></html>;
 }
