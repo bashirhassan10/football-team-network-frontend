@@ -1,5 +1,6 @@
 // This dedicated override is used only by the team-logo feature preview.
 // It avoids modifying the shared Production/Preview BACKEND_API_URL setting.
+const stagingBranch = process.env.VERCEL_GIT_COMMIT_REF === "staging" || process.env.VERCEL_GIT_COMMIT_REF?.startsWith("feat/staging-community-safety");
 const teamLogoPreviewOverride =
   process.env.VERCEL_ENV === "preview" &&
   ["feat/staging-team-logo-upload", "feat/staging-professional-team-profile", "feat/staging-team-divisions-fixtures"].includes(process.env.VERCEL_GIT_COMMIT_REF || "")
@@ -7,7 +8,7 @@ const teamLogoPreviewOverride =
     : undefined;
 
 const configuredBackendUrl =
-  teamLogoPreviewOverride || process.env.BACKEND_API_URL?.trim();
+  (stagingBranch ? "https://football-team-network-staging.onrender.com" : undefined) || teamLogoPreviewOverride || process.env.BACKEND_API_URL?.trim();
 
 // Only the real Vercel production environment may use the legacy production default.
 // Preview and development must never silently send requests to production.

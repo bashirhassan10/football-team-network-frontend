@@ -1,4 +1,5 @@
 "use client";
+import {BlockedTeams} from "@/components/CommunitySafety";
 import Link from "next/link";
 import {useState,type FormEvent} from "react";
 import {LockKeyhole,Mail,ShieldCheck,UserRound,ArrowUpRight} from "lucide-react";
@@ -17,5 +18,5 @@ export default function Settings(){
  <section style={card}><div style={{display:"flex",alignItems:"center",gap:12}}><LockKeyhole color="#116149"/><h2 style={{margin:0}}>Password & sign-in</h2></div><p style={{color:"#64748b"}}>Reset your password through the secure recovery process.</p><Link className="ghostButton" href="/forgot-password">Reset password →</Link></section>
  <section style={card}><div style={{display:"flex",alignItems:"center",gap:12}}><ShieldCheck color="#116149"/><h2 style={{margin:0}}>Session security</h2></div><p style={{color:"#64748b"}}>Sign out of your current team session when using a shared device.</p><form action="/api/auth/logout" method="post"><button type="submit" className="ghostButton">Sign out</button></form></section>
  <section style={card}><h2>Account deletion</h2><p style={{color:"#64748b"}}>You can request deletion of your NFN team account and associated personal data. Review the instructions and send a request to NFN support.</p><Link className="ghostButton" href="/account-deletion">Request account deletion →</Link></section>
- </main>;
+ <BlockedTeams/></main>;
 }
