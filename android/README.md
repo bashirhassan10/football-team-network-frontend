@@ -1,3 +1,5 @@
+> Current implementation update (24 November 2026): PR CI [45414505882](https://github.com/bashirhassan10/football-team-network-frontend/actions/runs/45414505882) passed TWA generation, canonical www identity, minimum SDK 24 / target SDK 36 checks and direct Gradle bundleRelease. Unsigned artifact nfn-android-twa-unsigned-224 was uploaded. Older diagnosis below is historical. Play Console is not created; release signing and certificate association remain incomplete.
+
 # NFN Android — Trusted Web Activity
 
 This directory contains the Android / Google Play preparation for **Naija Football Network (NFN)**. The intended packaging approach is a Trusted Web Activity (TWA) generated with Bubblewrap.

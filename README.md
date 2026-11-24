@@ -92,10 +92,10 @@ The existing approach is a Trusted Web Activity (TWA), using Bubblewrap to packa
 | Package ID | `com.naijafootballnetwork.app`, recorded as client-confirmed in the Android handoff |
 | Preparation | Separate `chore/android-play-release-prep` branch |
 | Toolchain | Branch workflow pins Bubblewrap 1.27.0, Java 17, Node 22 and Android API 36 |
-| Latest inspected run | [45404641520](https://github.com/bashirhassan10/football-team-network-frontend/actions/runs/45404641520) |
+| Latest inspected run | [45414505882](https://github.com/bashirhassan10/football-team-network-frontend/actions/runs/45414505882) |
 | Web quality checks | Passed in that run |
 | TWA generation and identity/API checks | Passed in that run |
-| Unsigned AAB build | Failed; no successful bundle verified |
+| Unsigned AAB build | Passed; unsigned validation artifact uploaded |
 | Signed AAB, signing certificate, Digital Asset Links | Not verified as completed |
 | Physical-device QA and Play submission | Outstanding |
 
@@ -109,7 +109,7 @@ The older documents on `main` remain useful background but contain stale claims,
 
 ## Remaining work before release
 
-- [ ] Diagnose and fix the unsigned Android bundle build on the preparation branch.
+- [x] Diagnose and fix the unsigned Android bundle build (PR CI 45414505882 produced an unsigned AAB).
 - [x] Reconcile non-www Android configuration with the observed www production redirect.
 - [ ] Complete secure signing, correct app-signing certificate association and Digital Asset Links.
 - [ ] Finish deletion integration: backend execution requires prior deactivation, but the current frontend has no deactivation proxy/UI step.
@@ -126,7 +126,7 @@ Do not mark any gate complete based only on source inspection or an older handof
 
 ## First five release items — implementation batch
 
-- [ ] Unsigned AAB build fix: CI now uses minimum SDK 24 and direct Gradle bundleRelease; await a successful Android run before ticking the release gate.
+- [x] Unsigned AAB build fix: minimum SDK 24 and direct Gradle bundleRelease passed Android CI 45414505882; artifact nfn-android-twa-unsigned-224 uploaded.
 - [x] Android configuration uses the observed canonical www host, including manifest/icon URLs and generated identity checks. Installed-app domain verification remains part of signing/device QA.
 - [ ] Signing and Play certificate association: Play Console app is not created yet. The assetlinks route validates public certificate fingerprints from ANDROID_APP_SIGNING_SHA256 and returns 404 while unconfigured. No private signing material is generated or committed.
 - [ ] Deletion integration: admin inspection exposes preparation state; explicit deactivation precedes erasure. Await cross-repository CI validation before ticking.
