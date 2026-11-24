@@ -158,4 +158,14 @@ Staging frontend branches explicitly use the staging backend URL even if an old 
 - [x] Public offline navigation fallback and reconnection guidance without private caching or action replay.
 - [x] Current registration/coach-letter verification guidance and removal of obsolete three-document instructions.
 
-See docs/staging-release-readiness.md. These are implementation milestones only. Billing approval, final disclosures, fresh-deletion backport to backend staging, migrations/hosting checks, signing and physical-device QA remain open. No main/master or hosting settings are changed by this batch.
+See docs/staging-release-readiness.md. These are implementation milestones only. Billing approval, final disclosures, operator-approved deletion activation, migrations/hosting checks, signing and physical-device QA remain open. No main/master or hosting settings are changed by this batch.
+
+## Next five — staging deletion journey
+
+- [x] Fresh password ownership verification, 24-hour expiry and attempt throttling reconciled into backend staging.
+- [x] Team-owned request IDs/statuses in Settings without exposing other teams or admin notes.
+- [x] Admin dependency preview with community records, ownership freshness and policy blockers.
+- [x] Serialized cleanup with failure-stage audit, rollback/retry tests and idempotent completion.
+- [x] Password-confirmed owner cancellation before deactivation, with cancelled requests protected in admin UI.
+
+These are staging implementation items, not authorization to erase real accounts. Apply backend migrations 025/027 to the existing deletion schema; 026 is required for community safety. Execution defaults off. Retention approval, explicit review of the community redaction option and hosted storage/device QA remain open.

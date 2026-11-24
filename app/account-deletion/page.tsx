@@ -39,7 +39,7 @@ export default function AccountDeletion() {
  <button className="button" type="submit" disabled={busy}>{busy?"Submitting…":"Submit deletion request"}</button>
  </form>
  <p>If the form is unavailable, email <a href="mailto:support@naijafootballnetwork.com?subject=NFN%20Account%20Deletion%20Request">support@naijafootballnetwork.com</a> with the subject <strong>NFN Account Deletion Request</strong> and your registered team name and email.</p>
- <h2>What happens next?</h2><p>NFN support receives your request and checks that you are authorized to manage the account. Submitting this form does not immediately delete an account. You may be contacted for additional verification through a secure channel.</p>
+ <p>Already signed in? <Link href="/settings">View your request IDs, confirm ownership or cancel a request in Settings</Link>.</p><h2>What happens next?</h2><p>NFN support receives your request and checks that you are authorized to manage the account. Submitting this form does not immediately delete an account. You may be contacted for additional verification through a secure channel.</p>
  <h2>Data deletion and retention</h2><p>Your request covers your account and associated personal data, including contact information and verification submissions. Match or chat records involving other teams may require separate review. Certain transaction, security or dispute records may be retained where legally justified, and backup copies may remain temporarily until normal backup expiry.</p>
  <p>Read our <Link href="/privacy-policy">Privacy Policy</Link> for more information.</p>
  <h2>Contact</h2><p>Operator: Gambo Garba Karaye — Naija Football Network, Nigeria.<br/>Email: <a href="mailto:support@naijafootballnetwork.com">support@naijafootballnetwork.com</a>.</p>

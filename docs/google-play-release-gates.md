@@ -14,7 +14,7 @@ Checkmarks in README mean source implementation plus CI verification, not produc
 
 - [ ] Play Console creation, release signing and correct Play app-signing certificate association.
 - [ ] Verification-payment classification and Play Billing decision. Test-only Paystack support is not approval for Android payments.
-- [ ] Backend staging reconciliation of fresh deletion controls previously implemented on master. A schema column alone is not sufficient.
+- [x] Source reconciliation of fresh deletion controls into backend staging, with owner tracking/cancellation and serialized cleanup. Migrations, operator retention approval and hosted deletion QA remain open.
 - [ ] Operator-approved retention, community Terms, moderation operations and final privacy/Data Safety declaration.
 - [ ] Hosting branch, database/storage isolation, migrations and runtime staging smoke tests.
 - [ ] Real Android login/recovery, uploads, payment return, chat/blocking, navigation, network interruption and resume tests.

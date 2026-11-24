@@ -1,2 +1,2 @@
-import {proxy} from "@/lib/club-api";
-export async function POST(req:Request){return proxy("/api/account-deletion/verify-ownership","POST",req,45000)}
+import {communityProxy} from "@/lib/community-proxy";
+export async function POST(req:Request){return communityProxy("/api/account-deletion/verify-ownership","POST",req,false,45000)}
