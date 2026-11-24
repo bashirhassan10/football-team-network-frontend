@@ -162,10 +162,10 @@ See docs/staging-release-readiness.md. These are implementation milestones only.
 
 ## Next five — staging deletion journey
 
-- [ ] Fresh password ownership verification, 24-hour expiry and attempt throttling reconciled into backend staging.
-- [ ] Team-owned request IDs/statuses in Settings without exposing other teams or admin notes.
-- [ ] Admin dependency preview with community records, ownership freshness and policy blockers.
-- [ ] Serialized cleanup with failure-stage audit, rollback/retry tests and idempotent completion.
-- [ ] Password-confirmed owner cancellation before deactivation, with cancelled requests protected in admin UI.
+- [x] Fresh password ownership verification, 24-hour expiry and attempt throttling reconciled into backend staging.
+- [x] Team-owned request IDs/statuses in Settings without exposing other teams or admin notes.
+- [x] Admin dependency preview with community records, ownership freshness and policy blockers.
+- [x] Serialized cleanup with failure-stage audit, rollback/retry tests and idempotent completion.
+- [x] Password-confirmed owner cancellation before deactivation, with cancelled requests protected in admin UI.
 
 These are staging implementation items, not authorization to erase real accounts. Apply backend migrations 025/027 to the existing deletion schema; 026 is required for community safety. Execution defaults off. Retention approval, explicit review of the community redaction option and hosted storage/device QA remain open.
