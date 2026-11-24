@@ -152,10 +152,10 @@ Staging frontend branches explicitly use the staging backend URL even if an old 
 
 ## Next five — staging release preparation
 
-- [ ] Default-off checkout initialization that requires explicit staging opt-in and a test key.
-- [ ] Read-only admin release-readiness dashboard with secret-free configuration/schema diagnostics.
-- [ ] Source-based Data Safety inventory and JSON draft export, with operator questions.
-- [ ] Public offline navigation fallback and reconnection guidance without private caching or action replay.
-- [ ] Current registration/coach-letter verification guidance and removal of obsolete three-document instructions.
+- [x] Default-off checkout initialization that requires explicit staging opt-in and a test key.
+- [x] Read-only admin release-readiness dashboard with secret-free configuration/schema diagnostics.
+- [x] Source-based Data Safety inventory and JSON draft export, with operator questions.
+- [x] Public offline navigation fallback and reconnection guidance without private caching or action replay.
+- [x] Current registration/coach-letter verification guidance and removal of obsolete three-document instructions.
 
 See docs/staging-release-readiness.md. These are implementation milestones only. Billing approval, final disclosures, fresh-deletion backport to backend staging, migrations/hosting checks, signing and physical-device QA remain open. No main/master or hosting settings are changed by this batch.
