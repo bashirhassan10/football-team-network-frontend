@@ -27,5 +27,13 @@ Updated: 2026-11-22. Staging planning; not a signed Android release.
 - `assetlinks.json` was not found in the frontend repository tree during this preparation review; it must be configured with the real signing fingerprint on the final domain.
 - TWA suitability and current Google Play requirements must be checked against the actual Android build at submission time.
 
+
+
+## Automated Android build preparation (2026-11-24)
+- Added `android/twa-manifest.json` with the confirmed package ID, app name, launcher name, production origin, start URL, icon and display/theme configuration.
+- Added an Android build job to the existing CI workflow. It runs only for pushes to `chore/android-play-release-prep`; it does not run on the production `main` branch or deploy the website.
+- The job installs JDK 17 and Android API 36 / Build Tools 36, generates the TWA project using Bubblewrap, verifies the generated package ID and target API, and attempts an unsigned AAB build.
+- The unsigned artifact is for technical validation only. No release keystore is configured or generated, and the artifact is not suitable for Play Console upload.
+
 ## Safety
 Do not commit secrets or pretend a web manifest alone is a Play Store Android app. Keep staging and production credentials separate. This preparation branch must not be merged or deployed without explicit approval.
