@@ -6,7 +6,7 @@
 4. Offline navigation returns only a public fallback; private HTML/API responses and actions are never cached/queued. Reconnection offers an explicit refresh and warns users to check interrupted payment/upload status. A first-ever visit with no installed worker still needs a network connection.
 5. New reviews require registration and coach-letter documents. Historical ID types remain supported in records but are not new requirements.
 
-The backend staging branch still lacks the fresh-deletion implementation previously merged on master. The readiness panel flags this; no automatic backport or operator retention decision is implied.
+Fresh deletion controls are now selectively reconciled into backend staging. The readiness panel checks migration signals and configured retention/redaction prerequisites separately from source implementation. No migration, operator approval or hosted deletion QA is implied.
 
 Play Billing reference: https://support.google.com/googleplay/android-developer/answer/9858738
 Data Safety reference: https://support.google.com/googleplay/android-developer/answer/10787469
