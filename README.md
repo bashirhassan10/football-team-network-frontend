@@ -169,3 +169,21 @@ See docs/staging-release-readiness.md. These are implementation milestones only.
 - [x] Password-confirmed owner cancellation before deactivation, with cancelled requests protected in admin UI.
 
 These are staging implementation items, not authorization to erase real accounts. Apply backend migrations 025/027 to the existing deletion schema; 026 is required for community safety. Execution defaults off. Retention approval, explicit review of the community redaction option and hosted storage/device QA remain open.
+
+## Next five — staging account security (25 November 2026)
+
+- [ ] Server-tracked sign-ins with random identifiers stored only as SHA-256 digests, 24-hour expiry, coarse browser labels and backend-validated frontend session identity.
+- [ ] Owner-only active-session list and individual revocation, including remote revocation on normal logout and honest local-only fallback feedback.
+- [ ] Current-password-confirmed sign-out everywhere with a persistent, separate action-attempt budget.
+- [ ] Atomic password reset and tracked-session revocation; recovery/email tokens cannot authorize team APIs.
+- [ ] Current-password-confirmed account/squad JSON download with an explicit data whitelist, private response headers and no opponent/credential/document/moderation data.
+
+Apply migration `028_account_security.sql` to isolated staging first, then set `SESSION_TRACKING_ENABLED=true` on the backend. Default is false; this batch does not apply migrations, enable hosting flags or verify a deployed instance. Enabling tracking forces existing stateless sessions to sign in again. Coordinate backend deployment before frontend deployment because session identity now calls `/api/auth/me`. Frontend branch routing remains pinned to staging.
+
+Tracked tokens continue to check their database record even if the issuance switch is later disabled. Disabling the switch permits legacy stateless tokens again; do not use that as a security rollback after enabling tracking. Legacy tokens issued before tracking cannot be individually revoked. Password reset revokes tracked sessions whenever the table exists. Login/reset issuance serialize on the team row. A sign-in performed after sign-out-everywhere may create a new session; change/reset the password if credentials are compromised.
+
+Session metadata is limited to digest, team, coarse browser label and creation/expiry/revocation times. Labels are approximate, derived from untrusted browser headers, and are not device identity. No raw JWT, IP address or raw User-Agent is stored in these tables. At most 50 sessions remain active; expired/revoked identifiers are pruned at the next login. Failed and successful sensitive actions share a per-team/per-action limit of five per 15-minute window. Team deletion cleans both new security tables; operator approval remains mandatory before deletion can run. Broader metadata/log/backup retention remains open.
+
+New authenticated routes: GET `/api/auth/me`, GET `/api/auth/sessions`, POST `/api/auth/sessions/revoke`, POST `/api/auth/sessions/revoke-all`, POST `/api/auth/logout`, POST `/api/account/export`. IDs and ownership come from the authenticated context; request bodies cannot select another team. The limited export covers contact/account fields and squad only, not a complete rights-request response; private documents, payments, shared fixtures/messages and moderation records require support review. Downloads contain personal information and should be removed from shared devices. Data Safety remains a draft.
+
+Checkmarks denote source implementation plus passing CI, not Play approval. Hosted activation/migration, physical-device QA, signing/Play Console, billing classification, operator retention and final disclosures remain unticked release gates.

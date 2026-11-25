@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   try {
     response = await fetch(backendUrl("/api/auth/login"), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "User-Agent": (request.headers.get("user-agent")||"").slice(0,512) },
       body: JSON.stringify(body),
       cache: "no-store",
       // Render Free instances can need 50+ seconds to wake after inactivity.
