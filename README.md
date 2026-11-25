@@ -204,3 +204,17 @@ Staging configuration now sets `APP_ENVIRONMENT=staging`, `COMMUNITY_SAFETY_ENAB
 Vercel reports the frontend staging deployment `dpl_95TfysLdfALdyv4a3T5ZEYBbkibF` at commit `09f2f0bf594e38d3e0c39481db121e7705e3d9bc` as READY. That is build/deployment evidence, not an authenticated walkthrough. Protected preview access needs separate authorization for the connector's temporary sharing link; do not disable deployment protection as a workaround.
 
 No persistent synthetic test account was created. Authenticated hosted tests remain open until the operator authorizes a named staging fixture and test actions. Prior disposable PostgreSQL CI tests remain the implementation evidence, not a substitute for those hosted tests. This checklist does not close retention, billing, signing/Play Console, Data Safety or final release gates.
+
+## Hosted synthetic account and frontend HTTP verification — 25 November 2026
+
+- [x] Operator-authorized synthetic team #23 created on Neon `staging-match-results`, with fake contact details and UNVERIFIED status; no production account was used.
+- [x] Hosted backend login, identity, session listing/revocation, sign-out everywhere, Terms consent, password-confirmed limited export and logout checks passed.
+- [x] 34 HTTP checks passed through the protected Vercel staging frontend at commit `ee535945e7e6457011a3bf1cee747c951868f450`, including cookie security, no bearer in login JSON, backend-validated team #23 identity, dashboard/Settings HTML, session revocation, consent state, private owner export and normal/stale logout cookie cleanup.
+- [x] All synthetic sessions were revoked; a final database query confirmed zero active sessions for team #23.
+- [ ] Complete JavaScript-driven interactive browser, responsive/mobile and physical Android walkthroughs; HTTP and HTML checks do not establish those outcomes.
+- [ ] Test actual email recovery delivery, external links/returns, maps/chat/matches, private uploads/storage isolation and interrupted connections.
+- [ ] Obtain operator retention and billing decisions, finalize Data Safety and complete Play Console/signing/release gates.
+
+The protected-preview checks used the operator-approved temporary staging-branch sharing link, configured with a 23-hour TTL and expiring at 2026-11-26 10:17:11 UTC. No link secret, password, bearer token or cookie value is recorded here. Vercel protection was not disabled. The synthetic account remains unverified for subsequent authorized staging testing; no account-deletion action was run.
+
+These results supersede the earlier activation entry's pending account creation and frontend HTTP checks. That entry's references to no persistent fixture and pending sharing authorization described the state before the operator approved those actions. Authenticated recovery delivery and full interactive/device QA remain incomplete. No production service, database or Git release branch was modified.
