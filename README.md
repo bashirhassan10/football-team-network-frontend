@@ -187,3 +187,20 @@ Session metadata is limited to digest, team, coarse browser label and creation/e
 New authenticated routes: GET `/api/auth/me`, GET `/api/auth/sessions`, POST `/api/auth/sessions/revoke`, POST `/api/auth/sessions/revoke-all`, POST `/api/auth/logout`, POST `/api/account/export`. IDs and ownership come from the authenticated context; request bodies cannot select another team. The limited export covers contact/account fields and squad only, not a complete rights-request response; private documents, payments, shared fixtures/messages and moderation records require support review. Downloads contain personal information and should be removed from shared devices. Data Safety remains a draft.
 
 Checkmarks denote source implementation plus passing CI, not Play approval. Hosted activation/migration, physical-device QA, signing/Play Console, billing classification, operator retention and final disclosures remain unticked release gates.
+
+## Hosted staging activation — 25 November 2026
+
+- [x] Applied repository migrations 025–028 to `football-team-network` → `staging-match-results` → `neondb`. Verified new tables, ownership timestamp, cancellation constraint and session/report indexes.
+- [x] Merged staging-service environment settings and completed Render deploy `dep-dc3c12qfngtc73dj3eh0` of backend commit `5f8abce24c6782730425dffa9d7aac0abe73854d`.
+- [x] Public backend liveness and database readiness returned HTTP 200; protected read endpoints reject missing authentication.
+- [ ] Complete authenticated hosted session, consent, revocation, export and account-recovery checks with explicitly authorized synthetic staging fixtures.
+- [ ] Complete protected Vercel frontend walkthrough and prove authenticated frontend/backend behavior.
+- [ ] Verify storage isolation, uploads, support/email delivery, matches/chat/maps and Android device journeys.
+
+The operator confirmed that the Render staging service uses the Neon staging branch above; Supabase is not the application database selected for this activation. No production database, production service, or production Git branch was modified.
+
+Staging configuration now sets `APP_ENVIRONMENT=staging`, `COMMUNITY_SAFETY_ENABLED=true` and `SESSION_TRACKING_ENABLED=true`. `DELETION_RETENTION_POLICY_APPROVED=false`, `COMMUNITY_DELETION_POLICY` remains unset/empty, and `STAGING_TEST_CHECKOUT_ENABLED=false`. Existing secrets and unrelated settings were preserved. Old stateless sessions must sign in again. Deletion execution and payment initialization are not enabled by this activation.
+
+Vercel reports the frontend staging deployment `dpl_95TfysLdfALdyv4a3T5ZEYBbkibF` at commit `09f2f0bf594e38d3e0c39481db121e7705e3d9bc` as READY. That is build/deployment evidence, not an authenticated walkthrough. Protected preview access needs separate authorization for the connector's temporary sharing link; do not disable deployment protection as a workaround.
+
+No persistent synthetic test account was created. Authenticated hosted tests remain open until the operator authorizes a named staging fixture and test actions. Prior disposable PostgreSQL CI tests remain the implementation evidence, not a substitute for those hosted tests. This checklist does not close retention, billing, signing/Play Console, Data Safety or final release gates.
