@@ -172,11 +172,11 @@ These are staging implementation items, not authorization to erase real accounts
 
 ## Next five — staging account security (25 November 2026)
 
-- [ ] Server-tracked sign-ins with random identifiers stored only as SHA-256 digests, 24-hour expiry, coarse browser labels and backend-validated frontend session identity.
-- [ ] Owner-only active-session list and individual revocation, including remote revocation on normal logout and honest local-only fallback feedback.
-- [ ] Current-password-confirmed sign-out everywhere with a persistent, separate action-attempt budget.
-- [ ] Atomic password reset and tracked-session revocation; recovery/email tokens cannot authorize team APIs.
-- [ ] Current-password-confirmed account/squad JSON download with an explicit data whitelist, private response headers and no opponent/credential/document/moderation data.
+- [x] Server-tracked sign-ins with random identifiers stored only as SHA-256 digests, 24-hour expiry, coarse browser labels and backend-validated frontend session identity.
+- [x] Owner-only active-session list and individual revocation, including remote revocation on normal logout and honest local-only fallback feedback.
+- [x] Current-password-confirmed sign-out everywhere with a persistent, separate action-attempt budget.
+- [x] Atomic password reset and tracked-session revocation; recovery/email tokens cannot authorize team APIs.
+- [x] Current-password-confirmed account/squad JSON download with an explicit data whitelist, private response headers and no opponent/credential/document/moderation data.
 
 Apply migration `028_account_security.sql` to isolated staging first, then set `SESSION_TRACKING_ENABLED=true` on the backend. Default is false; this batch does not apply migrations, enable hosting flags or verify a deployed instance. Enabling tracking forces existing stateless sessions to sign in again. Coordinate backend deployment before frontend deployment because session identity now calls `/api/auth/me`. Frontend branch routing remains pinned to staging.
 

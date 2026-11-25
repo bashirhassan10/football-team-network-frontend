@@ -49,7 +49,7 @@ export default function TeamSessionGuard() {
     const onVisibility = () => { if (!document.hidden) void check(); };
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onVisibility);
-    const timer = window.setInterval(() => { if (!document.hidden) void check(); }, 60000);
+    const timer = window.setInterval(() => { if (!document.hidden) void check(); }, 4000);
     return () => {
       disposed = true;
       window.removeEventListener("focus", onFocus);
