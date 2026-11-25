@@ -1,4 +1,5 @@
 "use client";
+import AccountSecurity from "@/components/AccountSecurity";
 import DeletionRequests from "@/components/DeletionRequests";
 import {BlockedTeams} from "@/components/CommunitySafety";
 import Link from "next/link";
@@ -12,6 +13,7 @@ export default function Settings(){
  <section style={card}><div style={{display:"flex",alignItems:"center",gap:12}}><UserRound color="#116149"/><h2 style={{margin:0}}>Club profile</h2></div><p style={{color:"#64748b"}}>Update your team badge, contact person, phone number and stadium location from your club profile.</p><Link className="button" href="/my-team/edit">Edit team profile <ArrowUpRight size={16}/></Link></section>
  <section style={card}><div style={{display:"flex",alignItems:"center",gap:12}}><Mail color="#116149"/><h2 style={{margin:0}}>Account email</h2></div><p style={{color:"#64748b"}}>To change your account email, verify the new inbox first. You must be signed into the team account you want to update.</p>
  <form onSubmit={requestEmailChange}><label style={{display:"block",fontWeight:600}}>New email address<input type="email" required maxLength={254} value={newEmail} onChange={e=>setNewEmail(e.target.value)} placeholder="new-email@example.com" style={{display:"block",padding:13,border:"1px solid #dce6dd",borderRadius:10,width:"100%",maxWidth:480,margin:"10px 0 18px"}}/></label><button type="submit" className="button" disabled={emailBusy}>{emailBusy?"Sending…":"Send verification link"}</button>{emailStatus&&<p role="status" aria-live="polite">{emailStatus}</p>}</form></section>
+ <AccountSecurity/>
  <DeletionRequests/>
  <section style={card}><div style={{display:"flex",alignItems:"center",gap:12}}><LockKeyhole color="#116149"/><h2 style={{margin:0}}>Password & sign-in</h2></div><p style={{color:"#64748b"}}>Reset your password through the secure recovery process.</p><Link className="ghostButton" href="/forgot-password">Reset password →</Link></section>
  <section style={card}><div style={{display:"flex",alignItems:"center",gap:12}}><ShieldCheck color="#116149"/><h2 style={{margin:0}}>Session security</h2></div><p style={{color:"#64748b"}}>Sign out of your current team session when using a shared device.</p><form action="/api/auth/logout" method="post"><button type="submit" className="ghostButton">Sign out</button></form></section>
